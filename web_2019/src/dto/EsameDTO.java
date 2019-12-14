@@ -5,6 +5,7 @@ import java.util.Date;
 public class EsameDTO {
 
 	private int id_esame;
+	private int id_prenotazione;
 	private int id_paziente;
 	private int id_medico;
 	private Date data;
@@ -12,9 +13,9 @@ public class EsameDTO {
 	private String referto;
 
 	
-	public EsameDTO(int id_esame, int id_paziente, int id_medico, Date data, String nomeEsame, String referto) {
-		super();
+	public EsameDTO(int id_esame, int id_paziente, int id_medico, Date data, String nomeEsame, String referto, int id_prenotazione) {
 		this.id_esame = id_esame;
+		this.id_prenotazione = id_prenotazione;
 		this.id_medico = id_medico;
 		this.id_paziente = id_paziente;
 		this.data = data;
@@ -24,6 +25,9 @@ public class EsameDTO {
 	
 	public int getId_esame() {
 		return id_esame;
+	}
+	public int getId_prenotazione() {
+		return id_prenotazione;
 	}
 	public void setId_esame(int id_esame) {
 		this.id_esame = id_esame;

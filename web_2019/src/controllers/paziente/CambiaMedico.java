@@ -1,4 +1,4 @@
-package controllers;
+package controllers.paziente;
 
 import java.io.IOException;
 import java.util.ArrayList;

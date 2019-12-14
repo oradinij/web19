@@ -1,7 +1,6 @@
 package dto;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 import dao.EsameDAO;
 import dao.PazienteDAO;
@@ -104,13 +103,28 @@ public class PazienteDTO {
 		listaPrescrizioni = new PrescrizioneDAO().getListaPrescrizioniByUserId(this.id);
 		return listaPrescrizioni;
 	}
+	/**
+	 * Aggiorna il medico nell'oggetto corrente e nel database
+	 * @param id_medico
+	 */
 	public void setMedico(int id_medico) {
 		this.id_medico = id_medico;
 		new PazienteDAO().setMedico(getId(), id_medico);
 
 	}
-	public void AggiugiPrescrizione(String farmaco) {
-		new PrescrizioneDAO().CreaPrescrizione(getId(), getId_medico(), farmaco);
+	public void aggiugiPrescrizioneFarmaco(String farmaco, int id_medico) {
+		new PrescrizioneDAO().creaPrescrizione(getId(), id_medico, farmaco);
 
+	}
+	public void aggiungiPrenotazioneEsame(int id_esame) {
+		new EsameDAO().creaPrenotazioneEsame(id_esame, this.id);
+	}
+	public void aggiugiPrescrizioneFarmaco(String farmaco) {
+		aggiugiPrescrizioneFarmaco(farmaco, this.getId_medico());
+		
+	}
+	public void aggiungiPrenotazioneVisita(String data_ora) {
+		new VisitaDAO().creaPrenotazioneVisita(this.getId(), this.getId_medico(), data_ora, 1);//stato = 1 vuol dire prenotata
+		
 	}
 }

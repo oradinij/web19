@@ -43,18 +43,15 @@ public class PrescrizioneDAO {
 		return listaPrescrizioni;
 	}
 
-	public void  CreaPrescrizione(int id_paziente, int id_medico,String farmaco) { 
+	public void  creaPrescrizione(int id_paziente, int id_medico,String farmaco) { 
 		Connection conn =DatabaseUtils.getDbConnection();
 		PreparedStatement stmt;
-		Calendar calendar = Calendar.getInstance();
-		java.sql.Timestamp timestamp = new java.sql.Timestamp(calendar.getTime().getTime());
-
+		
 		try {
-			stmt = conn.prepareStatement("INSERT INTO prescrizioni (id_medico, id_paziente, \"timestamp\", farmaco)	VALUES (?, ?, ?, ?);");
+			stmt = conn.prepareStatement("INSERT INTO prescrizioni (id_medico, id_paziente, farmaco)	VALUES (?, ?, ?);");
 			stmt.setInt(1, id_medico);
 			stmt.setInt(2, id_paziente);
-			stmt.setTimestamp(3, timestamp);
-			stmt.setString(4, farmaco);
+			stmt.setString(3, farmaco);
 			stmt.execute();
 			stmt.close();
 			conn.close();

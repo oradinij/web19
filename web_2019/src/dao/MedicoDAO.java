@@ -73,7 +73,32 @@ public class MedicoDAO {
 
 		return user;
 	}
+	public MedicoDTO getUserByEmail(String email) {
+		MedicoDTO user=null;
+		Connection conn =DatabaseUtils.getDbConnection();
+		ResultSet rs = null;
+		try {
+			Statement stmt = conn.createStatement();
+			String sql = "SELECT * FROM medici WHERE email = "+email+";";
+			rs = stmt.executeQuery(sql);
+			while(rs.next()){
+				int id = rs.getInt("id_medico");
+				int idSpecializzazione = rs.getInt("id_specializzazione");
+				ArrayList<PazienteDTO> listaPazienti = getListaPazienti(id, idSpecializzazione);
 
+				user= new MedicoDTO(email, id, idSpecializzazione,listaPazienti);
+
+			}
+			rs.close();
+			stmt.close();
+			conn.close();
+		}
+		catch (Exception e) {
+			e.printStackTrace();//puo essere che semplicemente non trovi l' utente
+		}
+
+		return user;
+	}
 	public ArrayList<MedicoDTO> getListaMediciBase(){
 		ArrayList<MedicoDTO> listaMedici = new ArrayList<MedicoDTO>();
 		Connection conn =DatabaseUtils.getDbConnection();
@@ -189,6 +214,8 @@ public class MedicoDAO {
 			e.printStackTrace();
 		}
 	}
+
+
 
 
 

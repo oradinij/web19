@@ -93,7 +93,40 @@ public class PazienteDAO {
 
 		return user;
 	}
+	public PazienteDTO getUserByEmail(String email) {
+		PazienteDTO user=null;
+		Connection conn =DatabaseUtils.getDbConnection();
+		ResultSet rs = null;
+		try {
+			String sql = "SELECT * FROM pazienti WHERE email = ?;";
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.setString(1, email);
+			rs = stmt.executeQuery();
+			while(rs.next()){
 
+				int id_medico = rs.getInt("id_medico");
+				int id_paziente = rs.getInt("id_paziente");
+				String codice_fiscale = rs.getString("codice_fiscale");	
+				String luogo_nascita = rs.getString("luogo_nascita");		
+				String nome = rs.getString("nome");	
+				String sesso = rs.getString("sesso");		
+				String data_nascita = rs.getString("data_nascita");		
+				String cognome = rs.getString("cognome");
+				String foto_path = rs.getString("immagine");
+				//TODO: String foto_path = rs.getString("");		
+				user= new PazienteDTO(id_paziente, id_medico, codice_fiscale, email, luogo_nascita, nome, sesso, data_nascita, cognome, foto_path);
+
+			}
+			rs.close();
+			stmt.close();
+			conn.close();
+		}
+		catch (Exception e) {
+			e.printStackTrace();//puo essere che semplicemente non trovi l' utente
+		}
+
+		return user;
+	}
 	/**
 	 * cerca di recuperare l'utente in base alla mail e alla password inserite nel form di login
 	 * 

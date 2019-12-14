@@ -9,7 +9,6 @@ import java.util.Date;
 
 import dbHelpers.DatabaseUtils;
 import dto.EsameDTO;
-import dto.TipologiaEsameDTO;
 
 public class EsameDAO {
 
@@ -26,13 +25,14 @@ public class EsameDAO {
 			while(rs.next()){
 				Date data = rs.getDate("data_ora");
 				int id_esame= rs.getInt("id_esame");
+				int id_prenotazione= rs.getInt("id_prenotazione");
 				int id_medico = rs.getInt("id_medico");
 				String referto = rs.getString("referto");
 				
 				String nomeEsame = getNameById(id_esame);
 
 
-				listaEsami.add(new EsameDTO(id_esame, id_paziente, id_medico, data, nomeEsame, referto ));
+				listaEsami.add(new EsameDTO(id_esame, id_paziente, id_medico, data, nomeEsame, referto, id_prenotazione ));
 			}
 			rs.close();
 			stmt.close();
@@ -68,6 +68,26 @@ public class EsameDAO {
 			e.printStackTrace();
 		}
 		return nomeEsame;
+	}
+
+	public void creaPrenotazioneEsame(int id_esame, int id_paziente) {
+		
+		Connection conn =DatabaseUtils.getDbConnection();
+		PreparedStatement stmt;
+
+		try {
+			String sql = "INSERT INTO public.prenotazioni_esami(id_esame, id_paziente)	VALUES (?, ?);";
+			stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, id_esame);
+			stmt.setInt(2, id_paziente);
+			stmt.executeUpdate();
+			stmt.close();
+			conn.close();
+		}
+
+		catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	

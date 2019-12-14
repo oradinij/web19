@@ -1,4 +1,4 @@
-package controllers;
+package controllers.medico;
 
 import java.io.IOException;
 import java.util.ArrayList;

@@ -27,8 +27,14 @@
 		<br> <input type="submit" value="upload Immagine" name="submit">
 	</form>
 
-	<a href="./cambiaMedico">Cambia Medico</a>
-
+	<a href="./cambiaMedico">Cambia Medico</a><br><br>
+<form action="./prenotaVisita">
+	<h4>Prenota una visita dal tuo medico di base</h4><br>
+	<input type="date" name="data"><br>
+	<input type="time" name="ora"><br>
+	<input type="submit">
+	</form>
+	<br><br>
 	<h1>Lista VISITE</h1>
 	<c:forEach items="${user.listaVisite}" var="visita">
 	 	Vistato in data: ${visita.data}<br>

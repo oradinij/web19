@@ -1,6 +1,7 @@
 package dao;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -38,6 +39,31 @@ public class TipologiaEsameDAO {
 		}
 		return listaEsami;
 		
+	}
+	public String getNameById(int id_esame) {
+		String nome_esame=null;
+		Connection conn =DatabaseUtils.getDbConnection();
+		ResultSet rs = null;
+		PreparedStatement stmt;
+		try {
+			String sql = "SELECT nome_esame FROM esami where id_esame = ?;";
+			stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, id_esame);
+			rs = stmt.executeQuery();
+			if(rs.next()){
+				nome_esame = rs.getString("nome_esame");			
+			}
+			else
+				System.out.println(String.format("%s: nome esame non trovato per %d", this.getClass().getName(), id_esame));
+			rs.close();
+			stmt.close();
+			conn.close();
+		}
+
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		return nome_esame;
 	}
 
 }

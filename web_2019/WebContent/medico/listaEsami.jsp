@@ -65,7 +65,8 @@ body {
 
 	<input type="text" id="myInput" onkeyup="myFunction()"
 		placeholder="Cerca.." title="Type in a name">
-
+<form action="./AggiungiEsame">
+<input type="submit" value="Prescrivi">
 	<table id="myTable">
 		<tr class="header">
 			<th style="width: 10%;"></th>

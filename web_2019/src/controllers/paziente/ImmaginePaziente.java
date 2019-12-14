@@ -1,4 +1,4 @@
-package controllers;
+package controllers.paziente;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

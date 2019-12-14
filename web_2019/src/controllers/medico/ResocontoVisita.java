@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import dto.PazienteDTO;
+import dto.TipologiaEsameDTO;
 import web_2019.VisitaCorrente;
 
 /**
@@ -23,7 +24,7 @@ public class ResocontoVisita extends HttpServlet {
 		PazienteDTO paziente = (PazienteDTO) request.getSession().getAttribute("paziente");
 		VisitaCorrente visita_corrente = (VisitaCorrente) request.getAttribute("visita_corrente");
 		ArrayList<String> lista_prescrizioni = visita_corrente.getLista_prescrizioni();
-		ArrayList<Integer> lista_esami = visita_corrente.getLista_esami(); 
+		ArrayList<TipologiaEsameDTO> lista_esami = visita_corrente.getLista_esami(); 
 		
 		
 	}

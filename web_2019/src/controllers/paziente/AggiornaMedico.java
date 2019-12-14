@@ -1,4 +1,4 @@
-package controllers;
+package controllers.paziente;
 
 import java.io.IOException;
 
@@ -11,7 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 import dto.PazienteDTO;
 
 /**
- * Servlet implementation class AggiornaMedico
+ * Aggiorna il medico nel relativo oggetto java e nel database
+ * @see PazienteDTO#setMedico(int)
  */
 @WebServlet("/paziente/AggiornaMedico")
 public class AggiornaMedico extends HttpServlet {

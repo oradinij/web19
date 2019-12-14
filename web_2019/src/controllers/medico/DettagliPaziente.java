@@ -1,4 +1,4 @@
-package controllers;
+package controllers.medico;
 
 
 import java.io.IOException;
@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import dto.MedicoDTO;
 import dto.PazienteDTO;
+import web_2019.VisitaCorrente;
 
 /**
  *  
@@ -27,9 +28,10 @@ public class DettagliPaziente extends HttpServlet {
 		MedicoDTO user= (MedicoDTO) request.getSession().getAttribute("user");
 		int id_paziente = Integer.parseInt(request.getParameter("id"));
 		PazienteDTO paziente = user.getPazienteById(id_paziente);//cerca il paziente corrispondente nella lista dei suoi pazienti
-		
-		
-		request.getSession().setAttribute("paziente", paziente);
+		VisitaCorrente visita_corrente = new VisitaCorrente();
+		visita_corrente.setPaziente(paziente);
+		request.getSession().setAttribute("visita_corrente", visita_corrente);
+		//request.getSession().setAttribute("paziente", paziente);
 				
 		response.sendRedirect(request.getContextPath()+"/medico/dettagliPaziente.jsp");
 		

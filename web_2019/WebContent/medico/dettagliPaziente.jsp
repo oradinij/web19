@@ -7,27 +7,27 @@
 <html>
 <head>
 <meta charset="US-ASCII">
-<title>${paziente.nome}${paziente.cognome}</title>
+<title>${visita_corrente.paziente.nome}${visita_corrente.paziente.cognome}</title>
 </head>
 <body>
-	<img alt="foto_profilo" src="${paziente.foto_path}">
-	<br> ${paziente.nome}
-	<br> ${paziente.cognome}
-	<br> ${paziente.codice_fiscale}
-	<br> ${paziente.data_nascita}
-	<br> ${paziente.luogo_nascita}
-	<br> ${paziente.sesso}
+	<img alt="foto_profilo" src="${visita_corrente.paziente.foto_path}">
+	<br> ${visita_corrente.paziente.nome}
+	<br> ${visita_corrente.paziente.cognome}
+	<br> ${visita_corrente.paziente.codice_fiscale}
+	<br> ${visita_corrente.paziente.data_nascita}
+	<br> ${visita_corrente.paziente.luogo_nascita}
+	<br> ${visita_corrente.paziente.sesso}
 	<br>
 	<br>
 	<br>
 	<br>
 	<h1>VISITE</h1>
 	<br>
-	<form action="/medico/ConcludiVisita">
+	<form action="./riepilogoVisita.jsp">
 		<input type="submit" value="completa lisita">
 	</form>
 	<br>
-	<c:forEach items="${paziente.listaVisite}" var="visita">
+	<c:forEach items="${visita_corrente.paziente.listaVisite}" var="visita">
 	 	Vistato in data: ${visita.data}<br>
 	</c:forEach>
 	<br>
@@ -39,7 +39,7 @@
 		<input type="submit" value="prescrivi Esame">
 	</form>
 	<br>
-	<c:forEach items="${paziente.listaEsami}" var="esame">
+	<c:forEach items="${visita_corrente.paziente.listaEsami}" var="esame">
 	 	 ${esame.nomeEsame} ${esame.data}<br>
 	</c:forEach>
 	<br>
@@ -49,7 +49,7 @@
 	<form action="./nuovaPrescrizione.jsp">
 		<input type="submit" value="prescrivi Farmaco">
 	</form>
-	<c:forEach items="${paziente.listaPrescrizioni}" var="prescrizione">
+	<c:forEach items="${visita_corrente.paziente.listaPrescrizioni}" var="prescrizione">
 	 	 ${prescrizione.farmaco} ${prescrizione.data}<br>
 	</c:forEach>
 </body>

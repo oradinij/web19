@@ -20,16 +20,13 @@ public class AggiungiEsame extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		String[] id_esami = request.getParameterValues("esameSelezionato");
-		PazienteDTO paziente = (PazienteDTO) request.getSession().getAttribute("paziente");
 		VisitaCorrente visita_corrente = (VisitaCorrente) request.getSession().getAttribute("visita_corrente");
-		if (id_esami!= null && paziente != null) {
+		if (id_esami!= null) {
 			if(visita_corrente == null) {
 				visita_corrente = new VisitaCorrente();
-				request.getSession().setAttribute("visita_corrente", new VisitaCorrente());
+				request.getSession().setAttribute("visita_corrente", visita_corrente);
 			}
-			System.out.println(visita_corrente);
-			System.out.println(id_esami.length);
-			visita_corrente.aggiungiEsame(id_esami);
+			visita_corrente.aggiungiEsami(id_esami);
 			System.out.println(String.format("\n%s: \n\t aggiunti %d nuovi esami alla visita corrente", this.getClass().getName(), id_esami.length));
 		}
 		response.sendRedirect(request.getContextPath()+"/medico/dettagliPaziente.jsp");
