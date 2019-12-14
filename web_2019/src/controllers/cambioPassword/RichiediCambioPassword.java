@@ -89,7 +89,7 @@ public class RichiediCambioPassword extends HttpServlet {
 		}
 		else {
 
-			//System.out.println(String.format("email = %s \n codice fiscale= %s", email, codice_fiscale));
+			//Logger.log("email = %s \n codice fiscale= %s", email, codice_fiscale));
 		}
 	}
 

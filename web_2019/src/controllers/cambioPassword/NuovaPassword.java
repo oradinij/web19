@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import dbHelpers.DatabaseUtils;
+import web_2019.Logger;
 
 /**
  * Controlla se il token ricevuto come parametro e' ancora valido
@@ -47,7 +48,7 @@ public class NuovaPassword extends HttpServlet {
 
 				}
 				else {
-					System.out.println(String.format("\nNuovaPassword.java: Token non valido, fare una nuova richiesta token \nToken: %s\n\n", token));
+					Logger.log("\nNuovaPassword.java: Token non valido, fare una nuova richiesta token \nToken: %s\n\n", token);
 					request.getRequestDispatcher("/passwordDimenticata.jsp").forward(request, response);
 				}
 

@@ -30,8 +30,8 @@ public class DettagliPaziente extends HttpServlet {
 		PazienteDTO paziente = user.getPazienteById(id_paziente);//cerca il paziente corrispondente nella lista dei suoi pazienti
 		VisitaCorrente visita_corrente = new VisitaCorrente();
 		visita_corrente.setPaziente(paziente);
+		visita_corrente.setId_medico(user.getId());
 		request.getSession().setAttribute("visita_corrente", visita_corrente);
-		//request.getSession().setAttribute("paziente", paziente);
 				
 		response.sendRedirect(request.getContextPath()+"/medico/dettagliPaziente.jsp");
 		

@@ -23,8 +23,11 @@
 	<br>
 	<h1>VISITE</h1>
 	<br>
-	<form action="./riepilogoVisita.jsp">
-		<input type="submit" value="completa lisita">
+	<form action="./riepilogoVisita">
+		<c:forEach items="${visita_corrente.visitePrenotate}" var="prenotazione_visita">
+			<input type="radio" name="id_prenotazione" value="${prenotazione_visita.id_prenotazione}" required="required"> ${prenotazione_visita.data} <br>
+		</c:forEach>
+			<input type="submit" value="completa lisita">
 	</form>
 	<br>
 	<c:forEach items="${visita_corrente.paziente.listaVisite}" var="visita">
@@ -49,7 +52,8 @@
 	<form action="./nuovaPrescrizione.jsp">
 		<input type="submit" value="prescrivi Farmaco">
 	</form>
-	<c:forEach items="${visita_corrente.paziente.listaPrescrizioni}" var="prescrizione">
+	<c:forEach items="${visita_corrente.paziente.listaPrescrizioni}"
+		var="prescrizione">
 	 	 ${prescrizione.farmaco} ${prescrizione.data}<br>
 	</c:forEach>
 </body>

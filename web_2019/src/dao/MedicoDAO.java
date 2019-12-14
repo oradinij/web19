@@ -13,8 +13,6 @@ import java.util.UUID;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
-import org.postgresql.util.PSQLException;
-
 import dbHelpers.DatabaseUtils;
 import dto.MedicoDTO;
 import dto.PazienteDTO;

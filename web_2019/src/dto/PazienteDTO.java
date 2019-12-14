@@ -26,7 +26,6 @@ public class PazienteDTO {
 
 	public String getDataUltimaVisita() {
 		ArrayList<VisitaDTO>listaVisite = getListaVisite();
-		System.out.println("Dimensione lista visite: "+listaVisite.size());
 		if(listaVisite.size()>0) {
 			VisitaDTO ultimaVisita = listaVisite.get(listaVisite.size()-1);
 			return ultimaVisita.getData().toString();
@@ -125,6 +124,37 @@ public class PazienteDTO {
 	}
 	public void aggiungiPrenotazioneVisita(String data_ora) {
 		new VisitaDAO().creaPrenotazioneVisita(this.getId(), this.getId_medico(), data_ora, 1);//stato = 1 vuol dire prenotata
+		
+	}
+	/**
+	 * cerca nella lista visite relative al paziente quelle non ancora svolte, ma prenotate (stato = 1), relative al medico id_medico
+	 */
+	public ArrayList<VisitaDTO> getVisitePrenotate(int id_medico){
+		ArrayList<VisitaDTO> visite_prenotate = new ArrayList<VisitaDTO>();
+		for (VisitaDTO visita : listaVisite) {
+			if(visita.getId_medico() == id_medico && visita.getStato() == 1)
+				visite_prenotate.add(visita);
+		}
+		return visite_prenotate;
+		
+	}
+	
+	/**
+	 * per le visite del medico di base lasiare referto = null, aggiorna la visita nel relativo DTO e nel database
+	 * @param id
+	 * @param referto
+	 */
+	public void completaVisita(int id, String referto) {
+		new VisitaDAO().aggiornaStato(id, 2);//stato cisita = 2 = svolta, referto = null
+		if(referto != null)
+			new VisitaDAO().aggiornaReferto(id, referto);
+		for (VisitaDTO visitaDTO : listaVisite) {
+			if(visitaDTO.getId_prenotazione() == id);
+			{
+				visitaDTO.setStato(2);
+				visitaDTO.setReferto(referto);
+			}
+		}
 		
 	}
 }

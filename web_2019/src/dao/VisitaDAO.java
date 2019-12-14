@@ -1,10 +1,10 @@
 package dao;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
-import java.sql.Date;
 
 import dbHelpers.DatabaseUtils;
 import dto.VisitaDTO;
@@ -62,6 +62,44 @@ public class VisitaDAO {
 			conn.close();
 		}
 
+		catch (Exception e) {
+			e.printStackTrace();
+
+		}
+	}
+
+	public void aggiornaStato(int id_prenotazione, int stato) {
+		Connection conn = DatabaseUtils.getDbConnection();
+		PreparedStatement stmt;
+		try {
+			String sql = "UPDATE public.prenotazioni_visite SET stato=? WHERE id_prenotazione = ?;";
+			stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, stato);
+			stmt.setInt(2, id_prenotazione);
+
+			stmt.executeUpdate();
+			stmt.close();
+			conn.close();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+
+		}
+	}
+	
+	public void aggiornaReferto(int id_prenotazione, String referto) {
+		Connection conn = DatabaseUtils.getDbConnection();
+		PreparedStatement stmt;
+		try {
+			String sql = "UPDATE public.prenotazioni_visite SET referto=?, WHERE id_prenotazione=?";
+			stmt = conn.prepareStatement(sql);
+			stmt.setString(1, referto);
+			stmt.setInt(2, id_prenotazione);
+
+			stmt.executeUpdate();
+			stmt.close();
+			conn.close();
+		}
 		catch (Exception e) {
 			e.printStackTrace();
 

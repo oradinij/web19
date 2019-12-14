@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import dto.PazienteDTO;
+import web_2019.Logger;
 import web_2019.VisitaCorrente;
 
 /**
@@ -30,7 +30,7 @@ public class AggiungiPrescrizione extends HttpServlet {
 				request.getSession().setAttribute("visita_corrente", visita_corrente);
 			}
 			visita_corrente.aggiungiPrescrizione(farmaco);
-			System.out.println(String.format("\n%s: \n\t aggiunto farmaco %s alla visita corrente", this.getClass().getName(), farmaco));
+			Logger.log("aggiunto farmaco %s alla visita corrente", farmaco);
 		}
 		response.sendRedirect(request.getContextPath()+"/medico/dettagliPaziente.jsp");
 		return;

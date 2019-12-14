@@ -1,6 +1,7 @@
 package controllers.medico;
 
 import java.io.IOException;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -8,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import dto.TipologiaEsameDTO;
+import web_2019.Logger;
 import web_2019.VisitaCorrente;
 
 /**
@@ -25,13 +27,13 @@ public class AnnullaPrescrizioneEsame extends HttpServlet {
 			TipologiaEsameDTO esame = new TipologiaEsameDTO(id_esame);
 			Boolean esame_rimosso = visita_corrente.getLista_esami().remove(esame);
 			if (esame_rimosso)//TODO: messaggistica di errore
-				System.out.println(String.format("\n%s: \n\t rimosso esame '%s'", this.getClass().getName(), esame.getNome_esame() ));
+				Logger.log("rimosso esame '%s'", esame.getNome_esame());
 			else
-				System.out.println(String.format("\n%s: \n\tNessun esame rimosso", getClass()));
+				Logger.log("Nessun esame rimosso");
 		}
 		else {
-			System.out.println(String.format("\n%s: \n\tid_esame %d:", getClass(), id_esame));
-			System.out.println(String.format("\n%s: \n\t visita_corrente: ", getClass())+visita_corrente);
+			Logger.log("id_esame %d:", id_esame);
+			
 		}
 		response.sendRedirect(request.getContextPath()+"/medico/riepilogoVisita.jsp");
 	}

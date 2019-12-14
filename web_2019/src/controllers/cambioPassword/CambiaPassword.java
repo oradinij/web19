@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import dbHelpers.DatabaseUtils;
+import web_2019.Logger;
 import web_2019.PasswordEncryptionService;
 
 /**
@@ -46,13 +47,13 @@ public class CambiaPassword extends HttpServlet {
 				campo_utente = "id_farmacia";
 				break;
 			default:
-				System.out.println(String.format("\nCambiaPassword.java: Nessuna tipologia utente ha corrispondenza per %d\n", tipologia_utente));
+				Logger.log("\nCambiaPassword.java: Nessuna tipologia utente ha corrispondenza per %d\n", tipologia_utente);
 				break;
 			}
 
 			secure_password = PasswordEncryptionService.generateStorngPasswordHash(password);
 
-			System.out.println(String.format("\nCambiaPassword.java: \ntabella_utente: %s\ncampo_utente: %s\nid_utente: %d\n",tabella_utente, campo_utente, id_utente));
+			Logger.log("\nCambiaPassword.java: \ntabella_utente: %s\ncampo_utente: %s\nid_utente: %d\n",tabella_utente, campo_utente, id_utente);
 
 
 			Connection conn =DatabaseUtils.getDbConnection();
@@ -62,11 +63,11 @@ public class CambiaPassword extends HttpServlet {
 			statement.setInt(2, id_utente);
 			int rows = statement.executeUpdate();
 			if(rows == 1) {
-				System.out.println(String.format("%s: password aggiornata per %s con id %d", this.getClass().getName(), tabella_utente, id_utente));
+				Logger.log("%s: password aggiornata per %s con id %d", this.getClass().getName(), tabella_utente, id_utente);
 				response.sendRedirect(request.getContextPath()+"/");
 			}
 			else {
-				System.out.println(String.format("%s: qualcosa e andato male", this.getClass().getName()));
+				Logger.log("%s: qualcosa e andato male", this.getClass().getName());
 				response.sendRedirect(request.getContextPath()+"/");
 			}
 			//TODO gestione errori vera

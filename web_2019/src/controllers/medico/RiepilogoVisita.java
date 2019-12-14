@@ -12,26 +12,18 @@ import web_2019.Logger;
 import web_2019.VisitaCorrente;
 
 /**
- * Servlet implementation class AggiungiEsame
+ * Servlet implementation class RiepilogoVisita
  */
-@WebServlet("/medico/AggiungiEsame")
-public class AggiungiEsame extends HttpServlet {
+@WebServlet("/medico/riepilogoVisita")
+public class RiepilogoVisita extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-		String[] id_esami = request.getParameterValues("esameSelezionato");
+		
 		VisitaCorrente visita_corrente = (VisitaCorrente) request.getSession().getAttribute("visita_corrente");
-		if (id_esami!= null) {
-			if(visita_corrente == null) {
-				visita_corrente = new VisitaCorrente();
-				request.getSession().setAttribute("visita_corrente", visita_corrente);
-			}
-			visita_corrente.aggiungiEsami(id_esami);
-			Logger.log("aggiunti %d nuovi esami alla visita corrente", id_esami.length);
-		}
-		response.sendRedirect(request.getContextPath()+"/medico/dettagliPaziente.jsp");
-		return;
+		int id_prenotazione_corrente = Integer.parseInt(request.getParameter("id_prenotazione"));
+		visita_corrente.setId_prenotazione_visita_corrente(id_prenotazione_corrente);
+		Logger.log("Settata visita corrente con id: %d", id_prenotazione_corrente);
+		response.sendRedirect(request.getContextPath()+"/medico/riepilogoVisita.jsp");
 	}
-}
 
+}

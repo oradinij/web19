@@ -4,11 +4,25 @@ import java.util.ArrayList;
 
 import dto.PazienteDTO;
 import dto.TipologiaEsameDTO;
+import dto.VisitaDTO;
 
 public class VisitaCorrente {
 	private ArrayList<String> lista_prescrizioni = new ArrayList<String>();
 	private ArrayList<TipologiaEsameDTO> lista_esami = new ArrayList<TipologiaEsameDTO>();
+	private ArrayList<VisitaDTO> visitePrenotate = new ArrayList<VisitaDTO>();
 	PazienteDTO paziente;
+	private Integer id_medico;
+	private int id_prenotazione_visita_corrente;
+
+	
+
+	public int getId_prenotazione_visita_corrente() {
+		return id_prenotazione_visita_corrente;
+	}
+
+	public void setId_prenotazione_visita_corrente(int id_prenotazione_visita_corrente) {
+		this.id_prenotazione_visita_corrente = id_prenotazione_visita_corrente;
+	}
 
 	public PazienteDTO getPaziente() {
 		return paziente;
@@ -16,6 +30,14 @@ public class VisitaCorrente {
 
 	public void setPaziente(PazienteDTO paziente) {
 		this.paziente = paziente;
+	}
+
+	public int getId_medico() {
+		return id_medico;
+	}
+
+	public void setId_medico(int id_medico) {
+		this.id_medico = id_medico;
 	}
 
 	public ArrayList<String> getLista_prescrizioni() {
@@ -37,6 +59,10 @@ public class VisitaCorrente {
 			lista_esami.add(new TipologiaEsameDTO(id));
 		}
 
+	}
+
+	public ArrayList<VisitaDTO> getVisitePrenotate() {
+		return paziente.getVisitePrenotate(id_medico);
 	}
 
 }

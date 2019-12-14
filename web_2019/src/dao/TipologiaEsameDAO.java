@@ -1,5 +1,6 @@
 package dao;
 
+import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -8,8 +9,9 @@ import java.util.ArrayList;
 
 import dbHelpers.DatabaseUtils;
 import dto.TipologiaEsameDTO;
+import web_2019.Logger;
 
-public class TipologiaEsameDAO {
+public class TipologiaEsameDAO  implements Serializable{
 	
 	public ArrayList<TipologiaEsameDTO> getAll() {
 		String nomeEsame;
@@ -54,7 +56,7 @@ public class TipologiaEsameDAO {
 				nome_esame = rs.getString("nome_esame");			
 			}
 			else
-				System.out.println(String.format("%s: nome esame non trovato per %d", this.getClass().getName(), id_esame));
+				Logger.log("nome esame non trovato per %d", id_esame);
 			rs.close();
 			stmt.close();
 			conn.close();
