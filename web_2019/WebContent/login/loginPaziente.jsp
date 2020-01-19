@@ -2,7 +2,6 @@
 <%@page import="dto.PazienteDTO"%>
 <%@ page language="java" contentType="text/html; charset=US-ASCII"
     pageEncoding="US-ASCII"%>
-<%@page import="../messages.jsp"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -11,10 +10,12 @@
 </head>
 <body>
 Login PAZIENTI
+
+  <%@ include file="../messages.jsp" %>
 	<br>
 	<br>
 	<form action="./loginPaziente">
-	<% check_messages(); %>
+	<% check_messages(request, response); %>
 		User-name:	<input type="text" name="email"><br>
 		Password:	<input type="password" name="password"><br>
 		Ricordami: <input type="checkbox" name = "remember_me"><br>
