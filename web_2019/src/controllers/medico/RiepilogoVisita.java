@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import web_2019.Logger;
+import utils.Logger;
 import web_2019.VisitaCorrente;
 
 /**
@@ -22,7 +22,7 @@ public class RiepilogoVisita extends HttpServlet {
 		VisitaCorrente visita_corrente = (VisitaCorrente) request.getSession().getAttribute("visita_corrente");
 		int id_prenotazione_corrente = Integer.parseInt(request.getParameter("id_prenotazione"));
 		visita_corrente.setId_prenotazione_visita_corrente(id_prenotazione_corrente);
-		Logger.log("Settata visita corrente con id: %d", id_prenotazione_corrente);
+		Logger.log("Settata visita relativa alla prenotazione con id: %d", id_prenotazione_corrente);
 		response.sendRedirect(request.getContextPath()+"/medico/riepilogoVisita.jsp");
 	}
 

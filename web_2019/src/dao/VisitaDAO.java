@@ -6,14 +6,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 
-import dbHelpers.DatabaseUtils;
 import dto.VisitaDTO;
+import web_2019.DatabaseService;
 
 public class VisitaDAO {
 
 	public ArrayList<VisitaDTO> getListaVisiteByUserId(int id_paziente) {
 		ArrayList<VisitaDTO> listaVisite = new ArrayList<VisitaDTO>();
-		Connection conn =DatabaseUtils.getDbConnection();
+		Connection conn =DatabaseService.getDbConnection();
 		ResultSet rs = null;
 		PreparedStatement stmt;
 
@@ -44,7 +44,7 @@ public class VisitaDAO {
 	}
 
 	public void creaPrenotazioneVisita(int id_paziente, int id_medico, String data_ora,  int stato) {
-		Connection conn = DatabaseUtils.getDbConnection();
+		Connection conn = DatabaseService.getDbConnection();
 		PreparedStatement stmt;
 		//se e' una visita del medico di base l'utente la prenota direttamente altrimenti viene prima prescritta dal medico e successivamente prenotata
 		//per questo il metodo prende anche lo stato
@@ -69,7 +69,7 @@ public class VisitaDAO {
 	}
 
 	public void aggiornaStato(int id_prenotazione, int stato) {
-		Connection conn = DatabaseUtils.getDbConnection();
+		Connection conn = DatabaseService.getDbConnection();
 		PreparedStatement stmt;
 		try {
 			String sql = "UPDATE public.prenotazioni_visite SET stato=? WHERE id_prenotazione = ?;";
@@ -88,7 +88,7 @@ public class VisitaDAO {
 	}
 	
 	public void aggiornaReferto(int id_prenotazione, String referto) {
-		Connection conn = DatabaseUtils.getDbConnection();
+		Connection conn = DatabaseService.getDbConnection();
 		PreparedStatement stmt;
 		try {
 			String sql = "UPDATE public.prenotazioni_visite SET referto=?, WHERE id_prenotazione=?";

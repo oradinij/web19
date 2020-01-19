@@ -9,11 +9,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import dto.TipologiaEsameDTO;
-import web_2019.Logger;
+import utils.Logger;
 import web_2019.VisitaCorrente;
 
 /**
- * Annulla la prescrizione di un esame prima del completamento di una visita
+ * elimina l'esame selezionato in /medico/riepilogoVisita.jsp dalla lista esami della visita corrente prima del definitivo inserimento nel database
+ * @see VisitaCorrente
  */
 @WebServlet("/medico/annullaPrescrizioneEsame")
 public class AnnullaPrescrizioneEsame extends HttpServlet {

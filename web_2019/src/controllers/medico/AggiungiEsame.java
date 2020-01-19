@@ -8,11 +8,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import web_2019.Logger;
+import utils.Logger;
 import web_2019.VisitaCorrente;
 
 /**
- * Servlet implementation class AggiungiEsame
+ * prende gli esami selezionati nella pagina /medico/listaEsami.jsp e li aggiunge all'oggetto visita corrente
  */
 @WebServlet("/medico/AggiungiEsame")
 public class AggiungiEsame extends HttpServlet {

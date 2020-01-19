@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.sun.mail.iap.Response;
+
 import dto.PazienteDTO;
 
 /**
@@ -24,7 +26,7 @@ public class PrenotaVisita extends HttpServlet {
 			String data_ora = data +" "+ora;
 			PazienteDTO user = (PazienteDTO)req.getSession().getAttribute("user");
 			user.aggiungiPrenotazioneVisita(data_ora);
-
+			resp.sendRedirect(req.getContextPath()+"/paziente/dettagliPaziente.jsp");
 		}
 		else {}//TODO messaggistica di errore
 		}

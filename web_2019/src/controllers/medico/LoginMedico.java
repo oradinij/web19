@@ -43,7 +43,7 @@ public class LoginMedico extends HttpServlet {
 			Cookie sessionCookie= new Cookie("m_session", m_session);
 			sessionCookie.setMaxAge(60*15);
 
-			medicoDAO.setNewSession(user.getId(),m_session);
+			medicoDAO.setNewSession(user.getId_medico(),m_session);
 
 			response.addCookie(sessionCookie);
 		}

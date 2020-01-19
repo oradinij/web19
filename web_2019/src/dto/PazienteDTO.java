@@ -1,15 +1,18 @@
 package dto;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import dao.EsameDAO;
+import dao.MedicoDAO;
 import dao.PazienteDAO;
 import dao.PrescrizioneDAO;
 import dao.VisitaDAO;
+import web_2019.Assets;
 
-public class PazienteDTO {
+public class PazienteDTO implements Serializable{
 	private int id;
-	private int id_medico;		
+	MedicoDTO medico;		
 	private String email;		
 	private String nome;	
 	private String cognome;
@@ -17,13 +20,35 @@ public class PazienteDTO {
 	private String sesso;		
 	private String data_nascita;		
 	private String luogo_nascita;		
-	private String foto_path;		
+	private String foto_path;	
+	
 	private ArrayList<EsameDTO>  listaEsami = null;
+	private ArrayList<EsameDTO>  lista_esami_da_prenotare = null;
+	private ArrayList<EsameDTO>  lista_esami_prenotati = null;
+	private ArrayList<EsameDTO>  lista_esami_svolti = null;
+	
 	private ArrayList<VisitaDTO>  listaVisite = null;
 	private ArrayList<PrescrizioneDTO>  listaPrescrizioni = null;
 	private String dataUltimaVisita;
 
 
+	public PazienteDTO(int id_paziente, int id_medico, String codice_fiscale, String email, String luogo_nascita, String nome, String sesso,
+			String data_nascita, String cognome, String foto_path) {
+		this.id =id_paziente;
+		this.medico = new MedicoDAO().getUserById(id_medico);
+		this.codice_fiscale = codice_fiscale;
+		this.email = email;
+		this.luogo_nascita = luogo_nascita;
+		this.nome = nome;
+		this.sesso = sesso;
+		this.data_nascita = data_nascita;
+		this.cognome = cognome;
+		//se non c'e una foto uso un icona di default
+		if (foto_path != null && foto_path.length()>0)
+			this.foto_path = foto_path;
+		else
+			this.foto_path = "/web2019/uploadFiles/default_user.png"; 
+	}
 	public String getDataUltimaVisita() {
 		ArrayList<VisitaDTO>listaVisite = getListaVisite();
 		if(listaVisite.size()>0) {
@@ -33,6 +58,10 @@ public class PazienteDTO {
 		else return "Nessuna visita disponibile";
 	}
 	public void setDataUltimaVisita(String dataUltimaVisita) {this.dataUltimaVisita = dataUltimaVisita;}
+	
+	public MedicoDTO getMedico() {return medico;}
+	public void setMedico(MedicoDTO medico) {this.medico = medico;}
+	
 
 	public String getCodice_fiscale() {return codice_fiscale;}
 	public void setCodice_fiscale(String codice_fiscale) {this.codice_fiscale = codice_fiscale;}
@@ -56,9 +85,8 @@ public class PazienteDTO {
 	public void setCognome(String cognome) {this.cognome = cognome;}
 
 	public int getId() {return id;}	
+	
 	public String getFoto_path() {return this.foto_path;}
-
-	public int getId_medico() {return id_medico;}
 
 	public void setFoto_path(String foto_path) {
 		if (foto_path!= null) {
@@ -66,24 +94,9 @@ public class PazienteDTO {
 			this.foto_path = foto_path;
 		}
 	}
+	public int getId_medico() {return this.getMedico().getId_medico();}
 
-	public PazienteDTO(int id_paziente, int id_medico, String codice_fiscale, String email, String luogo_nascita, String nome, String sesso,
-			String data_nascita, String cognome, String foto_path) {
-		this.id =id_paziente;
-		this.id_medico = id_medico;
-		this.codice_fiscale = codice_fiscale;
-		this.email = email;
-		this.luogo_nascita = luogo_nascita;
-		this.nome = nome;
-		this.sesso = sesso;
-		this.data_nascita = data_nascita;
-		this.cognome = cognome;
-		//se non c'e una foto uso un icona di default
-		if (foto_path != null && foto_path.length()>0)
-			this.foto_path = foto_path;
-		else
-			this.foto_path = "/web2019/uploadFiles/default_user.png"; 
-	}
+	
 
 	public ArrayList<EsameDTO>  getListaEsami()
 	{
@@ -107,20 +120,20 @@ public class PazienteDTO {
 	 * @param id_medico
 	 */
 	public void setMedico(int id_medico) {
-		this.id_medico = id_medico;
+		this.medico = new MedicoDAO().getUserById(id_medico);
 		new PazienteDAO().setMedico(getId(), id_medico);
 
 	}
-	public void aggiugiPrescrizioneFarmaco(String farmaco, int id_medico) {
-		new PrescrizioneDAO().creaPrescrizione(getId(), id_medico, farmaco);
+	public PrescrizioneDTO aggiugiPrescrizioneFarmaco(String farmaco, int id_medico) {
+		return new PrescrizioneDAO().creaPrescrizione(getId(), id_medico, farmaco);
 
+	}
+	public PrescrizioneDTO aggiugiPrescrizioneFarmaco(String farmaco) {
+		return aggiugiPrescrizioneFarmaco(farmaco, this.getId_medico());
+		
 	}
 	public void aggiungiPrenotazioneEsame(int id_esame) {
 		new EsameDAO().creaPrenotazioneEsame(id_esame, this.id);
-	}
-	public void aggiugiPrescrizioneFarmaco(String farmaco) {
-		aggiugiPrescrizioneFarmaco(farmaco, this.getId_medico());
-		
 	}
 	public void aggiungiPrenotazioneVisita(String data_ora) {
 		new VisitaDAO().creaPrenotazioneVisita(this.getId(), this.getId_medico(), data_ora, 1);//stato = 1 vuol dire prenotata
@@ -132,12 +145,114 @@ public class PazienteDTO {
 	public ArrayList<VisitaDTO> getVisitePrenotate(int id_medico){
 		ArrayList<VisitaDTO> visite_prenotate = new ArrayList<VisitaDTO>();
 		for (VisitaDTO visita : listaVisite) {
-			if(visita.getId_medico() == id_medico && visita.getStato() == 1)
+			if(visita.getId_medico() == id_medico && visita.getStato() == Assets.PRENOTAZIONE_EFFETTUATA)
 				visite_prenotate.add(visita);
 		}
 		return visite_prenotate;
 		
 	}
+	/**
+	 * cerca nella lista visite relative al paziente quelle da prenotare
+	 */
+	public ArrayList<VisitaDTO> getLista_visite_da_prenotare(){
+		ArrayList<VisitaDTO> visite_da_prenotare = new ArrayList<VisitaDTO>();
+		for (VisitaDTO visita : listaVisite) {
+			if(visita.getStato() == Assets.DA_PRENOTARE)
+				visite_da_prenotare.add(visita);
+		}
+		return visite_da_prenotare;
+		
+	}
+	/**
+	 * cerca nella lista visite relative al paziente quelle svolte
+	 */
+	public ArrayList<VisitaDTO> getLista_visite_svolte(){
+		ArrayList<VisitaDTO> visite_svolte = new ArrayList<VisitaDTO>();
+		for (VisitaDTO visita : listaVisite) {
+			if(visita.getStato() == Assets.PRENOTAZIONE_SVOLTA)
+				visite_svolte.add(visita);
+		}
+		return visite_svolte;
+		
+	}
+	/**
+	 * cerca nella lista visite relative al paziente quelle prenotate
+	 */
+	public ArrayList<VisitaDTO> getLista_visite_prenotate(){
+		ArrayList<VisitaDTO> visite_prenotate = new ArrayList<VisitaDTO>();
+		for (VisitaDTO visita : listaVisite) {
+			if(visita.getStato() == Assets.PRENOTAZIONE_EFFETTUATA)
+				visite_prenotate.add(visita);
+		}
+		return visite_prenotate;
+		
+	}
+	
+	
+	
+	
+	
+	/**
+	 * cerca nella lista esami relative al paziente quelle prenotate
+	 */
+	public ArrayList<EsameDTO> getLista_esami_prenotati(){
+		ArrayList<EsameDTO> esami_da_prenotare = new ArrayList<EsameDTO>();
+		for (EsameDTO esame : getListaEsami()) {
+			if(esame.getStato() == Assets.PRENOTAZIONE_EFFETTUATA)
+				esami_da_prenotare.add(esame);
+		}
+		return esami_da_prenotare;
+		
+	}
+	/**
+	 * cerca nella lista esami quelli prenotati
+	 */
+	public ArrayList<EsameDTO> getLista_esami_da_prenotare(){
+		ArrayList<EsameDTO> esami_prenotati = new ArrayList<EsameDTO>();
+		for (EsameDTO esame : getListaEsami()) {
+			if(esame.getStato() == Assets.DA_PRENOTARE)
+				esami_prenotati.add(esame);
+		}
+		return esami_prenotati;
+		
+	}
+	/**
+	 * cerca nella lista esami relative al paziente quelli svolti
+	 */
+	public ArrayList<EsameDTO> getLista_esami_svolti(){
+		ArrayList<EsameDTO> esami_svolti = new ArrayList<EsameDTO>();
+		for (EsameDTO esame : getListaEsami()) {
+			if(esame.getStato() == Assets.DA_PRENOTARE)
+				esami_svolti.add(esame);
+		}
+		return esami_svolti;
+		
+	}
+
+	/**
+	 * cerca nella lista ricette relative al paziente quelle prenotate
+	 */
+	public ArrayList<PrescrizioneDTO> getLista_prescrizioni_erogate(){
+		ArrayList<PrescrizioneDTO> prescrizioni_erogate = new ArrayList<>();
+		for (PrescrizioneDTO prescrizione : getListaPrescrizioni()) {
+			if(prescrizione.getStato() == Assets.FARMACO_EROGATO)
+				prescrizioni_erogate.add(prescrizione);
+		}
+		return prescrizioni_erogate;
+	}
+	
+	/**
+	 * cerca nella lista ricette relative al paziente quelle prenotate
+	 */
+	public ArrayList<PrescrizioneDTO> getLista_prescrizioni_da_erogare(){
+		ArrayList<PrescrizioneDTO> prescrizioni_da_erogare = new ArrayList<>();
+		for (PrescrizioneDTO prescrizione : getListaPrescrizioni()) {
+			if(prescrizione.getStato() == Assets.FARMACO_DA_EROGARE)
+				prescrizioni_da_erogare.add(prescrizione);
+		}
+		return prescrizioni_da_erogare;
+	}
+	
 	
 	/**
 	 * per le visite del medico di base lasiare referto = null, aggiorna la visita nel relativo DTO e nel database
@@ -145,13 +260,13 @@ public class PazienteDTO {
 	 * @param referto
 	 */
 	public void completaVisita(int id, String referto) {
-		new VisitaDAO().aggiornaStato(id, 2);//stato cisita = 2 = svolta, referto = null
+		new VisitaDAO().aggiornaStato(id, Assets.PRENOTAZIONE_SVOLTA);//stato visita = 2 = svolta, referto = null
 		if(referto != null)
 			new VisitaDAO().aggiornaReferto(id, referto);
 		for (VisitaDTO visitaDTO : listaVisite) {
 			if(visitaDTO.getId_prenotazione() == id);
 			{
-				visitaDTO.setStato(2);
+				visitaDTO.setStato(Assets.PRENOTAZIONE_EFFETTUATA);
 				visitaDTO.setReferto(referto);
 			}
 		}

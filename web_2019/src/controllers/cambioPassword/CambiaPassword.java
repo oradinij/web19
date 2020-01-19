@@ -10,12 +10,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import dbHelpers.DatabaseUtils;
-import web_2019.Logger;
+import utils.Logger;
+import web_2019.DatabaseService;
 import web_2019.PasswordEncryptionService;
 
 /**
- * Servlet implementation class CambiaPassword
+ * Aggiorna il database con la nuova password che l'utente ha inserito nella pagina /cambiaPassword.jsp
  */
 @WebServlet("/cambiaPassword")
 public class CambiaPassword extends HttpServlet {
@@ -23,7 +23,7 @@ public class CambiaPassword extends HttpServlet {
 
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+		
 		try {
 
 			String password =request.getParameter("password");
@@ -56,7 +56,7 @@ public class CambiaPassword extends HttpServlet {
 			Logger.log("\nCambiaPassword.java: \ntabella_utente: %s\ncampo_utente: %s\nid_utente: %d\n",tabella_utente, campo_utente, id_utente);
 
 
-			Connection conn =DatabaseUtils.getDbConnection();
+			Connection conn =DatabaseService.getDbConnection();
 			String sql="UPDATE "+tabella_utente+"	SET pswd=?	WHERE "+campo_utente+" = ?;";
 			PreparedStatement statement = conn.prepareStatement(sql);
 			statement.setString(1, secure_password);

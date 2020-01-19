@@ -7,17 +7,21 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-import dbHelpers.DatabaseUtils;
 import dto.TipologiaEsameDTO;
-import web_2019.Logger;
+import utils.Logger;
+import web_2019.DatabaseService;
 
 public class TipologiaEsameDAO  implements Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8893820252947975277L;
 	public ArrayList<TipologiaEsameDTO> getAll() {
 		String nomeEsame;
 		int id_esame;
 		
-		Connection conn =DatabaseUtils.getDbConnection();
+		Connection conn =DatabaseService.getDbConnection();
 		ResultSet rs = null;
 		Statement stmt;
 		ArrayList<TipologiaEsameDTO> listaEsami = new ArrayList<TipologiaEsameDTO>();
@@ -28,7 +32,8 @@ public class TipologiaEsameDAO  implements Serializable{
 			while(rs.next()){
 				nomeEsame = rs.getString("nome_esame");
 				id_esame = rs.getInt("id_esame");
-				listaEsami.add(new TipologiaEsameDTO(id_esame, nomeEsame));
+				int costo_esame = rs.getInt("costo_esame");
+				listaEsami.add(new TipologiaEsameDTO(id_esame, nomeEsame, costo_esame));
 				
 			}
 			rs.close();
@@ -44,7 +49,7 @@ public class TipologiaEsameDAO  implements Serializable{
 	}
 	public String getNameById(int id_esame) {
 		String nome_esame=null;
-		Connection conn =DatabaseUtils.getDbConnection();
+		Connection conn =DatabaseService.getDbConnection();
 		ResultSet rs = null;
 		PreparedStatement stmt;
 		try {

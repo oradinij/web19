@@ -2,6 +2,8 @@ package dto;
 
 import java.util.Date;
 
+import web_2019.Assets;
+
 public class EsameDTO {
 
 	private int id_esame;
@@ -11,9 +13,12 @@ public class EsameDTO {
 	private Date data;
 	private String nomeEsame;
 	private String referto;
+	private int stato;
 
 	
-	public EsameDTO(int id_esame, int id_paziente, int id_medico, Date data, String nomeEsame, String referto, int id_prenotazione) {
+	
+
+	public EsameDTO(int id_esame, int id_paziente, int id_medico, Date data, String nomeEsame, String referto, int id_prenotazione, int stato) {
 		this.id_esame = id_esame;
 		this.id_prenotazione = id_prenotazione;
 		this.id_medico = id_medico;
@@ -21,6 +26,7 @@ public class EsameDTO {
 		this.data = data;
 		this.nomeEsame = nomeEsame;
 		this.referto = referto;
+		this.stato = stato;
 	}
 	
 	public int getId_esame() {
@@ -71,6 +77,24 @@ public class EsameDTO {
 	}
 	public void setMedico(int medico) {
 		this.id_medico = medico;
+	}
+	public int getStato() {
+		return stato;
+	}
+
+	public void setStato(int stato) {
+		this.stato = stato;
+	}
+	
+	public String getBottone() {
+		
+		if (this.stato == Assets.DA_PRENOTARE)
+			return "<button type='button' >Prenota ora </button>";
+		else if (this.stato == Assets.PRENOTAZIONE_EFFETTUATA)
+			return "<button type='button' >Dettagli </button> <button type='button' >Annulla</button>";
+		else
+			return "<button type='button' >Dettagli </button>";
+		
 	}
 
 

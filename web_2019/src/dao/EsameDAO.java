@@ -7,14 +7,14 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
 
-import dbHelpers.DatabaseUtils;
 import dto.EsameDTO;
+import web_2019.DatabaseService;
 
 public class EsameDAO {
 
 	public ArrayList<EsameDTO>  getListaEsamiByUserId(int id_paziente) { 
 		ArrayList<EsameDTO> listaEsami= new ArrayList<EsameDTO>();
-		Connection conn =DatabaseUtils.getDbConnection();
+		Connection conn =DatabaseService.getDbConnection();
 		ResultSet rs = null;
 		PreparedStatement stmt;
 
@@ -27,12 +27,13 @@ public class EsameDAO {
 				int id_esame= rs.getInt("id_esame");
 				int id_prenotazione= rs.getInt("id_prenotazione");
 				int id_medico = rs.getInt("id_medico");
+				int stato = rs.getInt("stato");
 				String referto = rs.getString("referto");
 				
 				String nomeEsame = getNameById(id_esame);
 
 
-				listaEsami.add(new EsameDTO(id_esame, id_paziente, id_medico, data, nomeEsame, referto, id_prenotazione ));
+				listaEsami.add(new EsameDTO(id_esame, id_paziente, id_medico, data, nomeEsame, referto, id_prenotazione, stato ));
 			}
 			rs.close();
 			stmt.close();
@@ -48,7 +49,7 @@ public class EsameDAO {
 
 	private String getNameById(int id_esame) {
 		String nomeEsame = "";
-		Connection conn =DatabaseUtils.getDbConnection();
+		Connection conn =DatabaseService.getDbConnection();
 		ResultSet rs = null;
 		Statement stmt;
 
@@ -72,7 +73,7 @@ public class EsameDAO {
 
 	public void creaPrenotazioneEsame(int id_esame, int id_paziente) {
 		
-		Connection conn =DatabaseUtils.getDbConnection();
+		Connection conn =DatabaseService.getDbConnection();
 		PreparedStatement stmt;
 
 		try {

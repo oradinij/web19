@@ -7,9 +7,10 @@
 <title>Servizio Sanitario here</title>
 </head>
 <body>
-cose <br>cose cose
+cose <br>cose <br> cose
 <a href="./login/loginPaziente.jsp">Login Paziente</a>
 <a href="./login/loginMedico.jsp">Login Medico</a>
-<a href="./aggiungiMedico.jsp">Aggiungi Medico</a>
+<a href="./login/loginFarmacia.jsp">Login Farmacia</a>
+<a href="./passwordDimenticata.jsp">Cambia password</a>
 </body>
 </html>

@@ -13,16 +13,17 @@ import java.util.UUID;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
-import dbHelpers.DatabaseUtils;
 import dto.MedicoDTO;
 import dto.PazienteDTO;
+import utils.Logger;
+import web_2019.DatabaseService;
 import web_2019.PasswordEncryptionService;
 
 public class MedicoDAO {
 
 	public MedicoDTO getUserBySession(String id_sessione) {
 		MedicoDTO user=null;
-		Connection conn =DatabaseUtils.getDbConnection();
+		Connection conn =DatabaseService.getDbConnection();
 		ResultSet rs = null;
 		try {
 			Statement stmt = conn.createStatement();
@@ -45,7 +46,7 @@ public class MedicoDAO {
 
 	public MedicoDTO getUserById(int id_medico) {
 		MedicoDTO user=null;
-		Connection conn =DatabaseUtils.getDbConnection();
+		Connection conn =DatabaseService.getDbConnection();
 		ResultSet rs = null;
 		try {
 			Statement stmt = conn.createStatement();
@@ -54,11 +55,15 @@ public class MedicoDAO {
 			while(rs.next()){
 
 				String email = rs.getString("email");
+				String nome = rs.getString("nome");
+				String cognome = rs.getString("cognome");
 				int id = rs.getInt("id_medico");
 				int idSpecializzazione = rs.getInt("id_specializzazione");
-				ArrayList<PazienteDTO> listaPazienti = getListaPazienti(id, idSpecializzazione);
-
-				user= new MedicoDTO(email, id, idSpecializzazione,listaPazienti);
+				String telefono_stuidio = rs.getString("telefono_studio");
+				String telefono_cellulare = rs.getString("telefono_cellulare");
+				String immagine = rs.getString("immagine");
+				String struttura = rs.getString("struttura");
+				user= new MedicoDTO(email, id, idSpecializzazione, nome, cognome, telefono_stuidio, immagine, immagine, struttura);
 
 			}
 			rs.close();
@@ -73,18 +78,15 @@ public class MedicoDAO {
 	}
 	public MedicoDTO getUserByEmail(String email) {
 		MedicoDTO user=null;
-		Connection conn =DatabaseUtils.getDbConnection();
+		Connection conn =DatabaseService.getDbConnection();
 		ResultSet rs = null;
 		try {
 			Statement stmt = conn.createStatement();
-			String sql = "SELECT * FROM medici WHERE email = "+email+";";
+			String sql = "SELECT id_medico FROM medici WHERE email = "+email+";";
 			rs = stmt.executeQuery(sql);
 			while(rs.next()){
-				int id = rs.getInt("id_medico");
-				int idSpecializzazione = rs.getInt("id_specializzazione");
-				ArrayList<PazienteDTO> listaPazienti = getListaPazienti(id, idSpecializzazione);
-
-				user= new MedicoDTO(email, id, idSpecializzazione,listaPazienti);
+				int id_medico = rs.getInt("id_medico");
+				return getUserById(id_medico);
 
 			}
 			rs.close();
@@ -99,7 +101,7 @@ public class MedicoDAO {
 	}
 	public ArrayList<MedicoDTO> getListaMediciBase(){
 		ArrayList<MedicoDTO> listaMedici = new ArrayList<MedicoDTO>();
-		Connection conn =DatabaseUtils.getDbConnection();
+		Connection conn =DatabaseService.getDbConnection();
 		PreparedStatement pst;
 		ResultSet rs;
 		String sql = "SELECT * FROM medici WHERE id_specializzazione = ?;";
@@ -118,9 +120,9 @@ public class MedicoDAO {
 
 	}
 
-	private ArrayList<PazienteDTO> getListaPazienti(int id, int idSpecializzazione) {
+	public ArrayList<PazienteDTO> getListaPazienti(int id, int idSpecializzazione) {
 		ArrayList<PazienteDTO> listaPazienti = new ArrayList<PazienteDTO>();
-		Connection conn =DatabaseUtils.getDbConnection();
+		Connection conn =DatabaseService.getDbConnection();
 		ResultSet rs = null;
 		Statement stmt;
 
@@ -129,13 +131,23 @@ public class MedicoDAO {
 			String sql;
 			//se e' un medico di base recupero solo la lista di pazienti a lui associati altrimenti recupero tutti i pazienti
 			if (idSpecializzazione == 0)
-				sql = "SELECT id_paziente FROM pazienti WHERE id_medico = "+id+";";
+				sql = "SELECT * FROM pazienti WHERE id_medico = "+id+";";
 			else
-				sql = "SELECT id_paziente FROM pazienti;";
+				sql = "SELECT * FROM pazienti;";
 			rs = stmt.executeQuery(sql);
 			while(rs.next()){
-				int id_paziente= rs.getInt("id_paziente");
-				listaPazienti.add(new PazienteDAO().getUserById(id_paziente));//accede ad db quarantordici volte per nulla ma ok
+				int id_paziente = rs.getInt("id_paziente");
+				int id_medico = rs.getInt("id_medico");
+				String codice_fiscale = rs.getString("codice_fiscale");	
+				String mail = rs.getString("email");		
+				String luogo_nascita = rs.getString("luogo_nascita");		
+				String nome = rs.getString("nome");	
+				String sesso = rs.getString("sesso");		
+				String data_nascita = rs.getString("data_nascita");		
+				String cognome = rs.getString("cognome");
+				String foto_path = rs.getString("immagine");	
+				PazienteDTO paziente= new PazienteDTO(id_paziente, id_medico, codice_fiscale, mail, luogo_nascita, nome, sesso, data_nascita, cognome, foto_path);
+				listaPazienti.add(paziente);//accede ad db quarantordici volte per nulla ma ok
 			}
 			rs.close();
 			stmt.close();
@@ -153,7 +165,7 @@ public class MedicoDAO {
 
 	public MedicoDTO getUser(String email, String attemptedPassword) throws NoSuchAlgorithmException, InvalidKeySpecException {
 		MedicoDTO user=null;
-		Connection conn =DatabaseUtils.getDbConnection();
+		Connection conn =DatabaseService.getDbConnection();
 		ResultSet rs = null;
 		try {
 			Statement stmt = conn.createStatement();
@@ -163,13 +175,11 @@ public class MedicoDAO {
 				String encryptedPassword = rs.getString("pswd");	
 				//se la mail non corrisponde alla psw criptata ritorna null
 				if(!PasswordEncryptionService.validatePassword(attemptedPassword, encryptedPassword)) {
-					System.out.println("MedicoDAO:getUser:109 -> la password inserita non e' corretta");
+					Logger.log("la password inserita non e' corretta");
 					return null;
 				}
-				int id = rs.getInt("id_medico");
-				int idSpecializzazione = rs.getInt("id_specializzazione");
-
-				user= new MedicoDTO(email, id, idSpecializzazione, getListaPazienti(id, idSpecializzazione));
+				int id_medico = rs.getInt("id_medico");
+				user = getUserById(id_medico);
 				rs.close();
 				stmt.close();
 				return user;
@@ -192,7 +202,7 @@ public class MedicoDAO {
 					id_sessione = cookie.getValue();
 					user = getUserBySession(id_sessione);//cerco di recuperare i dati dal db
 					if(user!= null)
-						setNewSession(user.getId(), UUID.randomUUID().toString());
+						setNewSession(user.getId_medico(), UUID.randomUUID().toString());
 				}
 				return user;//l'utente oppure null se non ne ho trovati
 			}
@@ -201,7 +211,7 @@ public class MedicoDAO {
 
 	}
 	public void setNewSession(int id_medico, String id_sessione) {
-		Connection conn =DatabaseUtils.getDbConnection();
+		Connection conn =DatabaseService.getDbConnection();
 		try {
 			Statement stmt = conn.createStatement();
 			//se gia' e' presente la aggiorno e basta, la sintassi dipende dal db

@@ -1,37 +1,75 @@
 package dto;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class MedicoDTO {
-	private int id;
-	private ArrayList<PazienteDTO> listaPazienti;
+import dao.MedicoDAO;
+
+public class MedicoDTO implements Serializable{
+	private int id_medico;
+	private ArrayList<PazienteDTO> listaPazienti = null;
 	private String email;
 	private int idSpecializzazione;
+	private String nome;
+	private String cognome;
+	String telefono_studio;
+	String telefono_cellulare;
+	String struttura;
+	String immagine;
 
-	public MedicoDTO(String email, int id, int idSpecializzazione,ArrayList<PazienteDTO> listaPazienti) {
+	public MedicoDTO(String email, int id, int idSpecializzazione, String nome, String cognome, String telefono_studio, String telefono_cellulare, String immagine, String struttura) {
 		this.email = email;
-		this.id = id;
-		this.listaPazienti = listaPazienti;
+		this.id_medico = id;
 		this.idSpecializzazione =idSpecializzazione;
+		this.nome = nome;
+		this.cognome = cognome;
+		this.telefono_studio =telefono_studio;
+		this.telefono_cellulare=telefono_cellulare;
+		this.struttura=struttura;
+		this.immagine = immagine;
 	}
-	public String getEmail() {
-		return email;
+	
+	
+	public String getNome() {
+		return nome;
 	}
-	public void setEmail(String email) {
-		this.email = email;
+	public String getCognome() {
+		return cognome;
 	}
-	public int getId() {
-		return id;
+	
+	public String getEmail() {return email;}
+	
+	
+	public int getId_medico() {return id_medico;}
+	
+	
+	
+	public String getTelefono_studio() {
+		return telefono_studio;
 	}
-	public void setId(int id) {
-		this.id = id;
+
+
+	public String getTelefono_cellulare() {
+		return telefono_cellulare;
 	}
+
+
+	public String getStruttura() {
+		return struttura;
+	}
+
+
+	public String getImmagine() {
+		return immagine;
+	}
+
+
 	public ArrayList<PazienteDTO> getListaPazienti() {
+		if(listaPazienti == null)
+			this.listaPazienti = new MedicoDAO().getListaPazienti(id_medico, idSpecializzazione);
 		return listaPazienti;
 	}
-	public void setListaPazienti(ArrayList<PazienteDTO> listaPazienti) {
-		this.listaPazienti = listaPazienti;
-	}
+
 
 	public PazienteDTO getPazienteById(int id_paziente) {
 		for(PazienteDTO paziente : this.listaPazienti) {

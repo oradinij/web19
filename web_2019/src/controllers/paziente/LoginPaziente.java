@@ -29,14 +29,10 @@ import filters.CookiesFilterPaziente;
 public class LoginPaziente extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	PrintWriter out;
-	//Statement stmt = null;
-
 
 	//TODO: doPost
 	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		out = response.getWriter();
 		HttpSession session = request.getSession();
 		PazienteDAO pazienteDAO = new PazienteDAO();
 

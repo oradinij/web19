@@ -15,8 +15,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import dbHelpers.DatabaseUtils;
 import dto.PazienteDTO;
+import web_2019.DatabaseService;
 
 /**
  * Servlet implementation class ImmaginePaziente
@@ -30,7 +30,7 @@ public class ImmaginePaziente extends HttpServlet {
 		PazienteDTO user = (PazienteDTO) request.getSession().getAttribute("user");
 
 		try {
-			Connection connection = DatabaseUtils.getDbConnection();
+			Connection connection = DatabaseService.getDbConnection();
 			PreparedStatement preparedStatement = connection.prepareStatement("SELECT immagine FROM pazienti WHERE id_paziente = ?;");
 			preparedStatement.setInt(1, user.getId());
 			ResultSet resultSet = preparedStatement.executeQuery();

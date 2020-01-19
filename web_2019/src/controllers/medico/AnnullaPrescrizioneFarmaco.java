@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import web_2019.Logger;
+import utils.Logger;
 import web_2019.VisitaCorrente;
 
 /**

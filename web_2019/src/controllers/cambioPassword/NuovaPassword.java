@@ -11,11 +11,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import dbHelpers.DatabaseUtils;
-import web_2019.Logger;
+import utils.Logger;
+import web_2019.DatabaseService;
 
 /**
- * Controlla se il token ricevuto come parametro e' ancora valido
+ * gestisce i link invati nella mail del cambio pasword<br>
+ * - se il token esiste ed e' valido (tempo trascorso dall invio < time limit), ridireziona alla pagina /cambiaPassword.jsp
+ * - se il token non e' valido, o e' scaduto rimanda alla pagina /passwordDimenticata.jsp per poter fare una nuova richiesta
  */
 
 
@@ -28,7 +30,7 @@ public class NuovaPassword extends HttpServlet {
 		String token = request.getParameter("token");
 
 		if (token != null) {
-			Connection conn =DatabaseUtils.getDbConnection();
+			Connection conn =DatabaseService.getDbConnection();
 			try {
 				//controllo contemporaneamente che il token sia presente e che non sia gia' scaduto
 				String sql = "SELECT id_utente, tipologia_utente from richieste_cambio_password " + 
@@ -48,7 +50,7 @@ public class NuovaPassword extends HttpServlet {
 
 				}
 				else {
-					Logger.log("\nNuovaPassword.java: Token non valido, fare una nuova richiesta token \nToken: %s\n\n", token);
+					Logger.log("Token non valido, fare una nuova richiesta token \nToken: %s\n\n", token);
 					request.getRequestDispatcher("/passwordDimenticata.jsp").forward(request, response);
 				}
 

@@ -13,12 +13,18 @@ import javax.servlet.http.HttpServletResponse;
 
 import dao.MedicoDAO;
 import dao.PazienteDAO;
-import dbHelpers.DatabaseUtils;
 import dto.MedicoDTO;
 import dto.PazienteDTO;
+import web_2019.DatabaseService;
 import web_2019.MailingService;
 
-
+/**
+ * 
+ * Elabora i dati presi dalla pagina /cambiaPassword.jsp (email e tipologoa utente) <br>
+ * 	- crea la richiesta di cambio password nel database<br>
+ * 	- invia la mail con il link per il cambio password<br>
+ *
+ */
 @WebServlet("/richiediCambioPassword")
 public class RichiediCambioPassword extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -44,13 +50,13 @@ public class RichiediCambioPassword extends HttpServlet {
 			if(tipologia_utente == MEDICO) {
 				MedicoDTO user = new MedicoDAO().getUserByEmail(email);
 				if(user != null)
-					id_utente = user.getId();
+					id_utente = user.getId_medico();
 			}
 			if(tipologia_utente == FARMACIA) {
 				//TODO implementare farmacia
 			}
 			if(id_utente != null) {
-				Connection conn =DatabaseUtils.getDbConnection();
+				Connection conn =DatabaseService.getDbConnection();
 				try {
 					String sql = "INSERT INTO richieste_cambio_password (id_utente,token, tipologia_utente) VALUES (?, ?, ?)";		
 					PreparedStatement stmt = conn.prepareStatement(sql);

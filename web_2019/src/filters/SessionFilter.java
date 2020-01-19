@@ -16,7 +16,7 @@ import javax.servlet.http.HttpSession;
 /**
  * Filtro che controlla l esistenza di una variabile user necessaria per le pagine che richiedono autenticazione (medico e paziente)
  */
-@WebFilter(urlPatterns = { "/medico/*", "/paziente/*" })
+@WebFilter(urlPatterns = { "/medico/*", "/paziente/*", "/farmacia/*" })
 public class SessionFilter implements Filter {
 
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {

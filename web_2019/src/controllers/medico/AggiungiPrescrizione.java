@@ -8,11 +8,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import web_2019.Logger;
+import utils.Logger;
 import web_2019.VisitaCorrente;
 
 /**
- * Salva la prescrizione nel database
+ * Prende la prescrizione dalla pagina /medico/nuovaPrescrizione.jsp e la aggiunge all'oggetto visita corrente
+ * @see VisitaCorrente
  */
 @WebServlet("/medico/AggiungiPrescrizione")
 public class AggiungiPrescrizione extends HttpServlet {
@@ -25,10 +26,7 @@ public class AggiungiPrescrizione extends HttpServlet {
 		String farmaco = request.getParameter("prescrizione");
 		VisitaCorrente visita_corrente = (VisitaCorrente) request.getSession().getAttribute("visita_corrente");
 		if (farmaco!= null) {
-			if(visita_corrente == null) {
-				visita_corrente = new VisitaCorrente();
-				request.getSession().setAttribute("visita_corrente", visita_corrente);
-			}
+			request.getSession().setAttribute("visita_corrente", visita_corrente);
 			visita_corrente.aggiungiPrescrizione(farmaco);
 			Logger.log("aggiunto farmaco %s alla visita corrente", farmaco);
 		}

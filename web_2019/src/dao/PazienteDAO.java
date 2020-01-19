@@ -12,8 +12,8 @@ import java.util.UUID;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
-import dbHelpers.DatabaseUtils;
 import dto.PazienteDTO;
+import web_2019.DatabaseService;
 import web_2019.PasswordEncryptionService;
 
 /**
@@ -31,7 +31,7 @@ public class PazienteDAO {
 	 */
 	public PazienteDTO getUserBySession(String id_sessione) {
 		PazienteDTO user=null;
-		Connection conn =DatabaseUtils.getDbConnection();
+		Connection conn =DatabaseService.getDbConnection();
 		PreparedStatement pst = null;
 		ResultSet rs = null;
 		try {
@@ -61,7 +61,7 @@ public class PazienteDAO {
 	
 	public PazienteDTO getUserById(int id_paziente) {
 		PazienteDTO user=null;
-		Connection conn =DatabaseUtils.getDbConnection();
+		Connection conn =DatabaseService.getDbConnection();
 		ResultSet rs = null;
 		try {
 			String sql = "SELECT * FROM pazienti WHERE id_paziente = ?;";
@@ -78,8 +78,7 @@ public class PazienteDAO {
 				String sesso = rs.getString("sesso");		
 				String data_nascita = rs.getString("data_nascita");		
 				String cognome = rs.getString("cognome");
-				String foto_path = rs.getString("immagine");
-				//TODO: String foto_path = rs.getString("");		
+				String foto_path = rs.getString("immagine");	
 				user= new PazienteDTO(id_paziente, id_medico, codice_fiscale, mail, luogo_nascita, nome, sesso, data_nascita, cognome, foto_path);
 
 			}
@@ -95,7 +94,7 @@ public class PazienteDAO {
 	}
 	public PazienteDTO getUserByEmail(String email) {
 		PazienteDTO user=null;
-		Connection conn =DatabaseUtils.getDbConnection();
+		Connection conn =DatabaseService.getDbConnection();
 		ResultSet rs = null;
 		try {
 			String sql = "SELECT * FROM pazienti WHERE email = ?;";
@@ -139,7 +138,7 @@ public class PazienteDAO {
 	 */
 	public PazienteDTO getUser(String email, String attemptedPassword) throws NoSuchAlgorithmException, InvalidKeySpecException {
 		PazienteDTO user=null;
-		Connection conn =DatabaseUtils.getDbConnection();
+		Connection conn =DatabaseService.getDbConnection();
 		ResultSet rs = null;
 		try {
 			Statement stmt = conn.createStatement();
@@ -202,6 +201,42 @@ public class PazienteDAO {
 		return null;
 
 	}
+	
+	public PazienteDTO getUserByCodiceFiscale(String codice_fiscale) {
+		PazienteDTO user=null;
+		Connection conn =DatabaseService.getDbConnection();
+		ResultSet rs = null;
+		try {
+			String sql = "SELECT * FROM pazienti WHERE codice_fiscale = ?;";
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.setString(1, codice_fiscale);
+			rs = stmt.executeQuery();
+			while(rs.next()){
+
+				int id_medico = rs.getInt("id_medico");
+				Integer id_paziente = rs.getInt("id_paziente");	
+				String mail = rs.getString("email");		
+				String luogo_nascita = rs.getString("luogo_nascita");		
+				String nome = rs.getString("nome");	
+				String sesso = rs.getString("sesso");		
+				String data_nascita = rs.getString("data_nascita");		
+				String cognome = rs.getString("cognome");
+				String foto_path = rs.getString("immagine");	
+				user= new PazienteDTO(id_paziente, id_medico, codice_fiscale, mail, luogo_nascita, nome, sesso, data_nascita, cognome, foto_path);
+
+			}
+			rs.close();
+			stmt.close();
+			conn.close();
+		}
+		catch (Exception e) {
+			e.printStackTrace();//puo essere che semplicemente non trovi l' utente
+		}
+
+		return user;
+
+	}
+	
 	/**
 	 * inserisce o aggiorna nel db la sessione corrispondente all'utente
 	 * 
@@ -211,7 +246,7 @@ public class PazienteDAO {
 	 */
 	public void setNewSession(int id_paziente, String id_sessione) {
 
-		Connection conn =DatabaseUtils.getDbConnection();
+		Connection conn =DatabaseService.getDbConnection();
 
 		try {
 			//se gia' e' presente la aggiorno e basta, la sintassi dipende dal db
@@ -235,7 +270,7 @@ public class PazienteDAO {
 	}
 
 	public void setFoto_path(int id_paziente, String fileName) {
-		Connection conn =DatabaseUtils.getDbConnection();
+		Connection conn =DatabaseService.getDbConnection();
 
 		try {
 			String sql = "UPDATE pazienti SET immagine = ? WHERE id_paziente = ?";
@@ -255,7 +290,7 @@ public class PazienteDAO {
 	}
 
 	public void setMedico(int id_paziente, int id_medico) {
-		Connection conn =DatabaseUtils.getDbConnection();
+		Connection conn =DatabaseService.getDbConnection();
 
 		try {
 			String sql = "UPDATE pazienti SET id_medico = ? WHERE id_paziente = ?";
@@ -273,5 +308,6 @@ public class PazienteDAO {
 		}	
 		
 	}
+	
 
 }
