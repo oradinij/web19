@@ -12,7 +12,7 @@ import web_2019.Assets;
 
 public class PazienteDTO implements Serializable{
 	private int id;
-	MedicoDTO medico;		
+	MedicoDTO medico;
 	private String email;		
 	private String nome;	
 	private String cognome;
@@ -55,7 +55,7 @@ public class PazienteDTO implements Serializable{
 			VisitaDTO ultimaVisita = listaVisite.get(listaVisite.size()-1);
 			return ultimaVisita.getData().toString();
 		}
-		else return "Nessuna visita disponibile";
+		else return "Nessuna visita disponibile"; 
 	}
 	public void setDataUltimaVisita(String dataUltimaVisita) {this.dataUltimaVisita = dataUltimaVisita;}
 	

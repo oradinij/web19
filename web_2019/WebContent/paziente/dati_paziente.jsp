@@ -58,7 +58,7 @@
 			style="background-color: #C1D4D9; border-radius: 20px; padding: 20px; width: 80%">
 			<div class="card"
 				style="border-radius: 20px; padding: 10px; border-style: hidden">
-				<h4 class="card-title">${user.nome}${user.cognome}</h4>
+				<h4 class="card-title">${user.nome} ${user.cognome}</h4>
 				<center>
 					<div class="hovereffect">
 						<img class="img-responsive" src="${user.foto_path}"

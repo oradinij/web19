@@ -10,7 +10,7 @@ public class VisitaCorrente {
 	private ArrayList<String> lista_prescrizioni = new ArrayList<String>();
 	private ArrayList<TipologiaEsameDTO> lista_esami = new ArrayList<TipologiaEsameDTO>();
 	private ArrayList<VisitaDTO> visitePrenotate = new ArrayList<VisitaDTO>();
-	PazienteDTO paziente;
+	PazienteDTO paziente; 
 	private Integer id_medico;
 	private int id_prenotazione_visita_corrente;
 

@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import dto.PazienteDTO;
 import dto.PrescrizioneDTO;
+import utils.Logger;
 import web_2019.PdfPrescrizione;
 
 /**
@@ -37,7 +38,7 @@ public class ScaricaPrescrizione extends HttpServlet {
 				file = PdfPrescrizione.creaPdf(user, prescrizione, pdfFileName);
 			}
 		}
-
+		
 		response.setContentType("application/pdf");
 		response.addHeader("Content-Disposition", "attachment; filename=" + pdfFileName);
 		response.setContentLength(file.size());

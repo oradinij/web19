@@ -19,7 +19,7 @@
 	<br>
 	<form action="./AggiornaMedico">
 		<c:forEach items="${listaMedici}" var="medico">
-			<input type="radio" name="medico" id="medico" value="${medico.id}"> ${medico.email}<br>
+			<input type="radio" name="medico" id="medico" value="${medico.id_medico}"> ${medico.email}<br>
 		</c:forEach>
 		<br><br>
 		<input type="submit" value="cambia medico" name="submit">
