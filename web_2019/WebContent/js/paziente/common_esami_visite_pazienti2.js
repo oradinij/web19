@@ -1,5 +1,5 @@
 $('.carousel').carousel({
-	interval: false;
+	interval: false
 });
 
 window.onresize = function (event) {

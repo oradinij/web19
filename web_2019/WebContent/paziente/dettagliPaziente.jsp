@@ -89,7 +89,7 @@
 				<img src="../images/pills.jpg" alt="pills" style="height: 220px;">
 				<div class="overlay">
 					<div class="overlay-content">
-						<a class="hover" href="#!">Vai alle ricette</a>
+						<a class="hover" href="./ricette_paziente.jsp">Vai alle ricette</a>
 					</div>
 				</div>
 			</div>
@@ -105,7 +105,7 @@
 				<img src="../images/visit.jpg" alt="pills" style="height: 220px;">
 				<div class="overlay">
 					<div class="overlay-content">
-						<a href="#!">Vai alle visite</a>
+						<a href="./visite_paziente.jsp">Vai alle visite</a>
 					</div>
 				</div>
 			</div>
@@ -121,7 +121,7 @@
 				<img src="../images/exam.jpg" alt="pills" style="height: 220px;">
 				<div class="overlay">
 					<div class="overlay-content">
-						<a href="#!">Vai agli esami</a>
+						<a href="./esami_paziente.jsp">Vai agli esami</a>
 					</div>
 				</div>
 			</div>
