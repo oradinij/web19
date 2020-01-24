@@ -75,12 +75,17 @@ public class VisitaDTO {
 	private int stato;
 	private String referto;
 	private String nome_medico= null;
+	private String cognome_medico= null;
 	
 	public String getNome_medico() {
 		if(nome_medico == null) nome_medico = new MedicoDAO().getUserById(id_medico).getNome();
 		return nome_medico;
 	}
 
+	public String getCognome_medico() {
+		if(cognome_medico == null) cognome_medico = new MedicoDAO().getUserById(id_medico).getCognome();
+		return cognome_medico;
+	}
 
 	public Integer getId_visita() {
 		return id_visita;

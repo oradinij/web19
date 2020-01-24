@@ -17,7 +17,7 @@ import web_2019.VisitaCorrente;
  *  
  */
 @WebServlet("/medico/VisitePaziente")
-public class VisitePaziente extends HttpServlet {
+public class VisitePazienteMedicoBase extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     

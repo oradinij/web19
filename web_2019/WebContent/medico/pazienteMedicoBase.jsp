@@ -2,8 +2,8 @@
     pageEncoding="utf-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html5>
+<html lang="it">
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -35,7 +35,7 @@
   <div class="container">
     <div class="media">
       <div class="media-body text-center" style="background-color:  "> <img class="rounded-circle " src="../images/utente1img.jpg" width="150" height="150" alt="user">
-        <h3 class="mt-0">${visita_corrente.pa"C:/Users/FB/Desktop/materiale_LFC"ziente.nome} ${visita_corrente.paziente.cognome}</h3>
+        <h3 class="mt-0">${visita_corrente.paziente.nome} ${visita_corrente.paziente.cognome}</h3>
         &nbsp;
         <div class="container bg-light" style="border-radius: 20px; padding-bottom: 10px; padding-top: 10px;">
           <h5>Codice fiscale: ${visita_corrente.paziente.codice_fiscale}</h5>
@@ -54,7 +54,9 @@
   <div class="card">
     <div class="card-img"> <img src="../images/pills.jpg" alt="pills" style="height:220px;">
       <div class="overlay">
-        <div class="overlay-content"><a class="hover">Vai alle ricette del paziente</a></div>
+      <form id="formRicette" action="RicettePaziente"> 
+      <input type="hidden" value="${visita_corrente.paziente.id}" name="id"> 
+        <div class="overlay-content"><a class="hover" onclick="formRicette.submit();">Vai alle ricette del paziente</a></div>
         </form>
       </div>
     </div>
