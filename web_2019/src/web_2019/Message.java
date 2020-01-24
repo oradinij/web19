@@ -27,21 +27,31 @@ public class Message {
 	}
 
 	public String getTipoStr() {
-		switch (this.tipo) {
+		switch (tipo) {
 		case SUCCESS:
 			tipoStr= "success";
+			break;
 		case DANGER:
 			tipoStr = "danger";
+			break;
 		case WARNING:
-			tipoStr = "warning";		
-
+			tipoStr = "warning";
+			break;
 		default:
 			tipoStr = "info";
 		}
 		return tipoStr;
 	}
 
-
+@Override
+public boolean equals(Object obj) {
+	if(!this.getClass().equals(obj.getClass()))
+		return false;
+	else {
+		if (((Message) obj).getTesto()==this.getTesto() && ((Message)obj).getTipo() == this.getTipo())	return true;
+		else return false;
+	}
+}
 
 
 }
