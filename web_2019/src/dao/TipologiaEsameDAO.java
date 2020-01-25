@@ -19,6 +19,7 @@ public class TipologiaEsameDAO  implements Serializable{
 	private static final long serialVersionUID = 8893820252947975277L;
 	public ArrayList<TipologiaEsameDTO> getAll() {
 		String nomeEsame;
+		String area;
 		int id_esame;
 		
 		Connection conn =DatabaseService.getDbConnection();
@@ -32,8 +33,9 @@ public class TipologiaEsameDAO  implements Serializable{
 			while(rs.next()){
 				nomeEsame = rs.getString("nome_esame");
 				id_esame = rs.getInt("id_esame");
+				area = rs.getString("area_esame");
 				int costo_esame = rs.getInt("costo_esame");
-				listaEsami.add(new TipologiaEsameDTO(id_esame, nomeEsame, costo_esame));
+				listaEsami.add(new TipologiaEsameDTO(id_esame, area, nomeEsame, costo_esame));
 				
 			}
 			rs.close();

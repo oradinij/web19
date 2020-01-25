@@ -12,13 +12,14 @@ public class EsameDTO {
 	private int id_medico;
 	private Date data;
 	private String nomeEsame;
+	private String area;
 	private String referto;
 	private int stato;
 
 	
 	
 
-	public EsameDTO(int id_esame, int id_paziente, int id_medico, Date data, String nomeEsame, String referto, int id_prenotazione, int stato) {
+	public EsameDTO(int id_esame, String area, int id_paziente, int id_medico, Date data, String nomeEsame, String referto, int id_prenotazione, int stato) {
 		this.id_esame = id_esame;
 		this.id_prenotazione = id_prenotazione;
 		this.id_medico = id_medico;
@@ -27,6 +28,7 @@ public class EsameDTO {
 		this.nomeEsame = nomeEsame;
 		this.referto = referto;
 		this.stato = stato;
+		this.area = area;
 	}
 	
 	public int getId_esame() {
@@ -47,7 +49,16 @@ public class EsameDTO {
 	public int getId_medico() {
 		return id_medico;
 	}
+	
+	
+	public String getArea() {
+		return area;
+	}
 
+	public void setArea(String area) {
+		this.area= area;
+	}
+	
 	public void setId_medico(int id_medico) {
 		this.id_medico = id_medico;
 	}

@@ -9,7 +9,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Visite</title>
+<title>Esami</title>
 <link rel="stylesheet" href="../css/custom.css">
 <link rel="stylesheet" href="../css/tempusdominus-bootstrap-4.min.css">
 <link rel="stylesheet" href="../css/fontawesome-pro-5.12.0-web/css/all.css">
@@ -65,8 +65,8 @@
         <c:forEach items="${visita_corrente.paziente.listaEsami}" var="esame">
           <tr>
             <td>${esame.nomeEsame}</td>
-            <td style="vertical-align: middle"><span class="badge badge-pill badge-info">Dermatologia</span></td>
-            <td style="vertical-align: middle">10/09/2019</td>
+            <td style="vertical-align: middle"><span class="badge badge-pill badge-info">${esame.area}</span></td>
+            <td style="vertical-align: middle">${esame.data}</td>
             <td style="vertical-align: middle"><a href="#" data-toggle="modal" data-target="#modalPrenotazioneEsame" class="btn btn-outline-info"><i class="fa fa-info-circle"></i> Dettagli</a></td>
           </tr>
           </c:forEach>
