@@ -39,7 +39,10 @@
 &nbsp;
 <div class="container text-center" style="background-color: #C1D4D9; border-radius: 20px; padding:20px; max-width: 70%"><img class="rounded-circle " src="../images/utente1img.jpg" width="150" height="150" alt="user" style="margin-bottom: 10px;">
   <h2>Ricette di: <span class="badge badge-info">${visita_corrente.paziente.nome} ${visita_corrente.paziente.cognome}</span></h2>
-  <button class="btn btn-success"><i class="fa fa-arrow-circle-left" style="vertical-align: middel"></i> Torna al paziente</button>
+  <form id="formPaziente${visita_corrente.paziente.id}" action="DettagliPaziente">  
+       <input type="hidden" value="${visita_corrente.paziente.id}" name="id"> 
+  <button class="btn btn-success" type="submit"><i class="fa fa-arrow-circle-left" style="vertical-align: middel"></i> Torna al paziente</button>
+  </form>
 </div>
 &nbsp;
 <hr>
@@ -53,7 +56,7 @@
           <tr>
             <th>Medico prescrittore</th>
             <th>Stato</th>
-            <th>Data prescrizione</th>
+            <th>Data prescrizione/erogazione</th>
             <th></th>
           </tr>
         </thead>
@@ -62,12 +65,12 @@
           <tr>
             <td>${prescrizione.nome_medico}</td>
             <c:if test="${prescrizione.stato==0}">
-            <td style="vertical-align: middle"><span class="badge badge-pill badge-info">${ }</span></td>
+            <td style="vertical-align: middle"><span class="badge badge-pill badge-info">Non erogata</span></td>
             </c:if>
             <c:if test="${prescrizione.stato==1}">
             <td style="vertical-align: middle"><span class="badge badge-pill badge-secondary">Erogata</span></td>
             </c:if>
-            <td style="vertical-align: middle">10/09/2019</td>
+            <td style="vertical-align: middle">${prescrizione.data}</td>
             <td style="vertical-align: middle"><a href="#" data-toggle="modal" data-target="#modalRicettaErogata" class="btn btn-outline-info"><i class="fa fa-info-circle"></i> Dettagli</a></td>
           </tr>
          </c:forEach>
@@ -76,7 +79,10 @@
       <hr>
       <h5>Per prescrivere una nuova ricetta compila una visita: </h5>
       <br>
-      <button href="#" class="btn btn-success"><i class="fa fa-arrow-circle-right" style=" font-size: 20px; vertical-align: middle; padding: 5px 5px"></i> Vai alle visite del paziente</button>
+      <form id="formVisite" action="VisitePaziente">  
+       <input type="hidden" value="${visita_corrente.paziente.id}" name="id"> 
+      <button href="#" type="submit" class="btn btn-success"><i class="fa fa-arrow-circle-right" style=" font-size: 20px; vertical-align: middle; padding: 5px 5px"></i> Vai alle visite del paziente</button>
+    </form>
     </div>
   </div>
 </div>

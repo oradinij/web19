@@ -82,7 +82,10 @@
   <div class="card">
     <div class="card-img"> <img src="../images/exam.jpg" alt="pills" style="height:220px;">
       <div class="overlay">
-        <div class="overlay-content"><a href="#!">Vai agli esami del paziente</a></div>
+      <form id="formEsami" action="EsamiPaziente">  
+       <input type="hidden" value="${visita_corrente.paziente.id}" name="id"> 
+        <div class="overlay-content"><a class="hover" onclick="formEsami.submit();">Vai agli esami del paziente</a></div>
+        </form>
       </div>
     </div>
     <div class="card-content"> <a href="#!">

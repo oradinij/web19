@@ -2,7 +2,7 @@
     pageEncoding="utf-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
-<!DOCTYPE html5>
+<!DOCTYPE html>
 <html lang="it">
 <head>
 <meta charset="utf-8">
@@ -133,8 +133,35 @@
             <td style="vertical-align: middle"><span class="badge badge-pill badge-info">${visita.nome_visita}</span></td>
             </c:if>
             <td style="vertical-align: middle">${visita.nome_medico} ${visita.cognome_medico}</td>
-            <td style="vertical-align: middle"><a href="#" class="btn btn-outline-info" data-toggle="modal" data-target="#modalVisitaBase"><i class="fa fa-info-circle"></i> Dettagli</a></td>
+            <td style="vertical-align: middle"><button onclick="modal${visita.id_prenotazione}()" href="#" class="btn btn-outline-info"><i class="fa fa-info-circle"></i> Dettagli</button></td>
           </tr>
+          
+          <script>
+          
+  		    function modal${visita.id_prenotazione}(){
+        	 
+        	   $.ajax({
+        	        url: 'http://localhost:8080/web2019/medico/modal/dettagli_visita?id_prenotazione=${visita.id_prenotazione}',
+        	        type: "GET",
+        	        success: function (result) { 
+        	        	console.log(result);
+        	            document.getElementById('completata_data').innerHTML=result.data;
+        	            document.getElementById('completata_nome_medico').innerHTML=result.nome_medico;
+        	            $('#modalVisitaSpecialistica').modal('show');
+        	            },
+        	         error: function (result){
+        	        	
+        	        	console.log(result);
+        	        	
+        	        	
+        	        }
+        	        });
+        	    
+        	  
+        	};
+          
+          </script>
+          
           </c:forEach>
         </tbody>
       </table>
@@ -450,32 +477,27 @@ var id_visita_da_cancellare;
           <h5>
             <p class="badge badge-info">Tipologia</p>
           </h5>
-          <h5> Visita da medico specialista</h5>
+          <h5 id="completata_tipo_visito"></h5>
           <hr class="bg-light">
           <h5>
             <p class="badge badge-info">Medico</p>
           </h5>
-          <h5> Nome Medico</h5>
+          <h5 id="completata_nome_medico"></h5>
           <hr class="bg-light">
           <h5>
-            <p class="badge badge-info">Tipologia</p>
+            <p class="badge badge-info">Data</p>
           </h5>
-          <h5>Dermatologia</h5>
-          <hr class="bg-light">
-          <h5>
-            <p class="badge badge-info">Data e ora prenotazione</p>
-          </h5>
-          <h5>23/04/2019 13:30</h5>
+          <h5 id="completata_data"></h5>
           <hr class="bg-light">
           <h5>
             <p class="badge badge-info">Luogo</p>
           </h5>
-          <h5>Ospedale S. Maria di Rovereto</h5>
+          <h5 id="completata_luogo"></h5>
           <hr class="bg-light">
           <h5>
             <p class="badge badge-info">Referto</p>
           </h5>
-          <p class="card-body text-left" style="border-style: solid; border-radius: 20px;"> kjljlkjljljljljluhihihhih.hih hu hiuihihpuhiuh iuh  . uihih iuh iuilh7yo8 y ugihiuih iuh puih hul òoòjh òhlk. hiuh </p>
+          <p id="completata_referto" class="card-body text-left" style="border-style: solid; border-radius: 20px;"></p>
           <hr class="bg-light">
           <h5>
             <p class="badge badge-info">Ricette</p>
