@@ -52,7 +52,7 @@
               <br>
               ${paziente.data_nascita}<br>
               ${paziente.codice_fiscale}<br>
-              <span class="fa fa-envelope fa-fw info-testo" data-toggle="tooltip"></span> <span class="info-testo small text-truncate">email@info.it</span></div>
+              <span class="fa fa-envelope fa-fw info-testo" data-toggle="tooltip"></span> <span class="info-testo small text-truncate">${paziente.dataUltimaVisita}</span></div>
           </div>
         </li>
       </form>   

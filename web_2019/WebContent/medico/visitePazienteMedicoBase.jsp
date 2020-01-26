@@ -2,7 +2,7 @@
     pageEncoding="utf-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
-<!DOCTYPE html5>
+<!DOCTYPE html>
 <html lang="it">
 <head>
 <meta charset="utf-8">
@@ -52,7 +52,7 @@
   <div class="bg-light" style=" border-radius:20px; padding: 10px;">
     <h3>Le tue visite prenotate</h3>
     &nbsp;
-    <table id="tabellaVisitePrenotate" class="table datatable table-striped table-hover table-light tabella_visite" style="width: 100%;">
+    <table id="tabellaVisitePrenotate" class="table datatable table-striped table-hover table-light tabella_visite text-center" style="width: 100%;">
       <thead>
         <tr>
           <th>Data Prenotazione</th>
@@ -61,12 +61,15 @@
         </tr>
       </thead>
       <tbody>
+      <c:forEach items="${visita_corrente.paziente.lista_visite_prenotate}" var="visita">
+      <c:if test="${visita.nome_visita=='Base'}">
         <tr>
-          <td style="vertical-align: middle">05/07/2019</td>
-          <td style="vertical-align: middle"><a href="#" data-toggle="modal" data-target="#modalPrenotazioneBase" class="btn btn-outline-info"> <i class="fa fa-info-circle"></i> Dettagli</a></td>
+          <td style="vertical-align: middle">${visita.data}</td>
+          <td style="vertical-align: middle"><a href="#" data-toggle="modal" data-target="#modalPrenotazioneBase${visita.id_prenotazione}" class="btn btn-outline-info"> <i class="fa fa-info-circle"></i> Dettagli</a></td>
           <td style="vertical-align: middle"><a href="#" data-toggle="modal" data-target="#modalCompilazione" class="btn btn-outline-success"><i class="fa fa-clipboard-list-check"></i> Compila</a></td>
         </tr>
-    
+        </c:if>
+    </c:forEach>
       </tbody>
     </table>
   </div>
@@ -79,7 +82,7 @@
     <h3>Visite specialistiche prescritte: </h3>
     &nbsp;
     <div class="container">
-      <table id="tabellaVisiteSpecialistichePrescritte" class="table datatable table-striped table-hover table-light tabella_visite" style="width: 100%;">
+      <table id="tabellaVisiteSpecialistichePrescritte" class="table datatable table-striped table-hover table-light tabella_visite text-center" style="width: 100%;">
         <thead>
           <tr>
             <th>Data prescrizione</th>
@@ -88,16 +91,13 @@
           </tr>
         </thead>
         <tbody>
+         <c:forEach items="${visita_corrente.paziente.lista_visite_da_prenotare}" var="visita">
           <tr>
-            <td style="vertical-align: middle">10/09/2019</td>
-            <td style="vertical-align: middle"><span class="badge badge-pill badge-info">Dermatologia</span></td>
+            <td style="vertical-align: middle">${visita.data}</td>
+            <td style="vertical-align: middle"><span class="badge badge-pill badge-info">${visita.nome_visita}</span></td>
             <td style="vertical-align: middle"><a href="#" data-toggle="modal" data-target="#modalPrenotazioneSpecialistica" class="btn btn-outline-info"><i class="fa fa-info-circle"></i> Dettagli</a></td>
           </tr>
-          <tr>
-            <td style="vertical-align: middle">24/09/2019</td>
-            <td style="vertical-align: middle"><span class="badge badge-pill badge-info">Oculistica</span></td>
-            <td style="vertical-align: middle"><a href="#" data-toggle="modal" data-target="#modalPrenotazioneSpecialistica" class="btn btn-outline-info"><i class="fa fa-info-circle"></i> Dettagli</a></td>
-          </tr>
+         </c:forEach>
         </tbody>
       </table>
       <hr>
@@ -108,7 +108,7 @@
 &nbsp;
 <hr>
 &nbsp;
-<div class="text-center container" style="background-color: #C1D4D9;  border-radius: 20px; padding: 20px;">
+<div class="text-center container" style="background-color: #C1D4D9;  border-radius: 20px; padding: 20px; margin-bottom:20px;">
   <div class="bg-light" style=" border-radius:20px; padding: 10px;">
     <h3>Le tue visite effettuate: </h3>
     &nbsp;
@@ -123,31 +123,68 @@
           </tr>
         </thead>
         <tbody>
+        <c:forEach items="${visita_corrente.paziente.lista_visite_svolte}" var="visita">
           <tr>
-            <td style="vertical-align: middle">05/07/2019</td>
-            <td style="vertical-align: middle"><span class="badge badge-pill badge-secondary">Base</span></td>
-            <td style="vertical-align: middle">Abcdssdasdsdasd</td>
-            <td style="vertical-align: middle"><a href="#" class="btn btn-outline-info" data-toggle="modal" data-target="#modalVisitaBase"><i class="fa fa-info-circle"></i> Dettagli</a></td>
+            <td style="vertical-align: middle">${visita.data}</td>
+            <c:if test="${visita.nome_visita=='Base'}">
+            <td style="vertical-align: middle"><span class="badge badge-pill badge-secondary">${visita.nome_visita}</span></td>
+            </c:if>
+            <c:if test="${visita.nome_visita!='Base'}">
+            <td style="vertical-align: middle"><span class="badge badge-pill badge-info">${visita.nome_visita}</span></td>
+            </c:if>
+            <td style="vertical-align: middle">${visita.nome_medico} ${visita.cognome_medico}</td>
+            <td style="vertical-align: middle"><button onclick="modal${visita.id_prenotazione}()" href="#" class="btn btn-outline-info"><i class="fa fa-info-circle"></i> Dettagli</button></td>
           </tr>
-          <tr>
-            <td style="vertical-align: middle">05/07/2019</td>
-            <td style="vertical-align: middle"><span class="badge badge-pill badge-info">Oculistica</span></td>
-            <td style="vertical-align: middle">Abcdssdasdsdasd</td>
-            <td style="vertical-align: middle"><a href="#" class="btn btn-outline-info" data-toggle="modal" data-target="#modalVisitaSpecialistica"><i class="fa fa-info-circle"></i> Dettagli</a></td>
-          </tr>
+          
+          <script>
+          
+  		    function modal${visita.id_prenotazione}(){
+        	 
+        	   $.ajax({
+        	        url: 'http://localhost:8080/web2019/medico/modal/dettagli_visita?id_prenotazione=${visita.id_prenotazione}',
+        	        type: "GET",
+        	        success: function (result) { 
+        	        	console.log(result);
+        	            document.getElementById('completata_data').innerHTML=result.data;
+        	            document.getElementById('completata_nome_medico').innerHTML=result.nome_medico;
+        	            $('#modalVisitaSpecialistica').modal('show');
+        	            },
+        	         error: function (result){
+        	        	
+        	        	console.log(result);
+        	        	
+        	        	
+        	        }
+        	        });
+        	    
+        	  
+        	};
+          
+          </script>
+          
+          </c:forEach>
         </tbody>
       </table>
     </div>
   </div>
 </div>
-&nbsp;
-<div class="modal fade modalToClose" id="modalPrenotazioneBase">
+
+
+<script>
+
+var id_visita_da_cancellare;
+
+</script>
+
+<c:forEach items="${visita_corrente.paziente.lista_visite_prenotate}" var="visita">
+<c:if test="${visita.nome_visita=='Base'}">
+<div class="modal fade modalToClose" id="modalPrenotazioneBase${visita.id_prenotazione}">
   <div class="modal-dialog">
     <div class="modal-content"> 
       
       <!-- Modal Header -->
       <div class="modal-header text-light">
-        <h4 class="modal-title">Dettagli prenotazione visita</h4>
+        <h4 class="modal-title">Dettagli prenotazione visita base</h4>
         <button type="button" class="close text-light" data-dismiss="modal">&times;</button>
       </div>
       
@@ -157,8 +194,24 @@
           <h5>
             <p class="badge badge-info">Data e ora prenotazione</p>
           </h5>
-          <h5>23/04/2019 13:30</h5>
-          <a href="#" data-toggle="modal" data-target="#modalCancellazionePrenotazione" class="btn btn-danger">Annulla prenotazione</a>
+          <h5>${visita.data}</h5>
+          
+       	   <script>
+         
+         function myfunction${visita.id_prenotazione}(){
+        	 id_visita_da_cancellare=${visita.id_prenotazione};
+        	 console.log(id_visita_da_cancellare);
+        	 document.getElementById('id_to_delete').innerHTML = id_visita_da_cancellare;
+        	 document.getElementById('input_to_delete').value = id_visita_da_cancellare;
+        	 $("#modalCancellazionePrenotazione").modal("show");
+         }
+         
+         </script>
+          
+          <a href="#" class="btn btn-danger" onclick="myfunction${visita.id_prenotazione}()">Annulla prenotazione</a>
+          
+      
+          
           <hr class="bg-light">
           <h5>
             <p class="badge badge-info">Compila visita</p>
@@ -168,12 +221,15 @@
       
       <!-- Modal footer -->
       <div class="modal-footer">
-        <h6 class="badge badgeNumeroVisitaEsame" style="margin-top:10px;">Codice visita: 1223456599843882 </h6>
+        <h6 class="badge badgeNumeroVisitaEsame" style="margin-top:10px;">Codice prenotazione: ${visita.id_prenotazione} </h6>
         <button type="button" class="btn btn-danger" data-dismiss="modal">Chiudi</button>
       </div>
     </div>
   </div>
 </div>
+</c:if>
+</c:forEach>
+
 <div class="modal  fade" id="modalPrenotazioneSpecialistica">
   <div class="modal-dialog">
     <div class="modal-content"> 
@@ -421,32 +477,27 @@
           <h5>
             <p class="badge badge-info">Tipologia</p>
           </h5>
-          <h5> Visita da medico specialista</h5>
+          <h5 id="completata_tipo_visito"></h5>
           <hr class="bg-light">
           <h5>
             <p class="badge badge-info">Medico</p>
           </h5>
-          <h5> Nome Medico</h5>
+          <h5 id="completata_nome_medico"></h5>
           <hr class="bg-light">
           <h5>
-            <p class="badge badge-info">Tipologia</p>
+            <p class="badge badge-info">Data</p>
           </h5>
-          <h5>Dermatologia</h5>
-          <hr class="bg-light">
-          <h5>
-            <p class="badge badge-info">Data e ora prenotazione</p>
-          </h5>
-          <h5>23/04/2019 13:30</h5>
+          <h5 id="completata_data"></h5>
           <hr class="bg-light">
           <h5>
             <p class="badge badge-info">Luogo</p>
           </h5>
-          <h5>Ospedale S. Maria di Rovereto</h5>
+          <h5 id="completata_luogo"></h5>
           <hr class="bg-light">
           <h5>
             <p class="badge badge-info">Referto</p>
           </h5>
-          <p class="card-body text-left" style="border-style: solid; border-radius: 20px;"> kjljlkjljljljljluhihihhih.hih hu hiuihihpuhiuh iuh  . uihih iuh iuilh7yo8 y ugihiuih iuh puih hul òoòjh òhlk. hiuh </p>
+          <p id="completata_referto" class="card-body text-left" style="border-style: solid; border-radius: 20px;"></p>
           <hr class="bg-light">
           <h5>
             <p class="badge badge-info">Ricette</p>
@@ -534,11 +585,15 @@
       
       <!-- Modal body -->
       <div class="modal-body">
-        <h5 class="bg-warning text-center" style="border-radius: 20px; padding: 10px;">Sei sicuro di voler cancellare questa prenotazione per il paziente?</h5>
+        <h5 class="bg-warning text-center" style="border-radius: 20px; padding: 10px;">Sei sicuro di voler cancellare la prenotazione <span id="id_to_delete"></span> per il paziente?</h5>
       </div>
       
       <!-- Modal footer -->
-      <div class="modal-footer"> <a class="btn btn-warning">Cancella prenotazione</a>
+      <div class="modal-footer">
+      <form action="./annullaPrenotazioneVisita">
+      <input name="id_prenotazione" id="input_to_delete" type="hidden">
+      <button type="submit" class="btn btn-warning">Cancella prenotazione</button>
+       </form>
         <button type="button" class="btn btn-danger" data-dismiss="modal">Annulla</button>
       </div>
     </div>
@@ -651,6 +706,7 @@
     </div>
   </div>
 </div>
+
 <footer class="text-center text-light">©2019 Oradini & Bertamini</footer>
 <script src="../js/medico_base/utils_visite_paziente_medico_base.js"></script> 
 <script src="../js/medico_base/prenota_visita_timepicker.js"></script> 

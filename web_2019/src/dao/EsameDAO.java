@@ -29,11 +29,11 @@ public class EsameDAO {
 				int id_medico = rs.getInt("id_medico");
 				int stato = rs.getInt("stato");
 				String referto = rs.getString("referto");
-				
 				String nomeEsame = getNameById(id_esame);
+				String area = getAreaById(id_esame);
 
 
-				listaEsami.add(new EsameDTO(id_esame, id_paziente, id_medico, data, nomeEsame, referto, id_prenotazione, stato ));
+				listaEsami.add(new EsameDTO(id_esame, area, id_paziente, id_medico, data, nomeEsame, referto, id_prenotazione, stato ));
 			}
 			rs.close();
 			stmt.close();
@@ -71,6 +71,33 @@ public class EsameDAO {
 		return nomeEsame;
 	}
 
+	
+
+	private String getAreaById(int id_esame) {
+		String area = "";
+		Connection conn =DatabaseService.getDbConnection();
+		ResultSet rs = null;
+		Statement stmt;
+
+		try {
+			stmt = conn.createStatement();
+			String sql = "SELECT area_esame FROM esami WHERE id_esame = "+id_esame+";";
+			rs = stmt.executeQuery(sql);
+			while(rs.next()){
+				area = rs.getString("area_esame");
+			}
+			rs.close();
+			stmt.close();
+			conn.close();
+		}
+
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		return area;
+	}
+
+	
 	public void creaPrenotazioneEsame(int id_esame, int id_paziente) {
 		
 		Connection conn =DatabaseService.getDbConnection();

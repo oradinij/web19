@@ -5,6 +5,7 @@ import dao.TipologiaEsameDAO;
 public class TipologiaEsameDTO {
 
 	private int id_esame;
+	private String area;
 	private String nome_esame;
 	private int costo_esame;
 
@@ -18,6 +19,10 @@ public class TipologiaEsameDTO {
 		return costo_esame;
 	}
 	
+	public String getArea_esame() {
+		return area;
+	}
+	
 	public String getNome_esame() {
 		return nome_esame;
 	}
@@ -25,11 +30,12 @@ public class TipologiaEsameDTO {
 		this.nome_esame = nome_esame;
 	}
 
-	public TipologiaEsameDTO(int id_esame, String nome_esame, int costo_esame) {
+	public TipologiaEsameDTO(int id_esame, String area, String nome_esame, int costo_esame) {
 
 		this.id_esame = id_esame;
 		this.nome_esame = nome_esame;
 		this.costo_esame = costo_esame;
+		this.area = area;
 	}
 	public TipologiaEsameDTO(int id_esame) {
 		this.id_esame = id_esame;
