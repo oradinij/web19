@@ -2,6 +2,8 @@ package dto;
 
 import java.util.Date;
 
+import dao.MedicoDAO;
+
 public class VisitaDTO {
 	
 	
@@ -61,25 +63,50 @@ public class VisitaDTO {
 	}
 
 
+	public Date getData() {
+		return data;
+	}
+
+	
 	private Date data;
 	private int id_prenotazione;
 	private int id_medico;
 	private int id_paziente;
 	private int stato;
 	private String referto;
-
-	public Date getData() {
-		return data;
+	private String nome_medico= null;
+	
+	public String getNome_medico() {
+		if(nome_medico == null) nome_medico = new MedicoDAO().getUserById(id_medico).getNome();
+		return nome_medico;
 	}
 
 
-	public VisitaDTO(int id_prenotazione, int id_medico, int id_paziente, int stato, String referto, Date data) {
+	public Integer getId_visita() {
+		return id_visita;
+	}
+
+
+	private Integer id_visita;
+	private String nome_visita= null;
+
+	
+
+	public String getNome_visita() {
+		if(nome_visita == null)
+			nome_visita = new TipologiaVisitaDTO(id_visita).getNome_visita();
+		return nome_visita;
+	}
+
+
+	public VisitaDTO(int id_prenotazione, int id_medico, int id_paziente, int stato, String referto, Date data, Integer id_visita) {
 		this.data = data;
 		this.id_prenotazione = id_prenotazione;
 		this.id_medico = id_medico;
 		this.id_paziente = id_paziente;
 		this.stato = stato;
 		this.referto = referto;
+		this.id_visita = id_visita;
 	}
 	
 

@@ -12,7 +12,7 @@ import web_2019.Assets;
 
 public class PazienteDTO implements Serializable{
 	private int id;
-	MedicoDTO medico;		
+	MedicoDTO medico;
 	private String email;		
 	private String nome;	
 	private String cognome;
@@ -55,7 +55,7 @@ public class PazienteDTO implements Serializable{
 			VisitaDTO ultimaVisita = listaVisite.get(listaVisite.size()-1);
 			return ultimaVisita.getData().toString();
 		}
-		else return "Nessuna visita disponibile";
+		else return "Nessuna visita disponibile"; 
 	}
 	public void setDataUltimaVisita(String dataUltimaVisita) {this.dataUltimaVisita = dataUltimaVisita;}
 	
@@ -156,7 +156,7 @@ public class PazienteDTO implements Serializable{
 	 */
 	public ArrayList<VisitaDTO> getLista_visite_da_prenotare(){
 		ArrayList<VisitaDTO> visite_da_prenotare = new ArrayList<VisitaDTO>();
-		for (VisitaDTO visita : listaVisite) {
+		for (VisitaDTO visita : getListaVisite()) {
 			if(visita.getStato() == Assets.DA_PRENOTARE)
 				visite_da_prenotare.add(visita);
 		}
@@ -168,7 +168,7 @@ public class PazienteDTO implements Serializable{
 	 */
 	public ArrayList<VisitaDTO> getLista_visite_svolte(){
 		ArrayList<VisitaDTO> visite_svolte = new ArrayList<VisitaDTO>();
-		for (VisitaDTO visita : listaVisite) {
+		for (VisitaDTO visita : getListaVisite()) {
 			if(visita.getStato() == Assets.PRENOTAZIONE_SVOLTA)
 				visite_svolte.add(visita);
 		}
@@ -180,7 +180,7 @@ public class PazienteDTO implements Serializable{
 	 */
 	public ArrayList<VisitaDTO> getLista_visite_prenotate(){
 		ArrayList<VisitaDTO> visite_prenotate = new ArrayList<VisitaDTO>();
-		for (VisitaDTO visita : listaVisite) {
+		for (VisitaDTO visita : getListaVisite()) {
 			if(visita.getStato() == Assets.PRENOTAZIONE_EFFETTUATA)
 				visite_prenotate.add(visita);
 		}

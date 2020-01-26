@@ -8,9 +8,12 @@
 </head>
 <body>
 Login PAZIENTI
+
+
 	<br>
 	<br>
 	<form action="./loginPaziente">
+	
 		User-name:	<input type="text" name="email"><br>
 		Password:	<input type="password" name="password"><br>
 		Ricordami: <input type="checkbox" name = "remember_me"><br>

@@ -27,7 +27,7 @@ $(document).ready(function () {
 		scrollCollapse: false,
 
 		"columnDefs": [{
-			"targets": [1, 2, 3],
+			"targets": [2, 3],
 			"orderable": false
 		}]
 

@@ -3,6 +3,7 @@ package controllers.paziente;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.UUID;
 
 import javax.servlet.ServletException;
@@ -16,6 +17,7 @@ import javax.servlet.http.HttpSession;
 import dao.PazienteDAO;
 import dto.PazienteDTO;
 import filters.CookiesFilterPaziente;
+import web_2019.Message;
 
 /**
  * <h2>Controller login paziente</h2>
@@ -56,6 +58,9 @@ public class LoginPaziente extends HttpServlet {
 		}
 
 		session.setAttribute("user", user);
+		ArrayList<Message> lista_messaggi =new ArrayList<Message>();
+		lista_messaggi.add(new Message("Login Fallito", Message.DANGER));
+		session.setAttribute("lista_messaggi", lista_messaggi);
 		String nextPage = user!= null? "/paziente/dettagliPaziente.jsp": "/login/loginPaziente.jsp" ;
 		response.sendRedirect(request.getContextPath() + nextPage);
 

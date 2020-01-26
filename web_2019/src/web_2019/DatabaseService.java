@@ -11,8 +11,8 @@ public class DatabaseService {
 	static final String DB_URL="jdbc:postgresql://localhost:5432/web19";
 
 	//  Database credentials
-	static final String USER = "jan";
-	static final String PASS = "postgres";
+	static final String USER = "postgres";
+	static final String PASS = "password";
 
 	public static Connection getDbConnection() {
 		try {Class.forName(JDBC_DRIVER);}

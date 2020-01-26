@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=US-ASCII"
+<%@ page language="java" contentType="text/html; charset=utf-8"
 	pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
@@ -13,7 +13,7 @@
 <link rel="stylesheet" href="../css/paziente/carousel_paziente.css">
 <link rel="stylesheet" href="../css/tempusdominus-bootstrap-4.min.css">
 <link rel="stylesheet"
-	href="../css/font-awesome-4.7.0/../css/font-awesome.css">
+	href="../css/fontawesome-pro-5.12.0-web/css/all.css">
 <link rel="stylesheet" href="../css/bootstrap.css">
 <link rel="stylesheet" href="../css/dataTables.bootstrap4.min.css">
 <script type="text/javascript" src="../js/popper.min.js"></script>
@@ -25,6 +25,8 @@
 <script type="text/javascript" src="../js/moment-with-locales.min.js"></script>
 <script type="text/javascript"
 	src="../js/tempusdominus-bootstrap-4.min.js"></script>
+<script type="text/javascript" src="../js/paziente/esami_paziente.js"></script>
+<script type="text/javascript" src="../js/paziente/common_esami_visite_pazienti.js"></script>
 </head>
 <body>
 	<nav class="navbar navbar-expand-lg navbar-dark">
@@ -87,7 +89,7 @@
 							<hr class="bg-light">
 							&nbsp;
 							<table id="tabellaEsamiPrenotati"
-								class="table datatable table-striped table-hover"
+								class="table datatable table-striped table-hover text-center"
 								style="background-color: #FFFFFF;">
 								<thead>
 									<tr>
@@ -98,25 +100,19 @@
 									</tr>
 								</thead>
 								<tbody>
-									<tr>
-										<td style="vertical-align: middle">05/07/2019</td>
-										<td style="vertical-align: middle"><span
-											class="badge badge-pill badge-info">Dermatologia</span></td>
-										<td style="vertical-align: middle">Controllo nei</td>
-										<td style="vertical-align: middle"><a href="#"
-											data-toggle="modal" data-target="#modalPrenotazioneEsame"
-											class="btn btn-outline-info">Dettagli</a></td>
-									</tr>
-									<tr>
-										<td style="vertical-align: middle">19/08/2019</td>
-										<td style="vertical-align: middle"><span
-											class="badge badge-pill badge-info">Oculistica</span></td>
-										<td style="vertical-align: middle">Misura pressione
-											occhio</td>
-										<td style="vertical-align: middle"><a href="#"
-											data-toggle="modal" data-target="#modalPrenotazioneEsame"
-											class="btn btn-outline-info">Dettagli</a></td>
-									</tr>
+									
+										<c:forEach items="${user.lista_esami_da_prenotare}" var="esame">
+										<tr>
+											<td style="vertical-align: middle">${esame.data}</td>
+											<td style="vertical-align: middle">${esame.nomeEsame}</td>
+											<td style="vertical-align: middle"><a href="#"
+												class="btn btn-outline-info" data-toggle="modal"
+												data-target="#modalDettagliEsameDaPrenotare">Dettagli</a></td>
+											
+										</tr>
+									</c:forEach>
+
+								
 								</tbody>
 							</table>
 						</div>
@@ -130,7 +126,7 @@
 							<hr class="bg-light">
 							&nbsp;
 							<table id="tabellaEsamiDaPrenotare"
-								class="table datatable table-striped table-hover"
+								class="table datatable table-striped table-hover text-center"
 								style="background-color: #FFFFFF;">
 								<thead>
 									<tr>
@@ -146,7 +142,6 @@
 
 									<c:forEach items="${user.lista_esami_da_prenotare}" var="esame">
 										<tr>
-
 											<td style="vertical-align: middle">${esame.data}</td>
 											<td style="vertical-align: middle">${esame.nomeEsame}</td>
 											<td style="vertical-align: middle"><a href="#"
@@ -158,17 +153,6 @@
 										</tr>
 									</c:forEach>
 
-
-
-									<tr>
-										<td style="vertical-align: middle">24/09/2019</td>
-										<td style="vertical-align: middle">Controllo nei</td>
-										<td style="vertical-align: middle"><a href="#"
-											class="btn btn-outline-info" data-toggle="modal"
-											data-target="#modalDettagliEsameDaPrenotare">Dettagli</a></td>
-										<td style="vertical-align: middle"><a href="#"
-											class="btn btn-outline-success">Prenota</a></td>
-									</tr>
 								</tbody>
 							</table>
 						</div>
@@ -181,7 +165,7 @@
 							<hr class="bg-light">
 							&nbsp;
 							<table id="tabellaEsamiEffettuati"
-								class="table datatable table-striped table-hover"
+								class="table datatable table-striped table-hover text-center"
 								style="background-color: #FFFFFF; width: 100%">
 								<thead>
 									<tr>
@@ -421,8 +405,6 @@
 			</div>
 		</div>
 	</div>
-	<script type="text/javascript" src="../js/paziente/esami_paziente.js"></script>
-	<script type="text/javascript"
-		src="../js/paziente/common_esami_visite_pazienti.js"></script>
+	
 </body>
 </html>

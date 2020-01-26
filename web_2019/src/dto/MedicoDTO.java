@@ -30,6 +30,7 @@ public class MedicoDTO implements Serializable{
 	}
 	
 	
+	
 	public String getNome() {
 		return nome;
 	}
