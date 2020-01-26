@@ -20,7 +20,6 @@
 
 </head>
 <body>
-<% navbar(); %>
 	<div class="container bg-faded"
 		style="background-color: #C1D4D9; padding: 20px; border-radius: 20px; max-width: 50%;">
 		<div class="container">

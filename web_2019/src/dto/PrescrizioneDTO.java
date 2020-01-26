@@ -12,7 +12,7 @@ public class PrescrizioneDTO {
 	private int id_medico; 
 	private String data; 
 	private String farmaco;
-	Integer stato;
+	private int stato;
 	
 	public PrescrizioneDTO(int id_prescrizione, int id_paziente, int id_medico, String data, String farmaco, Integer stato) {
 		this.id_prescrizione = id_prescrizione;
@@ -49,6 +49,23 @@ public class PrescrizioneDTO {
 	}
 	public Integer getStato() {
 		return stato;
+	}
+	
+	public String toJson() {
+		return String.format("{"
+		+ "'id_prescrizione': '%d', \n" + 
+		"'id_paziente': '%d',\n" + 
+		"'id_medico': '%d',\n" + 
+		"'data': '%s',\n" + 
+		"'farmaco': '%s',\n" + 
+		"'stato': '%d' \n"+
+		"}",
+		id_prescrizione, 
+		id_paziente, 
+		id_medico, 
+		data, 
+		farmaco,
+		stato);
 	}
 
 

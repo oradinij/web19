@@ -1,5 +1,3 @@
-<%@page import="dao.PazienteDAO"%>
-<%@page import="dto.PazienteDTO"%>
 <%@ page language="java" contentType="text/html; charset=US-ASCII"
     pageEncoding="US-ASCII"%>
 <!DOCTYPE html>
