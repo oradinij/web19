@@ -30,7 +30,8 @@ $(document).ready(function () {
 		scrollY: 314,
 		scrollCollapse: false,
 		"lengthMenu": [
-			[5, 10, 25, 50, -1],
+			[5, 10, 25, 50, -1]],
+			
 		"columnDefs": [{
 			"targets": [3],
 			"orderable": false

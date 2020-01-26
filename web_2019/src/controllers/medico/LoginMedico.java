@@ -53,7 +53,7 @@ public class LoginMedico extends HttpServlet {
 
 		String nextPage;
 		if(user != null) 
-			nextPage = "/medico/parcoPazienti.jsp";
+			nextPage = "/medico/homeMedicoBase.jsp";
 		else
 			nextPage = "/loginFailed.jsp" ;
 		response.sendRedirect(request.getContextPath() + nextPage);

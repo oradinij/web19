@@ -1,34 +1,34 @@
-<%@ page language="java" contentType="text/html; charset=US-ASCII"
-	pageEncoding="US-ASCII"%>
+<%@ page language="java" contentType="text/html; charset=utf-8"
+	pageEncoding="utf-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html5>
+<html lang="it">
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Visite</title>
-<link rel="stylesheet" href="css/custom.css">
-<link rel="stylesheet" href="css/paziente/carousel_paziente.css">
-<link rel="stylesheet" href="css/tempusdominus-bootstrap-4.min.css">
+<link rel="stylesheet" href="../css/custom.css">
+<link rel="stylesheet" href="../css/paziente/carousel_paziente.css">
+<link rel="stylesheet" href="../css/tempusdominus-bootstrap-4.min.css">
 <link rel="stylesheet"
-	href="css/font-awesome-4.7.0/css/font-awesome.css">
-<link rel="stylesheet" href="css/bootstrap.css">
-<link rel="stylesheet" href="css/dataTables.bootstrap4.min.css">
+	href="../css/font-awesome-4.7.0/css/font-awesome.css">
+<link rel="stylesheet" href="../css/bootstrap.css">
+<link rel="stylesheet" href="../css/dataTables.bootstrap4.min.css">
 
 
-<script src="js/paziente/common_esami_visite_pazienti.js"></script>
-<script src="js/paziente/visite_paziente.js"></script>
-<script src="js/paziente/prenota_visita_timepicker.js"></script>
+<script src="../js/paziente/common_esami_visite_pazienti.js"></script>
+<script src="../js/paziente/visite_paziente.js"></script>
+<script src="../js/paziente/prenota_visita_timepicker.js"></script>
 
-<script src="js/popper.min.js"></script>
-<script src="js/jquery-3.3.1.min.js"></script>
-<script src="js/bootstrap.js"></script>
-<script src="js/datatables.min.js"></script>
-<script src="js/jquery.dataTables.js"></script>
-<script src="js/dataTables.bootstrap4.min.js"></script>
-<script src="js/moment-with-locales.min.js"></script>
-<script src="js/tempusdominus-bootstrap-4.min.js"></script>
+<script src="../js/popper.min.js"></script>
+<script src="../js/jquery-3.3.1.min.js"></script>
+<script src="../js/bootstrap.js"></script>
+<script src="../js/datatables.min.js"></script>
+<script src="../js/jquery.dataTables.js"></script>
+<script src="../js/dataTables.bootstrap4.min.js"></script>
+<script src="../js/moment-with-locales.min.js"></script>
+<script src="../js/tempusdominus-bootstrap-4.min.js"></script>
 
 
 </head>
@@ -88,12 +88,12 @@
 						<div class="container"
 							style="max-width: 80%; padding-top: 20px; padding-bottom: 50px;">
 							<h4 class="text-light">Visite prenotate</h4>
-							<p class="text-light">Qui trovi le visite che hai giÃ 
+							<p class="text-light">Qui trovi le visite che hai già
 								prenotato.</p>
 							<hr class="bg-light">
 							&nbsp;
 							<table id="tabellaVisitePrenotate"
-								class="table datatable table-striped table-hover"
+								class="table datatable table-striped table-hover text-center"
 								style="background-color: #FFFFFF;">
 								<thead>
 									<tr>
@@ -104,25 +104,18 @@
 									</tr>
 								</thead>
 								<tbody>
+								<c:forEach items="${user.lista_visite_prenotate}" var="visita">
 									<tr>
-										<td style="vertical-align: middle">05/07/2019</td>
+										<td style="vertical-align: middle">${visita.data}</td>
 										<td style="vertical-align: middle"><span
-											class="badge badge-pill badge-secondary">Base</span></td>
-										<td style="vertical-align: middle">Abcdssdasdsdasd</td>
+											class="badge badge-pill badge-secondary">${visita.nome_visita} </span></td>
+										<td style="vertical-align: middle">${visita.nome_medico}</td>
 										<td style="vertical-align: middle"><a href="#"
 											data-toggle="modal" data-target="#modalPrenotazioneBase"
 											class="btn btn-outline-info">Dettagli</a></td>
 									</tr>
-									<tr>
-										<td style="vertical-align: middle">19/08/2019</td>
-										<td style="vertical-align: middle"><span
-											class="badge badge-pill badge-info">Specialistica</span></td>
-										<td style="vertical-align: middle">Abcdgsgrg</td>
-										<td style="vertical-align: middle"><a href="#"
-											data-toggle="modal"
-											data-target="#modalPrenotazioneSpecialistica"
-											class="btn btn-outline-info">Dettagli</a></td>
-									</tr>
+									</c:forEach>
+									
 								</tbody>
 							</table>
 						</div>
@@ -147,27 +140,17 @@
 									</tr>
 								</thead>
 								<tbody>
+									<c:forEach items="${user.lista_visite_da_prenotare}" var="visita">
 									<tr>
-										<td style="vertical-align: middle">10/09/2019</td>
+										<td style="vertical-align: middle">${visita.data}</td>
 										<td style="vertical-align: middle"><span
-											class="badge badge-pill badge-info">Dermatologia</span></td>
+											class="badge badge-pill badge-secondary">${visita.nome_visita} </span></td>
+										<td style="vertical-align: middle">${visita.nome_medico}</td>
 										<td style="vertical-align: middle"><a href="#"
-											class="btn btn-outline-info" data-toggle="modal"
-											data-target="#modalDettagliDaPrenotare">Dettagli</a></td>
-										<td style="vertical-align: middle"><a href="#"
-											class="btn btn-outline-success" data-toggle="modal"
-											data-target="#modalEffettuaPrenotazione">Prenota</a></td>
+											data-toggle="modal" data-target="#modalPrenotazioneBase"
+											class="btn btn-outline-info">Dettagli</a></td>
 									</tr>
-									<tr>
-										<td style="vertical-align: middle">24/09/2019</td>
-										<td style="vertical-align: middle"><span
-											class="badge badge-pill badge-info">Oculistica</span></td>
-										<td style="vertical-align: middle"><a href="#"
-											class="btn btn-outline-info" data-toggle="modal"
-											data-target="#modalDettagliDaPrenotare">Dettagli</a></td>
-										<td style="vertical-align: middle"><a href="#"
-											class="btn btn-outline-success">Prenota</a></td>
-									</tr>
+									</c:forEach>
 								</tbody>
 							</table>
 						</div>
@@ -191,22 +174,17 @@
 									</tr>
 								</thead>
 								<tbody>
+								<c:forEach items="${user.lista_visite_da_prenotare}" var="visita">
 									<tr>
-										<td style="vertical-align: middle">05/07/2019</td>
+										<td style="vertical-align: middle">visita.data</td>
 										<td style="vertical-align: middle"><span
-											class="badge badge-pill badge-secondary">Base</span></td>
-										<td style="vertical-align: middle">Abcdssdasdsdasd</td>
+											class="badge badge-pill badge-secondary">visita.nome_visita</span></td>
+										<td style="vertical-align: middle">visita.nome_medico</td>
 										<td style="vertical-align: middle"><a href="#"
 											class="btn btn-outline-info" data-toggle="modal"
 											data-target="#modalVisitaBase">Dettagli</a></td>
 									</tr>
-									<tr>
-										<td>19/08/2019</td>
-										<td><span class="badge badge-pill badge-info">Specialistica</span></td>
-										<td>Abcdgsgrg</td>
-										<td><a href="#" class="btn btn-outline-info"
-											data-toggle="modal" data-target="#modalVisitaSpecialistica">Dettagli</a></td>
-									</tr>
+									</c:forEach>
 								</tbody>
 							</table>
 						</div>
@@ -227,10 +205,10 @@
 	<div class="text-center" style="margin-bottom: 40px;">
 		<a class="btn btn-success" href="#" data-toggle="modal"
 			data-target="#modalPrenotaVisitaBase">Prenota medico di base</a> <a
-			class="btn btn-info" href="#">Torna alla home</a>
+			class="btn btn-info" href="./dettagliPaziente.jsp">Torna alla home</a>
 	</div>
 	&nbsp;
-	<footer class="text-center text-light">Â©2019 Oradini &
+	<footer class="text-center text-light">©2019 Oradini &
 		Bertamini</footer>
 	<div class="modal fade modalPrenotazione" id="modalPrenotazioneBase">
 		<div class="modal-dialog">

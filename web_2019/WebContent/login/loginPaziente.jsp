@@ -11,11 +11,11 @@
 <body>
 Login PAZIENTI
 
-  <%@ include file="../messages.jsp" %>
+
 	<br>
 	<br>
 	<form action="./loginPaziente">
-	<% check_messages(request, response); %>
+	
 		User-name:	<input type="text" name="email"><br>
 		Password:	<input type="password" name="password"><br>
 		Ricordami: <input type="checkbox" name = "remember_me"><br>

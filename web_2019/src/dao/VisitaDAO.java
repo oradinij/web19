@@ -27,9 +27,10 @@ public class VisitaDAO {
 				Date data = rs.getDate("data");
 				Integer id_prenotazione = rs.getInt("id_prenotazione");
 				Integer id_medico = rs.getInt("id_medico");
+				Integer id_visita = rs.getInt("id_visita");
 				Integer stato = rs.getInt("stato");
 				String referto= rs.getString("referto");
-				listaVisite.add(new VisitaDTO(id_prenotazione, id_medico, id_paziente, stato, referto, data));
+				listaVisite.add(new VisitaDTO(id_prenotazione, id_medico, id_paziente, stato, referto, data, id_visita));
 			}
 			rs.close();
 			stmt.close();

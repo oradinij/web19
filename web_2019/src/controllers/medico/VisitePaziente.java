@@ -16,8 +16,8 @@ import web_2019.VisitaCorrente;
 /**
  *  
  */
-@WebServlet("/medico/DettagliPaziente")
-public class DettagliPaziente extends HttpServlet {
+@WebServlet("/medico/VisitePaziente")
+public class VisitePaziente extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     
@@ -33,7 +33,7 @@ public class DettagliPaziente extends HttpServlet {
 		visita_corrente.setId_medico(user.getId_medico());
 		request.getSession().setAttribute("visita_corrente", visita_corrente);
 				
-		response.sendRedirect(request.getContextPath()+"/medico/pazienteMedicoBase.jsp");
+		response.sendRedirect(request.getContextPath()+"/medico/visitePazienteMedicoBase.jsp");
 		
 	}
 
