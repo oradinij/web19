@@ -2,8 +2,8 @@
     pageEncoding="utf-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html5>
+<html lang="it">
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -54,7 +54,9 @@
   <div class="card">
     <div class="card-img"> <img src="../images/pills.jpg" alt="pills" style="height:220px;">
       <div class="overlay">
-        <div class="overlay-content"><a class="hover">Vai alle ricette del paziente</a></div>
+      <form id="formRicette" action="RicettePaziente"> 
+      <input type="hidden" value="${visita_corrente.paziente.id}" name="id"> 
+        <div class="overlay-content"><a class="hover" onclick="formRicette.submit();">Vai alle ricette del paziente</a></div>
         </form>
       </div>
     </div>
@@ -80,7 +82,10 @@
   <div class="card">
     <div class="card-img"> <img src="../images/exam.jpg" alt="pills" style="height:220px;">
       <div class="overlay">
-        <div class="overlay-content"><a href="#!">Vai agli esami del paziente</a></div>
+      <form id="formEsami" action="EsamiPaziente">  
+       <input type="hidden" value="${visita_corrente.paziente.id}" name="id"> 
+        <div class="overlay-content"><a class="hover" onclick="formEsami.submit();">Vai agli esami del paziente</a></div>
+        </form>
       </div>
     </div>
     <div class="card-content"> <a href="#!">

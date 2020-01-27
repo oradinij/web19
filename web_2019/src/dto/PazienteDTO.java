@@ -8,6 +8,7 @@ import dao.MedicoDAO;
 import dao.PazienteDAO;
 import dao.PrescrizioneDAO;
 import dao.VisitaDAO;
+import utils.Logger;
 import web_2019.Assets;
 
 public class PazienteDTO implements Serializable{
@@ -21,12 +22,12 @@ public class PazienteDTO implements Serializable{
 	private String data_nascita;		
 	private String luogo_nascita;		
 	private String foto_path;	
-	
+
 	private ArrayList<EsameDTO>  listaEsami = null;
 	private ArrayList<EsameDTO>  lista_esami_da_prenotare = null;
 	private ArrayList<EsameDTO>  lista_esami_prenotati = null;
 	private ArrayList<EsameDTO>  lista_esami_svolti = null;
-	
+
 	private ArrayList<VisitaDTO>  listaVisite = null;
 	private ArrayList<PrescrizioneDTO>  listaPrescrizioni = null;
 	private String dataUltimaVisita;
@@ -58,10 +59,10 @@ public class PazienteDTO implements Serializable{
 		else return "Nessuna visita disponibile"; 
 	}
 	public void setDataUltimaVisita(String dataUltimaVisita) {this.dataUltimaVisita = dataUltimaVisita;}
-	
+
 	public MedicoDTO getMedico() {return medico;}
 	public void setMedico(MedicoDTO medico) {this.medico = medico;}
-	
+
 
 	public String getCodice_fiscale() {return codice_fiscale;}
 	public void setCodice_fiscale(String codice_fiscale) {this.codice_fiscale = codice_fiscale;}
@@ -85,7 +86,7 @@ public class PazienteDTO implements Serializable{
 	public void setCognome(String cognome) {this.cognome = cognome;}
 
 	public int getId() {return id;}	
-	
+
 	public String getFoto_path() {return this.foto_path;}
 
 	public void setFoto_path(String foto_path) {
@@ -96,7 +97,7 @@ public class PazienteDTO implements Serializable{
 	}
 	public int getId_medico() {return this.getMedico().getId_medico();}
 
-	
+
 
 	public ArrayList<EsameDTO>  getListaEsami()
 	{
@@ -113,7 +114,12 @@ public class PazienteDTO implements Serializable{
 	public ArrayList<PrescrizioneDTO>  getListaPrescrizioni()
 	{
 		listaPrescrizioni = new PrescrizioneDAO().getListaPrescrizioniByUserId(this.id);
+		if(listaPrescrizioni!= null)
+			Logger.log("dim lista %d per id %d", listaPrescrizioni.size(), this.id);
+		else
+			Logger.log("lista NULL");
 		return listaPrescrizioni;
+
 	}
 	/**
 	 * Aggiorna il medico nell'oggetto corrente e nel database
@@ -130,14 +136,14 @@ public class PazienteDTO implements Serializable{
 	}
 	public PrescrizioneDTO aggiugiPrescrizioneFarmaco(String farmaco) {
 		return aggiugiPrescrizioneFarmaco(farmaco, this.getId_medico());
-		
+
 	}
 	public void aggiungiPrenotazioneEsame(int id_esame) {
 		new EsameDAO().creaPrenotazioneEsame(id_esame, this.id);
 	}
 	public void aggiungiPrenotazioneVisita(String data_ora) {
 		new VisitaDAO().creaPrenotazioneVisita(this.getId(), this.getId_medico(), data_ora, 1);//stato = 1 vuol dire prenotata
-		
+
 	}
 	/**
 	 * cerca nella lista visite relative al paziente quelle non ancora svolte, ma prenotate (stato = 1), relative al medico id_medico
@@ -149,7 +155,7 @@ public class PazienteDTO implements Serializable{
 				visite_prenotate.add(visita);
 		}
 		return visite_prenotate;
-		
+
 	}
 	/**
 	 * cerca nella lista visite relative al paziente quelle da prenotare
@@ -161,7 +167,7 @@ public class PazienteDTO implements Serializable{
 				visite_da_prenotare.add(visita);
 		}
 		return visite_da_prenotare;
-		
+
 	}
 	/**
 	 * cerca nella lista visite relative al paziente quelle svolte
@@ -173,7 +179,7 @@ public class PazienteDTO implements Serializable{
 				visite_svolte.add(visita);
 		}
 		return visite_svolte;
-		
+
 	}
 	/**
 	 * cerca nella lista visite relative al paziente quelle prenotate
@@ -185,13 +191,13 @@ public class PazienteDTO implements Serializable{
 				visite_prenotate.add(visita);
 		}
 		return visite_prenotate;
-		
+
 	}
-	
-	
-	
-	
-	
+
+
+
+
+
 	/**
 	 * cerca nella lista esami relative al paziente quelle prenotate
 	 */
@@ -202,7 +208,7 @@ public class PazienteDTO implements Serializable{
 				esami_da_prenotare.add(esame);
 		}
 		return esami_da_prenotare;
-		
+
 	}
 	/**
 	 * cerca nella lista esami quelli prenotati
@@ -214,7 +220,7 @@ public class PazienteDTO implements Serializable{
 				esami_prenotati.add(esame);
 		}
 		return esami_prenotati;
-		
+
 	}
 	/**
 	 * cerca nella lista esami relative al paziente quelli svolti
@@ -226,7 +232,7 @@ public class PazienteDTO implements Serializable{
 				esami_svolti.add(esame);
 		}
 		return esami_svolti;
-		
+
 	}
 
 	/**
@@ -240,7 +246,7 @@ public class PazienteDTO implements Serializable{
 		}
 		return prescrizioni_erogate;
 	}
-	
+
 	/**
 	 * cerca nella lista ricette relative al paziente quelle prenotate
 	 */
@@ -252,8 +258,8 @@ public class PazienteDTO implements Serializable{
 		}
 		return prescrizioni_da_erogare;
 	}
-	
-	
+
+
 	/**
 	 * per le visite del medico di base lasiare referto = null, aggiorna la visita nel relativo DTO e nel database
 	 * @param id
@@ -270,6 +276,6 @@ public class PazienteDTO implements Serializable{
 				visitaDTO.setReferto(referto);
 			}
 		}
-		
+
 	}
 }

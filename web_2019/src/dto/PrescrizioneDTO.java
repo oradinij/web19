@@ -1,11 +1,10 @@
 package dto;
 
-import java.util.Date;
-
+import dao.MedicoDAO;
 import web_2019.Assets;
 
 public class PrescrizioneDTO {
-	
+
 
 	private int id_prescrizione; 
 	private int id_paziente; 
@@ -13,7 +12,13 @@ public class PrescrizioneDTO {
 	private String data; 
 	private String farmaco;
 	private int stato;
-	
+	private String nome_medico;
+
+
+
+
+
+
 	public PrescrizioneDTO(int id_prescrizione, int id_paziente, int id_medico, String data, String farmaco, Integer stato) {
 		this.id_prescrizione = id_prescrizione;
 		this.id_paziente = id_paziente;
@@ -21,6 +26,12 @@ public class PrescrizioneDTO {
 		this.data = data;
 		this.farmaco = farmaco;
 		this.stato = stato;
+	}
+
+	public String getNome_medico() {
+		MedicoDTO med = new MedicoDAO().getUserById(id_medico);
+		return med.getNome() + " "+ med.getCognome();
+
 	}
 	public int getId_prescrizione() {
 		return id_prescrizione;
@@ -41,7 +52,7 @@ public class PrescrizioneDTO {
 	public String getFarmaco() {
 		return farmaco;
 	}
-	
+
 	public String getBottone() {
 		if(this.stato == Assets.FARMACO_EROGATO)
 			return "gia ritirato";
@@ -50,24 +61,5 @@ public class PrescrizioneDTO {
 	public Integer getStato() {
 		return stato;
 	}
-	
-	public String toJson() {
-		return String.format("{"
-		+ "'id_prescrizione': '%d', \n" + 
-		"'id_paziente': '%d',\n" + 
-		"'id_medico': '%d',\n" + 
-		"'data': '%s',\n" + 
-		"'farmaco': '%s',\n" + 
-		"'stato': '%d' \n"+
-		"}",
-		id_prescrizione, 
-		id_paziente, 
-		id_medico, 
-		data, 
-		farmaco,
-		stato);
-	}
-
-
 
 }

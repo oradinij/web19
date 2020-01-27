@@ -87,7 +87,7 @@ public class VisitaDAO {
 
 		}
 	}
-	
+
 	public void aggiornaReferto(int id_prenotazione, String referto) {
 		Connection conn = DatabaseService.getDbConnection();
 		PreparedStatement stmt;
@@ -105,5 +105,36 @@ public class VisitaDAO {
 			e.printStackTrace();
 
 		}
+	}
+
+	public VisitaDTO getById(Integer id_prenotazione) {
+		Connection conn =DatabaseService.getDbConnection();
+		ResultSet rs = null;
+		PreparedStatement stmt;
+
+		try {
+			String sql = "SELECT * FROM prenotazioni_visite WHERE id_prenotazione = ?;";
+			stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, id_prenotazione);
+			rs = stmt.executeQuery();
+			while(rs.next()){
+
+				Date data = rs.getDate("data");
+				Integer id_paziente = rs.getInt("id_paziente");
+				Integer id_medico = rs.getInt("id_medico");
+				Integer id_visita = rs.getInt("id_visita");
+				Integer stato = rs.getInt("stato");
+				String referto= rs.getString("referto");
+				return new VisitaDTO(id_prenotazione, id_medico, id_paziente, stato, referto, data, id_visita);
+			}
+			rs.close();
+			stmt.close();
+			conn.close();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+
+		}
+		return null;
 	}
 }
