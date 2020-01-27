@@ -150,19 +150,40 @@
 
 <script>
 var id_visita_da_cancellare;
-function aggiungiPrescrizione () {
+
+
+function aggiungiPrescrizione() {
 	
 	var testo_prescrizione;
 	
-	testo_prescrizione=document.getElementById('testo_prescrizione').innerHTML;
+	testo_prescrizione=document.getElementById('testo_prescrizione').value;
+	
+	console.log(testo_prescrizione);
 	
 	$.ajax({
 		
-		url: 'http://localhost:8080/web2019/medico/AggiungiPrescrizione?prescrizione='+testo_prescrizione,
+		url: 'http://localhost:8080/web2019/medico/AggiungiPrescrizione?prescrizione='+ testo_prescrizione,
         type: "GET",
         success: function (result) { 
         	
+        	if(testo_prescrizione==""){
+        		
+        		window.alert("Compila la ricetta!");
+        		
+        	}
+        	
+        	else {
+        	
+        	$('#modalNuovaRicetta').modal('hide');
+        	
+        	
+        	
+        	
             $('#modalCompilazione').modal('show');
+            
+            
+        	}
+            
             },
             
          error: function (err){
@@ -172,12 +193,30 @@ function aggiungiPrescrizione () {
         }
         });
 		
-	});
+	};
 	
+
+	function aggiungiEsame() {
+		
+		var tipo_esame = [];
+		
+		 var radios = document.getElementsByName('exam'); 
+      
+		 
+         for(i = 0; i < radios.length; i++) { 
+             if(radios[i].checked) 
+            	 tipo_esame.push(radios[i].value); 
+             	
+         } 
+		
+		console.log(tipo_esame);
+		
+
+			
+		};
+		
 	
-	
-	
-};
+
 function modal_compilazione_visita_base(id){
 	 
 	   $.ajax({
@@ -723,11 +762,11 @@ function modal_svolta_base(id){
           <input class="form-control" id="cercaEsame" type="text" placeholder="Cerca un esame..">
           &nbsp;
           <ul class="list-group striped overflow-auto text-left" style="height: 200px; width:100%" id="listaEsami">
-            <div class="custom-radio">
+            <div id="tipo_esame" class="form-check">
             
             <c:forEach items="${tipi_esame}" var="tipo_esame">
               <li class="list-group-item list-group-item-action" href="#"> &nbsp;
-                <input type="radio" class="custom-control-input" id="exam${tipo_esame.nome_esame}" name="exam" value="${tipo_esame.nome_esame}">
+                <input type="checkbox" class="custom-control-input" id="exam${tipo_esame.nome_esame}" name="exam" value="${tipo_esame.nome_esame}">
                 <label class="custom-control-label" for="exam${tipo_esame.nome_esame}"></label>
                 <span class="badge badge-info">${tipo_esame.area_esame}</span> &nbsp; ${tipo_esame.nome_esame}</li>
               </c:forEach>
@@ -735,7 +774,7 @@ function modal_svolta_base(id){
             </div>
           </ul>
         </div>
-        <div class="modal-footer"> <a href="#" class="btn btn-success"><i class="fa fa-check-circle"></i> Prescrivi esame</a>
+        <div class="modal-footer"> <a href="#" class="btn btn-success" onclick="aggiungiEsame()"><i class="fa fa-check-circle"></i> Prescrivi esame</a>
           <button type="button" action="submit" class="btn btn-danger" data-dismiss="modal">Annulla</button>
         </div>
       </form>
