@@ -149,10 +149,7 @@
 
 
 <script>
-
 var id_visita_da_cancellare;
-
-
 function aggiungiPrescrizione () {
 	
 	var testo_prescrizione;
@@ -181,9 +178,6 @@ function aggiungiPrescrizione () {
 	
 	
 };
-
-
-
 function modal_compilazione_visita_base(id){
 	 
 	   $.ajax({
@@ -210,7 +204,6 @@ function modal_compilazione_visita_base(id){
 	
 	
 	
-
   function modal_svolta_specialistica(id){
  
    $.ajax({
@@ -237,7 +230,6 @@ function modal_compilazione_visita_base(id){
     
   
 };
-
 function modal_svolta_base(id){
 	 
 	   $.ajax({
@@ -262,7 +254,6 @@ function modal_svolta_base(id){
 	    
 	  
 	};
-
 	
 	function modalDettagliPrenotazioneBase(id){
 		 
@@ -274,7 +265,6 @@ function modal_svolta_base(id){
 		            document.getElementById('prenotazione_data_base').innerHTML=result.data;
 		            document.getElementById('prenotazione_numero_footer_base').innerHTML="Codice prenotazione: " + id;
 		            document.getElementById('bottone_annullamento_prenotazione').outerHTML= "<a id=\"bottone_annullamento_prenotazione\" href=\"#\" class=\"btn btn-danger\" onclick=\"modalCancellazionePrenotazione(" + id + ")\">Annulla prenotazione</a>"
-
 		            $('#modalPrenotazioneBase').modal('show');
 		            },
 		            
@@ -288,7 +278,6 @@ function modal_svolta_base(id){
 		    
 		  
 		};	
-
 		
 		function modalCancellazionePrenotazione(id){
 		
@@ -297,7 +286,6 @@ function modal_svolta_base(id){
 			$('#modalCancellazionePrenotazione').modal('show');
 			
 		}
-
 </script>
 
 

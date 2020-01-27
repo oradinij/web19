@@ -1,6 +1,7 @@
 <%@page import="org.apache.tomcat.util.http.fileupload.RequestContext"%>
-<%@ page language="java" contentType="text/html; charset=US-ASCII"
+<%@ page language="java" contentType="text/html; charset=UTF8"
 	pageEncoding="UTF8"%>
+
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <!DOCTYPE html5>
@@ -19,6 +20,7 @@
 
 </head>
 <body>
+
 <nav class="navbar navbar-expand-lg navbar-dark">
 		<a class="navbar-brand" href="#">${user.nome} ${user.cognome}</a>
 		<button class="navbar-toggler" type="button" data-toggle="collapse"
@@ -89,7 +91,7 @@
 				<img src="../images/pills.jpg" alt="pills" style="height: 220px;">
 				<div class="overlay">
 					<div class="overlay-content">
-						<a class="hover" href="./ricette_paziente.jsp">Vai alle ricette</a>
+						<a class="hover" href="#!">Vai alle ricette</a>
 					</div>
 				</div>
 			</div>
@@ -105,7 +107,7 @@
 				<img src="../images/visit.jpg" alt="pills" style="height: 220px;">
 				<div class="overlay">
 					<div class="overlay-content">
-						<a href="./visite_paziente.jsp">Vai alle visite</a>
+						<a href="#!">Vai alle visite</a>
 					</div>
 				</div>
 			</div>
@@ -121,7 +123,7 @@
 				<img src="../images/exam.jpg" alt="pills" style="height: 220px;">
 				<div class="overlay">
 					<div class="overlay-content">
-						<a href="./esami_paziente.jsp">Vai agli esami</a>
+						<a href="#!">Vai agli esami</a>
 					</div>
 				</div>
 			</div>

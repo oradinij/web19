@@ -11,7 +11,7 @@ public class PrescrizioneDTO {
 	private int id_medico; 
 	private String data; 
 	private String farmaco;
-	Integer stato;
+	private int stato;
 	private String nome_medico;
 
 

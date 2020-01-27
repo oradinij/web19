@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.gson.JsonObject;
 
 import dao.VisitaDAO;
-import dto.VisitaDTO;
+import utils.Logger;
 
 
 @WebServlet("/medico/modal/dettagli_visita")
@@ -26,11 +26,12 @@ public class DettagliVisita extends HttpServlet {
 			Integer id_prenotazione = Integer.parseInt(id_visitaStr);
 			JsonObject visita_json = new VisitaDAO().getById(id_prenotazione).toJson();
 			PrintWriter out = response.getWriter();
-	        response.setContentType("json");
+	        response.setContentType("application/json");
 	        response.setCharacterEncoding("UTF-8");
 	        response.setHeader("Access-Control-Allow-Origin", "*");
 	        response.setHeader("Access-Control-Allow-Methods", "GET");
 	        out.print(visita_json);
+	        Logger.log("JSON visita con id %d:\n\n%s", id_prenotazione, visita_json);
 		}
 	}
 
