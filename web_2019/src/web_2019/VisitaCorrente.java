@@ -2,8 +2,10 @@ package web_2019;
 
 import java.util.ArrayList;
 
+import dao.TipologiaVisitaDAO;
 import dto.PazienteDTO;
 import dto.TipologiaEsameDTO;
+import dto.TipologiaVisitaDTO;
 import dto.VisitaDTO;
 
 public class VisitaCorrente {
@@ -13,9 +15,8 @@ public class VisitaCorrente {
 	PazienteDTO paziente; 
 	private Integer id_medico;
 	private int id_prenotazione_visita_corrente;
-
+    
 	
-
 	public int getId_prenotazione_visita_corrente() {
 		return id_prenotazione_visita_corrente;
 	}

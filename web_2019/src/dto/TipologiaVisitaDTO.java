@@ -1,13 +1,15 @@
 package dto;
 
 
+import java.util.ArrayList;
+
 import dao.TipologiaVisitaDAO;
 
 public class TipologiaVisitaDTO {
 
 	private int id_visita;
 	private String nome_visita;
-	private int costo_visita;
+	private String costo_visita;
 
 	public int getId_visita() {
 		return id_visita;
@@ -15,7 +17,7 @@ public class TipologiaVisitaDTO {
 	public void setId_visita(int id_visita) {
 		this.id_visita = id_visita;
 	}
-	public int getCosto_visita() {
+	public String getCosto_visita() {
 		return costo_visita;
 	}
 	
@@ -26,7 +28,7 @@ public class TipologiaVisitaDTO {
 		this.nome_visita = nome_visita;
 	}
 
-	public TipologiaVisitaDTO(int id_visita, String nome_visita, int costo_visita) {
+	public TipologiaVisitaDTO(int id_visita, String nome_visita, String costo_visita) {
 
 		this.id_visita = id_visita;
 		this.nome_visita = nome_visita;
@@ -36,6 +38,8 @@ public class TipologiaVisitaDTO {
 		this.id_visita = id_visita;
 		this.nome_visita = new TipologiaVisitaDAO().getNameById(id_visita);
 	}
+	
+	
 	@Override
 	public boolean equals(Object obj) {
 		if(obj == null)

@@ -63,20 +63,25 @@
         </thead>
         <tbody>
         <c:forEach items="${visita_corrente.paziente.listaEsami}" var="esame">
+        <c:if test="${esame.stato==1}">
           <tr>
             <td>${esame.nomeEsame}</td>
             <td style="vertical-align: middle"><span class="badge badge-pill badge-info">${esame.area}</span></td>
             <td style="vertical-align: middle">${esame.data}</td>
             <td style="vertical-align: middle"><a href="#" data-toggle="modal" data-target="#modalPrenotazioneEsame" class="btn btn-outline-info"><i class="fa fa-info-circle"></i> Dettagli</a></td>
           </tr>
+          </c:if>
           </c:forEach>
         </tbody>
       </table>
       <hr>
       <h5>Per prescrivere un nuovo esame compila una visita: </h5>
       <br>
-      <button href="#" class="btn btn-success"><i class="fa fa-arrow-circle-right" style=" font-size: 20px; vertical-align: middle; padding: 5px 5px"></i> Vai alle visite del paziente</button>
-    </div>
+ <form id="form_visite" action="VisitePaziente">  
+       <input type="hidden" value="${visita_corrente.paziente.id}" name="id"> 
+  <button class="btn btn-success" type="submit"><i class="fa fa-arrow-circle-right" style="vertical-align: middel"></i> Vai alle visite del paziente</button>
+  </form>
+      </div>
   </div>
 </div>
 &nbsp;
@@ -97,18 +102,16 @@
           </tr>
         </thead>
         <tbody>
+        <c:forEach items="${visita_corrente.paziente.listaEsami}" var="esame">
+        <c:if test="${esame.stato==0}">
           <tr>
-            <td  style="vertical-align: middle">Colonscopia</td>
-            <td style="vertical-align: middle">05/07/2019</td>
-            <td style="vertical-align: middle"><span class="badge badge-pill badge-info">Proctologia</span></td>
-            <td style="vertical-align: middle"><a href="#" class="btn btn-outline-info" data-toggle="modal" data-target="#modalEsame"><i class="fa fa-info-circle"></i> Dettagli</a></td>
+            <td>${esame.nomeEsame}</td>
+            <td style="vertical-align: middle"><span class="badge badge-pill badge-info">${esame.area}</span></td>
+            <td style="vertical-align: middle">${esame.data}</td>
+            <td style="vertical-align: middle"><a href="#" data-toggle="modal" data-target="#modalPrenotazioneEsame" class="btn btn-outline-info"><i class="fa fa-info-circle"></i> Dettagli</a></td>
           </tr>
-          <tr>
-            <td  style="vertical-align: middle">Ispezione anale</td>
-            <td style="vertical-align: middle">05/07/2019</td>
-            <td style="vertical-align: middle"><span class="badge badge-pill badge-info">Proctologia</span></td>
-            <td style="vertical-align: middle"><a href="#" class="btn btn-outline-info" data-toggle="modal" data-target="#modalEsame"><i class="fa fa-info-circle"></i> Dettagli</a></td>
-          </tr>
+          </c:if>
+          </c:forEach>
         </tbody>
       </table>
     </div>

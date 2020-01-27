@@ -17,7 +17,7 @@ public class TipologiaVisitaDAO  implements Serializable{
 	private static final long serialVersionUID = 6629777739354200574L;
 
 
-	public ArrayList<TipologiaVisitaDTO> getAll() {
+	public static ArrayList<TipologiaVisitaDTO> getAll() {
 		String nomeVisita;
 		int id_visita;
 
@@ -32,8 +32,8 @@ public class TipologiaVisitaDAO  implements Serializable{
 			while(rs.next()){
 				nomeVisita = rs.getString("nome_visita");
 				id_visita = rs.getInt("id_visita");
-				int costo_esame = rs.getInt("costo_visita");
-				listaVisite.add(new TipologiaVisitaDTO(id_visita, nomeVisita, costo_esame));
+				String costo_visita = rs.getString("costo_visita");
+				listaVisite.add(new TipologiaVisitaDTO(id_visita, nomeVisita, costo_visita));
 
 			}
 			rs.close();
@@ -47,6 +47,7 @@ public class TipologiaVisitaDAO  implements Serializable{
 		return listaVisite;
 
 	}
+	
 	public String getNameById(int id_visita) {
 		String nome_visita=null;
 		Connection conn =DatabaseService.getDbConnection();

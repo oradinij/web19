@@ -80,6 +80,7 @@ public class VisitaDTO {
 	private String referto;
 	private String nome_medico= null;
 	private String cognome_medico= null;
+	private String luogo;
 	
 	public String getNome_medico() {
 		if(nome_medico == null) nome_medico = new MedicoDAO().getUserById(id_medico).getNome();
@@ -91,6 +92,13 @@ public class VisitaDTO {
 		return cognome_medico;
 	}
 
+	
+	public String getLuogo_visita() {
+		
+		return luogo;
+		
+	}
+	
 	public Integer getId_visita() {
 		return id_visita;
 	}
@@ -108,7 +116,7 @@ public class VisitaDTO {
 	}
 
 
-	public VisitaDTO(int id_prenotazione, int id_medico, int id_paziente, int stato, String referto, Date data, Integer id_visita) {
+	public VisitaDTO(int id_prenotazione, int id_medico, int id_paziente, int stato, String referto, Date data, Integer id_visita, String luogo) {
 		this.data = data;
 		this.id_prenotazione = id_prenotazione;
 		this.id_medico = id_medico;
@@ -116,15 +124,19 @@ public class VisitaDTO {
 		this.stato = stato;
 		this.referto = referto;
 		this.id_visita = id_visita;
+		this.luogo=luogo;
 	}
 
 
-	public JsonObject toJson() {
+	public JsonObject toJson() {	
 		JsonObject visita = new JsonObject();
 		
 		visita.addProperty("nome_medico", getNome_medico());
 		visita.addProperty("data", data.toString());
 		visita.addProperty("cognome_medico", getCognome_medico());
+		visita.addProperty("nome_visita", getNome_visita());
+		visita.addProperty("referto", getReferto());
+		visita.addProperty("luogo", luogo);
 		
 		return visita;
 		

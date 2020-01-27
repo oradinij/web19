@@ -65,8 +65,8 @@
       <c:if test="${visita.nome_visita=='Base'}">
         <tr>
           <td style="vertical-align: middle">${visita.data}</td>
-          <td style="vertical-align: middle"><a href="#" data-toggle="modal" data-target="#modalPrenotazioneBase${visita.id_prenotazione}" class="btn btn-outline-info"> <i class="fa fa-info-circle"></i> Dettagli</a></td>
-          <td style="vertical-align: middle"><a href="#" data-toggle="modal" data-target="#modalCompilazione" class="btn btn-outline-success"><i class="fa fa-clipboard-list-check"></i> Compila</a></td>
+          <td style="vertical-align: middle"><a href="#" data-toggle="modal" onclick="modalDettagliPrenotazioneBase(${visita.id_prenotazione})" class="btn btn-outline-info"> <i class="fa fa-info-circle"></i> Dettagli</a></td>
+          <td style="vertical-align: middle"><a href="#" data-toggle="modal" onclick="modal_compilazione_visita_base(${visita.id_prenotazione})" class="btn btn-outline-success"><i class="fa fa-clipboard-list-check"></i> Compila</a></td>
         </tr>
         </c:if>
     </c:forEach>
@@ -133,35 +133,13 @@
             <td style="vertical-align: middle"><span class="badge badge-pill badge-info">${visita.nome_visita}</span></td>
             </c:if>
             <td style="vertical-align: middle">${visita.nome_medico} ${visita.cognome_medico}</td>
-            <td style="vertical-align: middle"><button onclick="modal${visita.id_prenotazione}()" href="#" class="btn btn-outline-info"><i class="fa fa-info-circle"></i> Dettagli</button></td>
+              <c:if test="${visita.nome_visita!='Base'}">
+            <td style="vertical-align: middle"><button onclick="modal_svolta_specialistica(${visita.id_prenotazione})" href="#" class="btn btn-outline-info"><i class="fa fa-info-circle"></i> Dettagli</button></td>
+            </c:if>
+            <c:if test="${visita.nome_visita=='Base'}">
+            <td style="vertical-align: middle"><button onclick="modal_svolta_base(${visita.id_prenotazione})" href="#" class="btn btn-outline-info"><i class="fa fa-info-circle"></i> Dettagli</button></td>
+            </c:if>
           </tr>
-          
-          <script>
-          
-  		    function modal${visita.id_prenotazione}(){
-        	 
-        	   $.ajax({
-        	        url: 'http://localhost:8080/web2019/medico/modal/dettagli_visita?id_prenotazione=${visita.id_prenotazione}',
-        	        type: "GET",
-        	        success: function (result) { 
-        	        	console.log(result);
-        	            document.getElementById('completata_data').innerHTML=result.data;
-        	            document.getElementById('completata_nome_medico').innerHTML=result.nome_medico;
-        	            $('#modalVisitaSpecialistica').modal('show');
-        	            },
-        	         error: function (result){
-        	        	
-        	        	console.log(result);
-        	        	
-        	        	
-        	        }
-        	        });
-        	    
-        	  
-        	};
-          
-          </script>
-          
           </c:forEach>
         </tbody>
       </table>
@@ -174,11 +152,157 @@
 
 var id_visita_da_cancellare;
 
+
+function aggiungiPrescrizione () {
+	
+	var testo_prescrizione;
+	
+	testo_prescrizione=document.getElementById('testo_prescrizione').innerHTML;
+	
+	$.ajax({
+		
+		url: 'http://localhost:8080/web2019/medico/AggiungiPrescrizione?prescrizione='+testo_prescrizione,
+        type: "GET",
+        success: function (result) { 
+        	
+            $('#modalCompilazione').modal('show');
+            },
+            
+         error: function (err){
+        	
+        	console.log(err);
+			
+        }
+        });
+		
+	});
+	
+	
+	
+	
+};
+
+
+
+function modal_compilazione_visita_base(id){
+	 
+	   $.ajax({
+	        url: 'http://localhost:8080/web2019/medico/nuovaCompilazioneVisita?id_visita='+id,
+	        type: "GET",
+	        success: function (result) { 
+	        	document.getElementById('compila_badge_numero_footer').innerHTML="Codice prenotazione: " + id;
+	        	
+	            $('#modalCompilazione').modal('show');
+	            },
+	         error: function (err){
+	        	
+	        	console.log(err);
+				document.getElementById('compila_badge_numero_footer').innerHTML="Codice prenotazione: " + id;
+	        	
+	            $('#modalCompilazione').modal('show');
+	        }
+	        });
+	    
+	  
+	};
+	
+	
+	
+	
+	
+
+  function modal_svolta_specialistica(id){
+ 
+   $.ajax({
+        url: 'http://localhost:8080/web2019/medico/modal/dettagli_visita?id_prenotazione='+id,
+        type: "GET",
+        success: function (result) { 
+        	console.log(result);
+            document.getElementById('completata_data_spec').innerHTML=result.data;
+            document.getElementById('completata_nome_medico_spec').innerHTML=result.nome_medico + " " + result.cognome_medico;
+            document.getElementById('completata_referto_spec').innerHTML=result.referto;
+            document.getElementById('completata_tipo_visita_spec').innerHTML=result.nome_visita;
+            document.getElementById('completata_luogo_spec').innerHTML=result.luogo;
+            document.getElementById('completata_numero_footer_specialistica').innerHTML="Codice visita: " + id; 
+            
+            $('#modalVisitaSpecialistica').modal('show');
+            },
+         error: function (result){
+        	
+        	console.log(result);
+        	
+        	
+        }
+        });
+    
+  
+};
+
+function modal_svolta_base(id){
+	 
+	   $.ajax({
+	        url: 'http://localhost:8080/web2019/medico/modal/dettagli_visita?id_prenotazione='+id,
+	        type: "GET",
+	        success: function (result) { 
+	        	console.log(result);
+	            document.getElementById('completata_data_base').innerHTML=result.data;
+	            document.getElementById('completata_nome_medico_base').innerHTML=result.nome_medico + " " + result.cognome_medico;    
+	            document.getElementById('completata_tipo_visita_base').innerHTML=result.nome_visita;
+	            document.getElementById('completata_luogo_spec').innerHTML=result.luogo;
+	            document.getElementById('completata_numero_footer_base').innerHTML="Codice visita: " + id; 
+	            $('#modalVisitaBase').modal('show');
+	            },
+	         error: function (result){
+	        	
+	        	console.log(result);
+	        	
+	        	
+	        }
+	        });
+	    
+	  
+	};
+
+	
+	function modalDettagliPrenotazioneBase(id){
+		 
+		   $.ajax({
+		        url: 'http://localhost:8080/web2019/medico/modal/dettagli_visita?id_prenotazione='+id,
+		        type: "GET",
+		        success: function (result) { 
+		        	console.log(result);
+		            document.getElementById('prenotazione_data_base').innerHTML=result.data;
+		            document.getElementById('prenotazione_numero_footer_base').innerHTML="Codice prenotazione: " + id;
+		            document.getElementById('bottone_annullamento_prenotazione').outerHTML= "<a id=\"bottone_annullamento_prenotazione\" href=\"#\" class=\"btn btn-danger\" onclick=\"modalCancellazionePrenotazione(" + id + ")\">Annulla prenotazione</a>"
+
+		            $('#modalPrenotazioneBase').modal('show');
+		            },
+		            
+		         error: function (result){
+		        	
+		        	console.log(result);
+		        	
+		        	
+		        	}
+		        });
+		    
+		  
+		};	
+
+		
+		function modalCancellazionePrenotazione(id){
+		
+			id_visita_da_cancellare=id;
+			console.log(id_visita_da_cancellare);
+			$('#modalCancellazionePrenotazione').modal('show');
+			
+		}
+
 </script>
 
-<c:forEach items="${visita_corrente.paziente.lista_visite_prenotate}" var="visita">
-<c:if test="${visita.nome_visita=='Base'}">
-<div class="modal fade modalToClose" id="modalPrenotazioneBase${visita.id_prenotazione}">
+
+
+<div class="modal fade modalToClose" id="modalPrenotazioneBase">
   <div class="modal-dialog">
     <div class="modal-content"> 
       
@@ -194,23 +318,9 @@ var id_visita_da_cancellare;
           <h5>
             <p class="badge badge-info">Data e ora prenotazione</p>
           </h5>
-          <h5>${visita.data}</h5>
+          <h5 id="prenotazione_data_base"></h5>
           
-       	   <script>
-         
-         function myfunction${visita.id_prenotazione}(){
-        	 id_visita_da_cancellare=${visita.id_prenotazione};
-        	 console.log(id_visita_da_cancellare);
-        	 document.getElementById('id_to_delete').innerHTML = id_visita_da_cancellare;
-        	 document.getElementById('input_to_delete').value = id_visita_da_cancellare;
-        	 $("#modalCancellazionePrenotazione").modal("show");
-         }
-         
-         </script>
-          
-          <a href="#" class="btn btn-danger" onclick="myfunction${visita.id_prenotazione}()">Annulla prenotazione</a>
-          
-      
+          <a id="bottone_annullamento_prenotazione" href="#" class="btn btn-danger" onclick="">Annulla prenotazione</a>
           
           <hr class="bg-light">
           <h5>
@@ -221,14 +331,13 @@ var id_visita_da_cancellare;
       
       <!-- Modal footer -->
       <div class="modal-footer">
-        <h6 class="badge badgeNumeroVisitaEsame" style="margin-top:10px;">Codice prenotazione: ${visita.id_prenotazione} </h6>
+        <h6 class="badge badgeNumeroVisitaEsame" style="margin-top:10px;" id="prenotazione_numero_footer_base">Codice prenotazione: ${visita.id_prenotazione} </h6>
         <button type="button" class="btn btn-danger" data-dismiss="modal">Chiudi</button>
       </div>
     </div>
   </div>
 </div>
-</c:if>
-</c:forEach>
+
 
 <div class="modal  fade" id="modalPrenotazioneSpecialistica">
   <div class="modal-dialog">
@@ -262,7 +371,7 @@ var id_visita_da_cancellare;
       
       <!-- Modal footer -->
       <div class="modal-footer">
-        <h6 class="badge badgeNumeroVisitaEsame" style="margin-top:10px;">Codice visita: 1223456599843882 </h6>
+        <h6 id="completata_numero_footer_specialistica" class="badge badgeNumeroVisitaEsame" style="margin-top:10px;"></h6>
         <button type="button" class="btn btn-danger" data-dismiss="modal">Chiudi</button>
       </div>
     </div>
@@ -301,7 +410,7 @@ var id_visita_da_cancellare;
           <table class="table datatable table-light table table-hover table-striped tabellaRicetteEsami" id="tabellaRicette" style="width: 100%;">
             <thead>
               <tr>
-                <th>Numero Ricetta</th>
+                <th>Farmaci</th>
                 <th>Dettagli</th>
               </tr>
             </thead>
@@ -320,7 +429,7 @@ var id_visita_da_cancellare;
           <table class="table table-light table-hover table-striped tabellaRicetteEsami" id="tabellaEsami">
             <thead style="max">
               <tr>
-                <th>Numero Esame</th>
+                <th>Esame</th>
                 <th>Dettagli</th>
               </tr>
             </thead>
@@ -329,18 +438,7 @@ var id_visita_da_cancellare;
                 <td> 123456789067677 </td>
                 <td><a class="btn btn-outline-info">Dettagli</a></td>
               </tr>
-              <tr>
-                <td> 123456789067677 </td>
-                <td><a class="btn btn-outline-info">Dettagli</a></td>
-              </tr>
-              <tr>
-                <td> 123456789067677 </td>
-                <td><a class="btn btn-outline-info">Dettagli</a></td>
-              </tr>
-              <tr>
-                <td> 123456789067677 </td>
-                <td><a class="btn btn-outline-info">Dettagli</a></td>
-              </tr>
+             
             </tbody>
           </table>
           <a href="#" class="btn btn-success" data-toggle="modal" data-target="#modalNuovoEsame"><i class="fa fa-plus-circle"></i> Prescrivi esame</a> </div>
@@ -348,7 +446,7 @@ var id_visita_da_cancellare;
       
       <!-- Modal footer -->
       <div class="modal-footer">
-        <h6 class="badge badgeNumeroVisitaEsame">Codice visita: 1223456599843882 </h6>
+        <h6 id="compila_badge_numero_footer" class="badge badgeNumeroVisitaEsame"></h6>
         <button type="button" class="btn btn-danger" data-dismiss="modal">Chiudi</button>
       </div>
     </div>
@@ -370,17 +468,17 @@ var id_visita_da_cancellare;
           <h5>
             <p class="badge badge-info">Tipologia</p>
           </h5>
-          <h5> Visita da medico di base</h5>
+          <h5 id="completata_tipo_visita_base"></h5>
           <hr class="bg-light">
           <h5>
             <p class="badge badge-info">Medico</p>
           </h5>
-          <h5> Nome Medico</h5>
+          <h5 id="completata_nome_medico_base"></h5>
           <hr class="bg-light">
           <h5>
-            <p class="badge badge-info">Data e ora prenotazione</p>
+            <p class="badge badge-info">Data e ora</p>
           </h5>
-          <h5>23/04/2019 13:30</h5>
+          <h5 id="completata_data_base"></h5>
           <hr class="bg-light">
           <h5>
             <p class="badge badge-info">Ricette</p>
@@ -455,7 +553,7 @@ var id_visita_da_cancellare;
       
       <!-- Modal footer -->
       <div class="modal-footer">
-        <h6 class="badge badgeNumeroVisitaEsame">Codice visita: 1223456599843882 </h6>
+        <h6 id="completata_numero_footer_base" class="badge badgeNumeroVisitaEsame"> </h6>
         <button type="button" class="btn btn-danger" data-dismiss="modal">Chiudi</button>
       </div>
     </div>
@@ -477,27 +575,27 @@ var id_visita_da_cancellare;
           <h5>
             <p class="badge badge-info">Tipologia</p>
           </h5>
-          <h5 id="completata_tipo_visito"></h5>
+          <h5 id="completata_tipo_visita_spec"></h5>
           <hr class="bg-light">
           <h5>
             <p class="badge badge-info">Medico</p>
           </h5>
-          <h5 id="completata_nome_medico"></h5>
+          <h5 id="completata_nome_medico_spec"></h5>
           <hr class="bg-light">
           <h5>
             <p class="badge badge-info">Data</p>
           </h5>
-          <h5 id="completata_data"></h5>
+          <h5 id="completata_data_spec"></h5>
           <hr class="bg-light">
           <h5>
             <p class="badge badge-info">Luogo</p>
           </h5>
-          <h5 id="completata_luogo"></h5>
+          <h5 id="completata_luogo_spec"></h5>
           <hr class="bg-light">
           <h5>
             <p class="badge badge-info">Referto</p>
           </h5>
-          <p id="completata_referto" class="card-body text-left" style="border-style: solid; border-radius: 20px;"></p>
+          <p id="completata_referto_spec" class="card-body text-left" style="border-style: solid; border-radius: 20px;"></p>
           <hr class="bg-light">
           <h5>
             <p class="badge badge-info">Ricette</p>
@@ -567,7 +665,7 @@ var id_visita_da_cancellare;
       
       <!-- Modal footer -->
       <div class="modal-footer">
-        <h6 class="badge badgeNumeroVisitaEsame">Codice visita: 1223456599843882 </h6>
+        <h6 id="completata_numero_footer_sepcialistica" class="badge badgeNumeroVisitaEsame"></h6>
         <button type="button" class="btn btn-danger" data-dismiss="modal">Chiudi</button>
       </div>
     </div>
@@ -613,10 +711,10 @@ var id_visita_da_cancellare;
       <div class="modal-body">
         <h5><span class="badge badge-info">Prescrizioni</span></h5>
         <div class="form-group">
-          <textarea class="form-control" style="min-height: 400px;"></textarea>
+          <textarea id="testo_prescrizione" class="form-control" name="prescrizione" style="min-height: 400px;"></textarea>
         </div>
       </div>
-      <div class="modal-footer"> <a href="#" class="btn btn-success"><i class="fa fa-check-circle"></i> Inserisci ricetta</a>
+      <div class="modal-footer"> <a href="#" onclick="aggiungiPrescrizione()" class="btn btn-success"><i class="fa fa-check-circle"></i> Inserisci ricetta</a>
         <button type="button" class="btn btn-danger" data-dismiss="modal">Annulla</button>
       </div>
     </div>
@@ -638,30 +736,14 @@ var id_visita_da_cancellare;
           &nbsp;
           <ul class="list-group striped overflow-auto text-left" style="height: 200px; width:100%" id="listaEsami">
             <div class="custom-radio">
+            
+            <c:forEach items="${tipi_esame}" var="tipo_esame">
               <li class="list-group-item list-group-item-action" href="#"> &nbsp;
-                <input type="radio" class="custom-control-input" id="exam1" name="exam" value="exam1">
-                <label class="custom-control-label" for="exam1"></label>
-                <span class="badge badge-info">Dermatologia</span> &nbsp; Radiografia anale </li>
-              <li class="list-group-item list-group-item-action" href="#"> &nbsp;
-                <input type="radio" class="custom-control-input" id="exam2" name="exam" value="exam2">
-                <label class="custom-control-label" for="exam2"></label>
-                <span class="badge badge-info">Generica</span> &nbsp; Radiografia clitoridea</li>
-              <li class="list-group-item list-group-item-action" href="#"> &nbsp;
-                <input type="radio" class="custom-control-input" id="exam3" name="exam" value="exam3">
-                <label class="custom-control-label" for="exam3"></label>
-                <span class="badge badge-info">Oculistica</span> &nbsp; Radiografia cappellare</li>
-              <li class="list-group-item list-group-item-action" href="#"> &nbsp;
-                <input type="radio" class="custom-control-input" id="exam4" name="exam" value="exam4">
-                <label class="custom-control-label" for="exam4"></label>
-                <span class="badge badge-info">Generica</span> &nbsp; Radiografia perinea</li>
-              <li class="list-group-item list-group-item-action" href="#"> &nbsp;
-                <input type="radio" class="custom-control-input" id="exam5" name="exam" value="exam5">
-                <label class="custom-control-label" for="exam5"></label>
-                <span class="badge badge-info">Proctologa</span> &nbsp; Radiografia testicolare </li>
-              <li class="list-group-item list-group-item-action" href="#"> &nbsp;
-                <input type="radio" class="custom-control-input" id="exam6" name="exam" value="exam6">
-                <label class="custom-control-label" for="exam6"></label>
-                <span class="badge badge-info">Generica</span> &nbsp; Radiografia anale </li>
+                <input type="radio" class="custom-control-input" id="exam${tipo_esame.nome_esame}" name="exam" value="${tipo_esame.nome_esame}">
+                <label class="custom-control-label" for="exam${tipo_esame.nome_esame}"></label>
+                <span class="badge badge-info">${tipo_esame.area_esame}</span> &nbsp; ${tipo_esame.nome_esame}</li>
+              </c:forEach>
+              
             </div>
           </ul>
         </div>
@@ -684,18 +766,17 @@ var id_visita_da_cancellare;
       <form>
         <!-- Modal body -->
         <div class="modal-body text-center">
-          <input class="form-control" id="cercaArea" type="text" placeholder="Cerca un'area medica..">
+          <input class="form-control" id="cercaArea" type="text" placeholder="Cerca una visita..">
           &nbsp;
           <ul class="list-group striped overflow-auto text-left" style="height: 200px; width:100%" id="listaAree">
             <div class="custom-radio">
+     
+        	<c:forEach items="${tipi_visita}" var="tipo_visita">
               <li class="list-group-item list-group-item-action" href="#"> &nbsp;
-                <input type="radio" class="custom-control-input" id="area1" name="area" value="area1">
-                <label class="custom-control-label" for="area1"></label>
-                <span class="badge badge-info">Oculistica</span> </li>
-              <li class="list-group-item list-group-item-action" href="#"> &nbsp;
-                <input type="radio" class="custom-control-input" id="area2" name="area" value="area2">
-                <label class="custom-control-label" for="area2"></label>
-                <span class="badge badge-info">Dermatologia</span> </li>
+                <input type="radio" class="custom-control-input" id="area${tipo_visita.nome_visita}" name="area" value="${tipo_visita.nome_visita}">
+                <label class="custom-control-label" for="area${tipo_visita.nome_visita}"></label>
+                <span class="badge badge-info">${tipo_visita.nome_visita}</span> </li>
+                </c:forEach>
             </div>
           </ul>
         </div>

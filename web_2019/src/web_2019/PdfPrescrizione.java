@@ -1,17 +1,6 @@
 package web_2019;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-
-import javax.servlet.ServletException;
-import javax.servlet.ServletOutputStream;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.tomcat.util.buf.ByteChunk.ByteOutputChannel;
 
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
@@ -24,7 +13,6 @@ import com.itextpdf.text.pdf.BarcodeQRCode;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 
-import dto.EsameDTO;
 import dto.PazienteDTO;
 import dto.PrescrizioneDTO;
 import utils.Logger;

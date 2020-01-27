@@ -6,6 +6,38 @@ window.onresize = function (event) {
 $(document).ready(function () {
 
 
+	$('#tabellaEsami').DataTable({
+
+		ordering: true,
+		paging: false,
+		scrollY: 200,
+		scrollX: true,
+		bInfo: false,
+		scrollCollapse: false,
+		"columnDefs": [{
+			"targets": [1],
+			"orderable": false
+		}]
+
+	});
+	
+	
+	$('#tabellaRicette').DataTable({
+
+		ordering: true,
+		paging: false,
+		scrollY: 200,
+		scrollX: true,
+		bInfo: false,
+		scrollCollapse: false,
+		"columnDefs": [{
+			"targets": [1],
+			"orderable": false
+		}]
+
+	});
+	
+	
 	$('#tabellaVisitePrenotate').DataTable({
 
 		ordering: true,

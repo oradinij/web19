@@ -7,7 +7,7 @@ public class TipologiaEsameDTO {
 	private int id_esame;
 	private String area;
 	private String nome_esame;
-	private int costo_esame;
+	private String costo_esame;
 
 	public int getId_esame() {
 		return id_esame;
@@ -15,7 +15,7 @@ public class TipologiaEsameDTO {
 	public void setId_esame(int id_esame) {
 		this.id_esame = id_esame;
 	}
-	public int getCosto_esame() {
+	public String getCosto_esame() {
 		return costo_esame;
 	}
 	
@@ -30,13 +30,14 @@ public class TipologiaEsameDTO {
 		this.nome_esame = nome_esame;
 	}
 
-	public TipologiaEsameDTO(int id_esame, String area, String nome_esame, int costo_esame) {
+	public TipologiaEsameDTO(int id_esame, String area, String nome_esame, String costo_esame) {
 
 		this.id_esame = id_esame;
 		this.nome_esame = nome_esame;
 		this.costo_esame = costo_esame;
 		this.area = area;
 	}
+	
 	public TipologiaEsameDTO(int id_esame) {
 		this.id_esame = id_esame;
 		this.nome_esame = new TipologiaEsameDAO().getNameById(id_esame);
