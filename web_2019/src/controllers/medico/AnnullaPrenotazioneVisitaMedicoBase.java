@@ -25,7 +25,7 @@ public class AnnullaPrenotazioneVisitaMedicoBase extends HttpServlet {
 		Integer id_prenotazione = Integer.parseInt(request.getParameter("id_prenotazione"));
 		VisitaCorrente visita_corrente = (VisitaCorrente) request.getSession().getAttribute("visita_corrente");
 		if(id_prenotazione != null && visita_corrente!= null) {
-			TipologiaVisitaDTO visita = new PrenotazioneVisitaDTO(id_prenotazione);
+			TipologiaVisitaDTO visita = new TipologiaVisitaDTO(id_prenotazione);
 			Boolean visita_rimossa = visita_corrente.getVisitePrenotate().remove(visita);
 			if (visita_rimossa)//TODO: messaggistica di errore
 				Logger.log("rimossa visita '%s'", visita.getNome_visita());

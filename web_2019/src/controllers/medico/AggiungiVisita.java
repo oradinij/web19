@@ -22,13 +22,13 @@ public class AggiungiVisita extends HttpServlet {
 
 		String[] id_visite = request.getParameterValues("visite_selezionate");
 		VisitaCorrente visita_corrente = (VisitaCorrente) request.getSession().getAttribute("visita_corrente");
-		if (id_esami!= null) {
+		if (id_visite!= null) {
 			if(visita_corrente == null) {
 				visita_corrente = new VisitaCorrente();
 				request.getSession().setAttribute("visita_corrente", visita_corrente);
 			}
 			visita_corrente.aggiungiVisite(id_visite);
-			Logger.log("aggiunti %d nuovi esami alla visita corrente", id_esami.length);
+			Logger.log("aggiunti %d nuovi esami alla visita corrente", id_visite.length);
 		}
 		response.sendRedirect(request.getContextPath()+"/medico/dettagliPaziente.jsp");
 		return;
