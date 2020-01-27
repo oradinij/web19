@@ -2,13 +2,24 @@ package dto;
 
 import java.util.Date;
 
-import javax.xml.crypto.dsig.keyinfo.RetrievalMethod;
-
 import com.google.gson.JsonObject;
 
 import dao.MedicoDAO;
 
 public class VisitaDTO {
+	
+	public JsonObject toJson() {
+		JsonObject json = new JsonObject();
+		json.addProperty("data",data.toString());
+		json.addProperty("id_prenotazione",id_prenotazione);
+		json.addProperty("id_medico",id_medico);
+		json.addProperty("id_paziente",id_paziente);
+		json.addProperty("stato",stato);
+		json.addProperty("referto",referto);
+		json.addProperty("nome_medico",nome_medico);
+		json.addProperty("cognome_medico",cognome_medico);
+		return json;
+	}
 	
 	
 
@@ -118,18 +129,6 @@ public class VisitaDTO {
 		this.id_visita = id_visita;
 	}
 
-
-	public JsonObject toJson() {
-		JsonObject visita = new JsonObject();
-		
-		visita.addProperty("nome_medico", getNome_medico());
-		visita.addProperty("data", data.toString());
-		visita.addProperty("cognome_medico", getCognome_medico());
-		
-		return visita;
-		
-		//return String.format("[{'id_prenotazione': '%d', 'data': '%s', 'id_medico': '%d', 'nome_medico': '%s'}]", id_prenotazione, data.toString(), id_medico, getNome_medico());
-	}
 	
 
 }

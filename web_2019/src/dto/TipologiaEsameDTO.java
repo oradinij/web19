@@ -1,5 +1,7 @@
 package dto;
 
+import com.google.gson.JsonObject;
+
 import dao.TipologiaEsameDAO;
 
 public class TipologiaEsameDTO {
@@ -9,27 +11,14 @@ public class TipologiaEsameDTO {
 	private String nome_esame;
 	private int costo_esame;
 
-	public int getId_esame() {
-		return id_esame;
+	public JsonObject toJson() {
+		JsonObject json = new JsonObject();
+		json.addProperty("id_esame", id_esame);
+		json.addProperty("area", area);
+		json.addProperty("nome_esame", nome_esame);
+		json.addProperty("costo_esame", costo_esame);
+		return json;
 	}
-	public void setId_esame(int id_esame) {
-		this.id_esame = id_esame;
-	}
-	public int getCosto_esame() {
-		return costo_esame;
-	}
-	
-	public String getArea_esame() {
-		return area;
-	}
-	
-	public String getNome_esame() {
-		return nome_esame;
-	}
-	public void setNome_esame(String nome_esame) {
-		this.nome_esame = nome_esame;
-	}
-
 	public TipologiaEsameDTO(int id_esame, String area, String nome_esame, int costo_esame) {
 
 		this.id_esame = id_esame;
@@ -54,5 +43,28 @@ public class TipologiaEsameDTO {
 			return true;
 
 	}
+
+	public int getId_esame() {
+		return id_esame;
+	}
+	public void setId_esame(int id_esame) {
+		this.id_esame = id_esame;
+	}
+	public int getCosto_esame() {
+		return costo_esame;
+	}
+
+	public String getArea_esame() {
+		return area;
+	}
+
+	public String getNome_esame() {
+		return nome_esame;
+	}
+	public void setNome_esame(String nome_esame) {
+		this.nome_esame = nome_esame;
+	}
+
+
 
 }

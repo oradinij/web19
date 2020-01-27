@@ -1,6 +1,8 @@
 package dto;
 
 
+import com.google.gson.JsonObject;
+
 import dao.TipologiaVisitaDAO;
 
 public class TipologiaVisitaDTO {
@@ -9,6 +11,14 @@ public class TipologiaVisitaDTO {
 	private String nome_visita;
 	private int costo_visita;
 
+	public JsonObject toJson() {
+		JsonObject json = new JsonObject();
+		json.addProperty("id_visita", id_visita);
+		json.addProperty("nome_visita", nome_visita);
+		json.addProperty("costo_visita", costo_visita);
+		return json;
+	}
+	
 	public int getId_visita() {
 		return id_visita;
 	}
