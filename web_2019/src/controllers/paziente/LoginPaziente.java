@@ -6,6 +6,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.UUID;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.Cookie;
@@ -17,7 +18,9 @@ import javax.servlet.http.HttpSession;
 import dao.PazienteDAO;
 import dto.PazienteDTO;
 import filters.CookiesFilterPaziente;
+import utils.Logger;
 import web_2019.Message;
+import web_2019.Notifica;
 
 /**
  * <h2>Controller login paziente</h2>
@@ -59,10 +62,21 @@ public class LoginPaziente extends HttpServlet {
 
 		session.setAttribute("user", user);
 		ArrayList<Message> lista_messaggi =new ArrayList<Message>();
-		lista_messaggi.add(new Message("Login Fallito", Message.DANGER));
-		session.setAttribute("lista_messaggi", lista_messaggi);
-		String nextPage = user!= null? "/paziente/dettagliPaziente.jsp": "/login/loginPaziente.jsp" ;
-		response.sendRedirect(request.getContextPath() + nextPage);
+		
+		
+		String nextPage;
+		if(user!= null) {
+			nextPage = "/paziente/dettagliPaziente.jsp";
+			request.getSession().setAttribute("notifica", new Notifica("Login corretto", Notifica.SUCCESS));
+			Logger.log("Login Successful");
+		}
+		else {
+			nextPage = "/login/loginPaziente.jsp" ;
+			request.getSession().setAttribute("notifica", new Notifica("Login fallito", Notifica.DANGER));
+			Logger.log("Login Failed");
+		}
+		RequestDispatcher rd = request.getRequestDispatcher(nextPage);
+		rd.forward(request, response);
 
 	}
 
