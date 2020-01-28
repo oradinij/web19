@@ -1,6 +1,7 @@
 package controllers.medico;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -28,10 +29,16 @@ public class AggiungiPrescrizione extends HttpServlet {
 		if (farmaco!= null) {
 			request.getSession().setAttribute("visita_corrente", visita_corrente);
 			visita_corrente.aggiungiPrescrizione(farmaco);
-			Logger.log("aggiunto farmaco %s alla visita corrente", farmaco);
+			Logger.log("aggiunto farmaco \" %s \" alla visita corrente", farmaco);
 		}
-		response.sendRedirect(request.getContextPath()+"/medico/dettagliPaziente.jsp");
+		PrintWriter out = response.getWriter();
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.setHeader("Access-Control-Allow-Origin", "*");
+        response.setHeader("Access-Control-Allow-Methods", "GET");
+        out.print(visita_corrente.toJson());
 		return;
 	}
+
 
 }

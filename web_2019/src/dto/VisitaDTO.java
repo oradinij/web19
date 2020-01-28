@@ -2,13 +2,25 @@ package dto;
 
 import java.util.Date;
 
-import javax.xml.crypto.dsig.keyinfo.RetrievalMethod;
-
 import com.google.gson.JsonObject;
 
 import dao.MedicoDAO;
 
 public class VisitaDTO {
+	
+	public JsonObject toJson() {
+		JsonObject json = new JsonObject();
+		json.addProperty("data",data.toString());
+		json.addProperty("id_prenotazione",id_prenotazione);
+		json.addProperty("id_medico",id_medico);
+		json.addProperty("id_paziente",id_paziente);
+		json.addProperty("stato",stato);
+		json.addProperty("referto",referto);
+		json.addProperty("nome_medico",nome_medico);
+		json.addProperty("cognome_medico",cognome_medico);
+		json.addProperty("luogo",luogo);
+		return json;
+	}
 	
 	
 
@@ -81,6 +93,7 @@ public class VisitaDTO {
 	private String nome_medico= null;
 	private String cognome_medico= null;
 	private String luogo;
+	private Integer id_visita;
 	
 	public String getNome_medico() {
 		if(nome_medico == null) nome_medico = new MedicoDAO().getUserById(id_medico).getNome();
@@ -92,19 +105,11 @@ public class VisitaDTO {
 		return cognome_medico;
 	}
 
-	
-	public String getLuogo_visita() {
-		
-		return luogo;
-		
-	}
-	
 	public Integer getId_visita() {
 		return id_visita;
 	}
 
 
-	private Integer id_visita;
 	private String nome_visita= null;
 
 	
@@ -116,6 +121,18 @@ public class VisitaDTO {
 	}
 
 
+	public String getLuogo() {
+		return luogo;
+	}
+
+
+
+	public void setLuogo(String luogo) {
+		this.luogo = luogo;
+	}
+
+
+
 	public VisitaDTO(int id_prenotazione, int id_medico, int id_paziente, int stato, String referto, Date data, Integer id_visita, String luogo) {
 		this.data = data;
 		this.id_prenotazione = id_prenotazione;
@@ -124,24 +141,9 @@ public class VisitaDTO {
 		this.stato = stato;
 		this.referto = referto;
 		this.id_visita = id_visita;
-		this.luogo=luogo;
+		this.luogo = luogo;
 	}
 
-
-	public JsonObject toJson() {	
-		JsonObject visita = new JsonObject();
-		
-		visita.addProperty("nome_medico", getNome_medico());
-		visita.addProperty("data", data.toString());
-		visita.addProperty("cognome_medico", getCognome_medico());
-		visita.addProperty("nome_visita", getNome_visita());
-		visita.addProperty("referto", getReferto());
-		visita.addProperty("luogo", luogo);
-		
-		return visita;
-		
-		//return String.format("[{'id_prenotazione': '%d', 'data': '%s', 'id_medico': '%d', 'nome_medico': '%s'}]", id_prenotazione, data.toString(), id_medico, getNome_medico());
-	}
 	
 
 }

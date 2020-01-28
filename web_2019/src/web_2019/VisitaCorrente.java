@@ -2,11 +2,14 @@ package web_2019;
 
 import java.util.ArrayList;
 
-import dao.TipologiaVisitaDAO;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+
 import dto.PazienteDTO;
 import dto.TipologiaEsameDTO;
 import dto.TipologiaVisitaDTO;
 import dto.VisitaDTO;
+import utils.Logger;
 
 public class VisitaCorrente {
 	private ArrayList<String> lista_prescrizioni = new ArrayList<String>();
@@ -20,8 +23,8 @@ public class VisitaCorrente {
 
 	private Integer id_medico;
 	private int id_prenotazione_visita_corrente;
-    
-	
+
+
 	public int getId_prenotazione_visita_corrente() {
 		return id_prenotazione_visita_corrente;
 	}
@@ -88,7 +91,37 @@ public class VisitaCorrente {
 			int id = Integer.parseInt(id_visita);
 			lista_esami.add(new TipologiaEsameDTO(id));
 		}
-		
+
+	}
+
+
+
+	public JsonObject toJson() {
+		JsonObject json = new JsonObject();
+
+		JsonArray array_prescrizioni = new JsonArray();
+		for (String prescrizione : lista_prescrizioni) {
+			array_prescrizioni.add(prescrizione);	
+		}
+		json.add("lista_prescrizioni", array_prescrizioni);
+
+		JsonArray array_esami = new JsonArray();
+		for (TipologiaEsameDTO esame : lista_esami) {
+			array_prescrizioni.add(esame.toJson());	
+		}
+		json.add("lista_esami", array_esami);
+
+		JsonArray array_visite = new JsonArray();
+		for (TipologiaVisitaDTO visita : lista_visite) {
+			array_prescrizioni.add(visita.toJson());	
+		}
+		json.add("lista_esami", array_visite);
+
+
+		Logger.log("JSON visita corrente, relativa alla  prenotazione %d: \n", id_prenotazione_visita_corrente, json.toString());
+		return json;
+
+
 	}
 
 }

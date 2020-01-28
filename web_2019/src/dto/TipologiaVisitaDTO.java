@@ -1,7 +1,7 @@
 package dto;
 
 
-import java.util.ArrayList;
+import com.google.gson.JsonObject;
 
 import dao.TipologiaVisitaDAO;
 
@@ -11,6 +11,14 @@ public class TipologiaVisitaDTO {
 	private String nome_visita;
 	private String costo_visita;
 
+	public JsonObject toJson() {
+		JsonObject json = new JsonObject();
+		json.addProperty("id_visita", id_visita);
+		json.addProperty("nome_visita", nome_visita);
+		json.addProperty("costo_visita", costo_visita);
+		return json;
+	}
+	
 	public int getId_visita() {
 		return id_visita;
 	}
@@ -28,18 +36,16 @@ public class TipologiaVisitaDTO {
 		this.nome_visita = nome_visita;
 	}
 
-	public TipologiaVisitaDTO(int id_visita, String nome_visita, String costo_visita) {
+	public TipologiaVisitaDTO(int id_visita, String nome_visita, String costo_visita2) {
 
 		this.id_visita = id_visita;
 		this.nome_visita = nome_visita;
-		this.costo_visita = costo_visita;
+		this.costo_visita = costo_visita2;
 	}
 	public TipologiaVisitaDTO(int id_visita) {
 		this.id_visita = id_visita;
 		this.nome_visita = new TipologiaVisitaDAO().getNameById(id_visita);
 	}
-	
-	
 	@Override
 	public boolean equals(Object obj) {
 		if(obj == null)
@@ -55,4 +61,3 @@ public class TipologiaVisitaDTO {
 	}
 
 }
-
