@@ -11,14 +11,15 @@ public class VisitaDTO {
 	public JsonObject toJson() {
 		JsonObject json = new JsonObject();
 		json.addProperty("data",data.toString());
-		json.addProperty("id_prenotazione",id_prenotazione);
-		json.addProperty("id_medico",id_medico);
-		json.addProperty("id_paziente",id_paziente);
-		json.addProperty("stato",stato);
-		json.addProperty("referto",referto);
-		json.addProperty("nome_medico",nome_medico);
-		json.addProperty("cognome_medico",cognome_medico);
-		json.addProperty("luogo",luogo);
+		json.addProperty("id_prenotazione",getId_prenotazione());
+		json.addProperty("id_medico",getId_medico());
+		json.addProperty("id_paziente",getId_paziente());
+		json.addProperty("stato",getStato());
+		json.addProperty("referto",getReferto());
+		json.addProperty("nome_medico",getNome_medico());
+		json.addProperty("cognome_medico",getCognome_medico());
+		json.addProperty("luogo",getLuogo());
+		json.addProperty("nome_visita", getNome_visita());
 		return json;
 	}
 	

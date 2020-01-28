@@ -95,7 +95,7 @@
           <tr>
             <td style="vertical-align: middle">${visita.data}</td>
             <td style="vertical-align: middle"><span class="badge badge-pill badge-info">${visita.nome_visita}</span></td>
-            <td style="vertical-align: middle"><a href="#" data-toggle="modal" data-target="#modalPrenotazioneSpecialistica" class="btn btn-outline-info"><i class="fa fa-info-circle"></i> Dettagli</a></td>
+            <td style="vertical-align: middle"><ar onclick="modalDettagliPrenotazioneSpecialistica(${visita.id_prenotazione})" class="btn btn-outline-info"><i class="fa fa-info-circle"></i> Dettagli</a></td>
           </tr>
          </c:forEach>
         </tbody>
@@ -160,31 +160,56 @@ function aggiungiPrescrizione() {
 	
 	console.log(testo_prescrizione);
 	
+	if(testo_prescrizione==""){
+		
+		window.alert("Compila la ricetta!");
+		
+	}
+	
+	else {
+	
 	$.ajax({
 		
 		url: 'http://localhost:8080/web2019/medico/AggiungiPrescrizione?prescrizione='+ testo_prescrizione,
         type: "GET",
         success: function (result) { 
         	
-        	if(testo_prescrizione==""){
-        		
-        		window.alert("Compila la ricetta!");
-        		
-        	}
+        console.log(result);
         	
-        	else {
+        function ajaxRemoveVisita(prescrizione){
+			
+        	$.ajax({
+        		
+        		url: 'http://localhost:8080/web2019/medico/annullaPrescrizioneFarmaco?prescrizione='+ prescrizione,
+                type: "GET" 
         	
+        	});
+        	
+        	$(this).closest('tr').remove();
+			
+			
+			
+		}
+        
+        
         	$('#modalNuovaRicetta').modal('hide');
         	
-        	
-        	
+        	result.lista_prescrizioni.forEach(el =>{
+        		
+        		
+        		
+        		
+        		
+        	$("#tbody_tabella_ricette").append("<tr><td>" + el + "</td><td><button onclick=\"ajaxRemoveVisita(el)\" class=\"btn btn-outline-danger\">Elimina</button><td>");
+				
+        		           
+        	});
         	
             $('#modalCompilazione').modal('show');
             
-            
-        	}
-            
             },
+            
+            
             
          error: function (err){
         	
@@ -192,6 +217,8 @@ function aggiungiPrescrizione() {
 			
         }
         });
+	
+	}
 		
 	};
 	
@@ -318,6 +345,34 @@ function modal_svolta_base(id){
 		  
 		};	
 		
+		
+		
+		function modalDettagliPrenotazioneSpecialistica(id){
+			 
+			   $.ajax({
+			        url: 'http://localhost:8080/web2019/medico/modal/dettagli_visita?id_prenotazione='+id,
+			        type: "GET",
+			        success: function (result) { 
+			        	console.log(result);
+			            document.getElementById('prenotazione_data_spec').innerHTML=result.data;
+			            document.getElementById('prenotazione_numero_footer_spec').innerHTML="Codice prenotazione: " + id;
+			            document.getElementById('prenotazione_nome_visita_spec').innerHTML=result.nome_visita;
+			            document.getElementById('prenotazione_medico_spec').innerHTML=result.nome_medico + " " + result.cognome_medico;
+			            
+			            $('#modalPrenotazioneSpecialistica').modal('show');
+			            },
+			            
+			         error: function (result){
+			        	
+			        	console.log(result);
+			        	
+			        	
+			        	}
+			        });
+			    
+			  
+			};	
+		
 		function modalCancellazionePrenotazione(id){
 		
 			id_visita_da_cancellare=id;
@@ -365,7 +420,6 @@ function modal_svolta_base(id){
   </div>
 </div>
 
-
 <div class="modal  fade" id="modalPrenotazioneSpecialistica">
   <div class="modal-dialog">
     <div class="modal-content"> 
@@ -380,25 +434,25 @@ function modal_svolta_base(id){
       <div class="modal-body">
         <div class="container  bg-light text-center" style="padding: 10px;border-radius: 20px">
           <h5>
-            <p class="badge badge-info">Medico</p>
+            <p class="badge badge-info">Data prescrizione</p>
           </h5>
-          <h5>Nome Medico</h5>
+          <h5 id="prenotazione_data_spec"></h5>
           <hr class="bg-light">
           <h5>
-            <p class="badge badge-info">Luogo</p>
+            <p class="badge badge-info">Tipo</p>
           </h5>
-          <h5>Ospedale S. Maria, Rovereto</h5>
+          <h5 id="prenotazione_nome_visita_spec"></h5>
           <hr class="bg-light">
           <h5>
-            <p class="badge badge-info">Specializzazione</p>
+            <p class="badge badge-info">Medico prescrittore</p>
           </h5>
-          <h5>Dermatologia</h5>
+          <h5 id="prenotazione_medico_spec"></h5>
         </div>
       </div>
       
       <!-- Modal footer -->
       <div class="modal-footer">
-        <h6 id="completata_numero_footer_specialistica" class="badge badgeNumeroVisitaEsame" style="margin-top:10px;"></h6>
+        <h6 id="prenotazione_numero_footer_spec" class="badge badgeNumeroVisitaEsame" style="margin-top:10px;"></h6>
         <button type="button" class="btn btn-danger" data-dismiss="modal">Chiudi</button>
       </div>
     </div>
@@ -441,11 +495,7 @@ function modal_svolta_base(id){
                 <th>Dettagli</th>
               </tr>
             </thead>
-            <tbody>
-              <tr>
-                <td> 123456789067677 </td>
-                <td><a class="btn btn-outline-info">Dettagli</a></td>
-              </tr>
+            <tbody id="tbody_tabella_ricette">
             </tbody>
           </table>
           <a href="#" data-toggle="modal" data-target="#modalNuovaRicetta" class="btn btn-success"><i class="fa fa-plus-circle"></i> Aggiungi ricetta</a>
@@ -454,7 +504,7 @@ function modal_svolta_base(id){
             <p class="badge badge-info">Esami</p>
           </h5>
           <table class="table table-light table-hover table-striped tabellaRicetteEsami" id="tabellaEsami">
-            <thead style="max">
+            <thead style="width:100%">
               <tr>
                 <th>Esame</th>
                 <th>Dettagli</th>
@@ -629,7 +679,7 @@ function modal_svolta_base(id){
           </h5>
           <div class="container">
             <table class="table datatable table-hover table-striped table-bordered  tabellaRicetteEsami">
-              <thead style="max">
+              <thead style="width:100%">
                 <tr>
                   <th>Numero Ricetta</th>
                   <th>Dettagli</th>
@@ -661,7 +711,7 @@ function modal_svolta_base(id){
           </h5>
           <div class="container">
             <table class="table  datatable table-hover table-striped table-bordered  tabellaRicetteEsami">
-              <thead style="max">
+              <thead style="width:100%">
                 <tr>
                   <th>Numero Esame</th>
                   <th>Dettagli</th>
@@ -692,7 +742,7 @@ function modal_svolta_base(id){
       
       <!-- Modal footer -->
       <div class="modal-footer">
-        <h6 id="completata_numero_footer_sepcialistica" class="badge badgeNumeroVisitaEsame"></h6>
+        <h6 id="completata_numero_footer_specialistica" class="badge badgeNumeroVisitaEsame"></h6>
         <button type="button" class="btn btn-danger" data-dismiss="modal">Chiudi</button>
       </div>
     </div>
