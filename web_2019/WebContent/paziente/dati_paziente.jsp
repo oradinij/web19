@@ -50,6 +50,11 @@
 			</ul>
 		</div>
 	</nav>
+	
+	<div id="notifica">
+    <%@ include file="../notifica.jspf" %>
+</div>
+	
 	&nbsp;
 	<h2 class="text-center">Il tuo profilo</h2>
 	<div class="text-center">

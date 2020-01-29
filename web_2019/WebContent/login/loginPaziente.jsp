@@ -8,9 +8,14 @@
 </head>
 <body>
 Login PAZIENTI
+<!-- Bootstrap -->
 
+<link href="../css/bootstrap.css" rel="stylesheet" type="text/css">
+<link href="../css/custom.css" rel="stylesheet" type="text/css">
+<link href="../css/card_hover.css" rel="stylesheet" type="text/css">
 
-	<br>
+    <%@ include file="../notifica.jspf" %>
+	<br>r
 	<br>
 	<form action="./loginPaziente">
 	

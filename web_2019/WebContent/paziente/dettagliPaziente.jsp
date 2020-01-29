@@ -21,7 +21,7 @@
 </head>
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-dark">
+	<nav class="navbar navbar-expand-lg navbar-dark">
 		<a class="navbar-brand" href="#">${user.nome} ${user.cognome}</a>
 		<button class="navbar-toggler" type="button" data-toggle="collapse"
 			data-target="#navbarSupportedContent"
@@ -31,10 +31,10 @@
 		</button>
 		<div class="collapse navbar-collapse" id="navbarSupportedContent">
 			<ul class="navbar-nav mr-auto">
-				<li class="nav-item"><a class="nav-link" href="./dettagliPaziente.jsp">Home <span
-						class="sr-only">
-							 
-						</span></a></li>
+				<li class="nav-item"><a class="nav-link"
+					href="./dettagliPaziente.jsp">Home <span class="sr-only">
+
+					</span></a></li>
 				<li class="nav-item active"><a class="nav-link" href="#"
 					id="navbarDropdown" role="button" data-toggle="dropdown"
 					aria-haspopup="true" aria-expanded="false"> Dati Personali </a></li>
@@ -61,6 +61,10 @@
 			</ul>
 		</div>
 	</nav>
+    <%@ include file="../notifica.jspf" %>
+	
+
+
 	&nbsp;
 	<div class="container bg-faded"
 		style="background-color: #C1D4D9; padding: 20px; border-radius: 20px; max-width: 50%;">
