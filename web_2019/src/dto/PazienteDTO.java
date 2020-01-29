@@ -140,10 +140,16 @@ public class PazienteDTO implements Serializable{
 	}
 	public void aggiungiPrenotazioneVisita(int id_visita, String data_ora, int id_medico, int id_riferimento) {
 		int stato = Assets.DA_PRENOTARE;
-		if(id_medico == getId_medico())
+		if(id_medico == getId_medico()) {
+			Logger.log("Wow ma allra non sei codice inutile! riga 144");
 			stato = Assets.PRENOTAZIONE_EFFETTUATA;
+		}
 		new VisitaDAO().creaPrenotazioneVisita(id_visita, this.getId(), id_medico, data_ora, stato, id_riferimento);//stato = 1 vuol dire prenotata
 
+	}
+	public void aggiungiPrenotazioneVisita(String data_ora) {
+		new VisitaDAO().creaPrenotazioneVisita(Assets.ID_VISITA_BASE, this.getId(), this.getId_medico(), data_ora, Assets.PRENOTAZIONE_EFFETTUATA, 0);
+		
 	}
 	/**
 	 * cerca nella lista visite relative al paziente quelle non ancora svolte, ma prenotate (stato = 1), relative al medico id_medico
@@ -266,7 +272,7 @@ public class PazienteDTO implements Serializable{
 	 * @param referto
 	 */
 	public void completaVisita(int id, String referto) {
-		new VisitaDAO().aggiornaStato(id, Assets.PRENOTAZIONE_SVOLTA);//stato visita = 2 = svolta, referto = null
+		new VisitaDAO().aggiornaStato(id, Assets.PRENOTAZIONE_SVOLTA);
 		if(referto != null)
 			new VisitaDAO().aggiornaReferto(id, referto);
 		for (VisitaDTO visitaDTO : listaVisite) {
@@ -274,8 +280,10 @@ public class PazienteDTO implements Serializable{
 			{
 				visitaDTO.setStato(Assets.PRENOTAZIONE_EFFETTUATA);
 				visitaDTO.setReferto(referto);
+				break;
 			}
 		}
 
 	}
+	
 }

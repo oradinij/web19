@@ -29,6 +29,7 @@
     </ul>
   </div>
 </nav>
+<%@ include file="../notifica.jspf" %>
 &nbsp;
 <div class="container bg-faded" style="background-color: #C1D4D9; padding:20px; border-radius: 20px; max-width: 50%;">
   <div class="text-center container" style="padding:20px; border-radius: 20px; max-width: 90%; background-color: white;">

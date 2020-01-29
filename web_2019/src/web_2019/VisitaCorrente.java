@@ -15,13 +15,16 @@ public class VisitaCorrente {
 	private ArrayList<String> lista_prescrizioni = new ArrayList<String>();
 	private ArrayList<TipologiaEsameDTO> lista_esami = new ArrayList<TipologiaEsameDTO>();
 	private ArrayList<TipologiaVisitaDTO> lista_visite = new ArrayList<TipologiaVisitaDTO>();
-	private ArrayList<VisitaDTO> visitePrenotate = new ArrayList<VisitaDTO>();
+	private Integer id_medico;
+	private String referto = null;
 	PazienteDTO paziente; 
+	
+	private ArrayList<VisitaDTO> visitePrenotate = new ArrayList<VisitaDTO>();//TODO rimuovere, non serve, duplicato di visita_corrente.paziente.getVisitePrenotate(id_medico);
+	
 	public ArrayList<TipologiaVisitaDTO> getLista_visite() {
 		return lista_visite;
 	}
 
-	private Integer id_medico;
 	private int id_prenotazione_visita_corrente;
 
 
@@ -86,6 +89,17 @@ public class VisitaCorrente {
 		this.lista_esami = lista_esami;
 	}
 
+	public String getReferto() {
+		return referto;
+	}
+
+	public void setReferto(String referto) {
+		this.referto = referto;
+	}
+
+	
+	
+	
 	public void aggiungiVisite(String[] id_visite) {
 		for (String id_visita : id_visite) {
 			int id = Integer.parseInt(id_visita);
@@ -119,10 +133,12 @@ public class VisitaCorrente {
 		}
 		json.add("lista_visite", array_visite);
 
-		Logger.log("JSON visita corrente, relativa alla  prenotazione %d: \n", id_prenotazione_visita_corrente, json.toString());
+		Logger.log("JSON visita corrente, relativa alla  prenotazione %d: \n", id_prenotazione_visita_corrente, json.getAsString());
 		return json;
 
 
 	}
+
+
 
 }

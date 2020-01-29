@@ -1,0 +1,15 @@
+
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+
+<c:if test="${not empty notifica}">
+		<div
+			class="alert alert-${notifica.tipoStr} alert-dismissible fade show"
+			role="alert">
+			${notifica.testo}
+			<button type="button" class="close" data-dismiss="alert"
+				aria-label="Chiudi">
+				<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+		<%session.removeAttribute("notifica"); %>
+	</c:if>

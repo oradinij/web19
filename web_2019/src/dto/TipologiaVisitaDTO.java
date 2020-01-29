@@ -25,6 +25,7 @@ public class TipologiaVisitaDTO {
 	public void setId_visita(int id_visita) {
 		this.id_visita = id_visita;
 	}
+
 	public String getCosto_visita() {
 		return costo_visita;
 	}
@@ -36,12 +37,13 @@ public class TipologiaVisitaDTO {
 		this.nome_visita = nome_visita;
 	}
 
-	public TipologiaVisitaDTO(int id_visita, String nome_visita, String costo_visita2) {
+	public TipologiaVisitaDTO(int id_visita, String nome_visita, String costo_visita) {
 
 		this.id_visita = id_visita;
 		this.nome_visita = nome_visita;
-		this.costo_visita = costo_visita2;
+		this.costo_visita = costo_visita;
 	}
+
 	public TipologiaVisitaDTO(int id_visita) {
 		this.id_visita = id_visita;
 		this.nome_visita = new TipologiaVisitaDAO().getNameById(id_visita);

@@ -14,6 +14,7 @@ import javax.servlet.http.HttpSession;
 
 import dao.MedicoDAO;
 import dto.MedicoDTO;
+import web_2019.Notifica;
 
 /**
  * Servlet implementation class LoginMedico
@@ -52,10 +53,13 @@ public class LoginMedico extends HttpServlet {
 		session.setAttribute("user", user);
 
 		String nextPage;
-		if(user != null) 
+		if(user != null) {
 			nextPage = "/medico/homeMedicoBase.jsp";
-		else
-			nextPage = "/loginFailed.jsp" ;
+		request.getSession().setAttribute("notifica", new Notifica("Login corretto", Notifica.SUCCESS));}
+		else {
+			nextPage = "/login/loginMedico.jsp" ;
+			request.getSession().setAttribute("notifica", new Notifica("<strong>Login fallito:</strong> username o password sbagliati", Notifica.DANGER));
+		}
 		response.sendRedirect(request.getContextPath() + nextPage);
 
 	}

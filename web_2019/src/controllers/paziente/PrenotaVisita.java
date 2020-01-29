@@ -13,7 +13,7 @@ import com.sun.mail.iap.Response;
 import dto.PazienteDTO;
 
 /**
- * Servlet implementation class PrenotaVisita
+ * Prenotazione visita dal prorio medico di base
  */
 @WebServlet("/paziente/prenotaVisita")
 public class PrenotaVisita extends HttpServlet {
