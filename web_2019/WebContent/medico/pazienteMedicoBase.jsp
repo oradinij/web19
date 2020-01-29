@@ -50,14 +50,15 @@
 </div>
 &nbsp;
 <hr>
+<form id="formRicette" action="RicettePaziente"> 
+<input type="hidden" value="${visita_corrente.paziente.id}" name="id"> 
+</form>
 <div class="container text-center">
+
   <div class="card">
     <div class="card-img"> <img src="../images/pills.jpg" alt="pills" style="height:220px;">
       <div class="overlay">
-      <form id="formRicette" action="RicettePaziente"> 
-      <input type="hidden" value="${visita_corrente.paziente.id}" name="id"> 
-        <div class="overlay-content"><a class="hover" onclick="formRicette.submit();">Vai alle ricette del paziente</a></div>
-        </form>
+        <div class="overlay-content"><a class="hover" href="#" onclick="formRicette.submit();">Vai alle ricette del paziente</a></div>
       </div>
     </div>
     <div class="card-content"> <a href="#!">

@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import dto.EsameDTO;
+import dto.TipologiaEsameDTO;
 import web_2019.DatabaseService;
 
 public class EsameDAO {
@@ -98,16 +99,19 @@ public class EsameDAO {
 	}
 
 	
-	public void creaPrenotazioneEsame(int id_esame, int id_paziente) {
+	public void creaPrenotazioneEsame(int id_esame, int id_paziente, String data_ora, int id_medico, int id_riferimento) {
 		
 		Connection conn =DatabaseService.getDbConnection();
 		PreparedStatement stmt;
 
 		try {
-			String sql = "INSERT INTO public.prenotazioni_esami(id_esame, id_paziente)	VALUES (?, ?);";
+			String sql = "INSERT INTO public.prenotazioni_esami(id_esame, id_paziente, data_ora, id_medico, id_riferimento)	VALUES (?, ?,  TO_TIMESTAMP(?, 'YYYY-MM-DD HH24:MI:SS'), ?, ?);";
 			stmt = conn.prepareStatement(sql);
 			stmt.setInt(1, id_esame);
 			stmt.setInt(2, id_paziente);
+			stmt.setString(3, data_ora);
+			stmt.setInt(4, id_medico);
+			stmt.setInt(5, id_riferimento);
 			stmt.executeUpdate();
 			stmt.close();
 			conn.close();
@@ -116,6 +120,11 @@ public class EsameDAO {
 		catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	public TipologiaEsameDTO getTipologiaEsame(int id_esame) {
+		return new TipologiaEsameDAO().getById(id_esame);
+		
 	}
 
 	

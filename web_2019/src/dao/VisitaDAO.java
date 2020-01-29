@@ -74,19 +74,21 @@ public class VisitaDAO {
 		return luogoVisita;
 	}
 
-	public void creaPrenotazioneVisita(int id_paziente, int id_medico, String data_ora,  int stato) {
+	public void creaPrenotazioneVisita(int id_visita, int id_paziente, int id_medico, String data_ora,  int stato, int id_riferimento) {
 		Connection conn = DatabaseService.getDbConnection();
 		PreparedStatement stmt;
 		//se e' una visita del medico di base l'utente la prenota direttamente altrimenti viene prima prescritta dal medico e successivamente prenotata
 		//per questo il metodo prende anche lo stato
 		try {
-			String sql = "INSERT INTO public.prenotazioni_visite(data, id_paziente, id_medico, stato) VALUES (TO_TIMESTAMP(?, 'YYYY-MM-DD HH24:MI'), ?, ?, ?);";
+			String sql = "INSERT INTO public.prenotazioni_visite(data, id_paziente, id_medico, stato, id_riferimento, id_visita) VALUES (TO_TIMESTAMP(?, 'YYYY-MM-DD HH24:MI'), ?, ?, ?, ?, ?);";
 			stmt = conn.prepareStatement(sql);
 
 			stmt.setString(1, data_ora);
 			stmt.setInt(2, id_paziente);
 			stmt.setInt(3, id_medico);
 			stmt.setInt(4, stato);
+			stmt.setInt(5,	id_riferimento);
+			stmt.setInt(6,	id_visita);
 
 			stmt.executeUpdate();
 			stmt.close();

@@ -2,6 +2,7 @@ package dto;
 
 import java.util.Date;
 
+import dao.EsameDAO;
 import web_2019.Assets;
 
 public class EsameDTO {
@@ -31,6 +32,8 @@ public class EsameDTO {
 		this.area = area;
 	}
 	
+	
+	
 	public int getId_esame() {
 		return id_esame;
 	}
@@ -52,7 +55,7 @@ public class EsameDTO {
 	
 	
 	public String getArea() {
-		return area;
+		return new EsameDAO().getTipologiaEsame(this.id_esame).getArea_esame();
 	}
 
 	public void setArea(String area) {

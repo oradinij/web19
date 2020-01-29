@@ -1,39 +1,40 @@
 window.onresize = function (event) {
-	$('.datatable').DataTable().columns.adjust().draw();
+	$('.datatable').DataTable().columns.adjust();
 };
 
+$(document).on('shown.bs.modal','.modal', function () {
+
+	$('.datatable').DataTable().columns.adjust();
+
+});
 
 $(document).ready(function () {
 
 
 	$('#tabellaEsami').DataTable({
 
-		ordering: true,
+		ordering: false,
 		paging: false,
 		scrollY: 200,
 		scrollX: true,
 		bInfo: false,
 		scrollCollapse: false,
-		"columnDefs": [{
-			"targets": [1],
-			"orderable": false
-		}]
+		searching: false
+		
 
 	});
 	
 	
 	$('#tabellaRicette').DataTable({
 
-		ordering: true,
+		ordering: false,
 		paging: false,
 		scrollY: 200,
 		scrollX: true,
 		bInfo: false,
-		scrollCollapse: false,
-		"columnDefs": [{
-			"targets": [1],
-			"orderable": false
-		}]
+		scrollCollapse: false, 
+		searching: false
+		
 
 	});
 	

@@ -149,7 +149,103 @@
 
 
 <script>
+
+
+
+
 var id_visita_da_cancellare;
+var ricetta_da_eliminare;
+
+
+function ajaxRemoveEsami(esame){
+	
+	$.ajax({
+		
+		url: 'http://localhost:8080/web2019/medico/annullaPrescrizioneEsame?id_esame='+ esame,
+        type: "GET",
+        success: function (result){
+
+        	document.getElementById('tbody_tabella_esami').innerHTML="";	
+        	
+        	
+        	result.lista_esami.forEach(el =>{
+        		
+        		
+   
+        		
+        		
+        		$("#tbody_tabella_esami").append("<tr><td align=\"center\" style=\"vertical-align:middle\">" + el.nome_esame + "</td><td align=\"center\" style=\"vertical-align:middle\"><button onclick= \"ajaxRemoveEsami('"+el.id_esame+"');\" class=\"btn btn-outline-danger\">Elimina</button></td>");
+				
+        		           
+        	});
+        	
+        	if(result.lista_esami.length==0){
+
+        	$('#tabellaEsami').DataTable().columns.adjust().draw();
+        	}
+        	
+        }, 
+        
+        error: function(err){
+        	
+        	console.log(err);
+        	
+        	
+        }
+	
+	});
+	
+	
+	
+	
+	
+}
+
+
+
+function ajaxRemoveRicetta(prescrizione){
+	
+	$.ajax({
+		
+		url: 'http://localhost:8080/web2019/medico/annullaPrescrizioneFarmaco?prescrizione='+ prescrizione,
+        type: "GET",
+        success: function (result){
+
+        	document.getElementById('tbody_tabella_ricette').innerHTML="";	
+        	
+        	
+        	result.lista_prescrizioni.forEach(el =>{
+        		
+        		
+   
+        		
+        		
+        	$("#tbody_tabella_ricette").append("<tr><td align=\"center\" style=\"vertical-align:middle\">" + el+ "</td><td align=\"center\" style=\"vertical-align:middle\"><button onclick= \"ajaxRemoveRicetta('"+el+"');\" class=\"btn btn-outline-danger\">Elimina</button></td>");
+				
+        		           
+        	});
+        	
+        	if(result.lista_prescrizioni.length==0){
+        	
+        	$('#tabellaRicette').DataTable().columns.adjust().draw();
+        	}
+        	
+        }, 
+        
+        error: function(err){
+        	
+        	console.log(err);
+        	
+        	
+        }
+	
+	});
+	
+
+	
+	
+	
+}
 
 
 function aggiungiPrescrizione() {
@@ -176,31 +272,19 @@ function aggiungiPrescrizione() {
         	
         console.log(result);
         	
-        function ajaxRemoveVisita(prescrizione){
-			
-        	$.ajax({
-        		
-        		url: 'http://localhost:8080/web2019/medico/annullaPrescrizioneFarmaco?prescrizione='+ prescrizione,
-                type: "GET" 
-        	
-        	});
-        	
-        	$(this).closest('tr').remove();
-			
-			
-			
-		}
+        
         
         
         	$('#modalNuovaRicetta').modal('hide');
+        	document.getElementById('tbody_tabella_ricette').innerHTML="";	
         	
         	result.lista_prescrizioni.forEach(el =>{
         		
         		
+   
         		
         		
-        		
-        	$("#tbody_tabella_ricette").append("<tr><td>" + el + "</td><td><button onclick=\"ajaxRemoveVisita(el)\" class=\"btn btn-outline-danger\">Elimina</button><td>");
+        	$("#tbody_tabella_ricette").append("<tr><td align=\"center\" style=\"vertical-align:middle\">" + el + "</td><td  align=\"center\" style=\"vertical-align:middle\"><button onclick= \"ajaxRemoveRicetta('"+el+"');\" class=\"btn btn-outline-danger\">Elimina</button></td>");
 				
         		           
         	});
@@ -226,22 +310,51 @@ function aggiungiPrescrizione() {
 	function aggiungiEsame() {
 		
 		var tipo_esame = [];
-		
+		var url="http://localhost:8080/web2019/medico/AggiungiEsame"
 		 var radios = document.getElementsByName('exam'); 
       
 		 
          for(i = 0; i < radios.length; i++) { 
              if(radios[i].checked) 
-            	 tipo_esame.push(radios[i].value); 
+            	 url=url + "?id_esame="+ radios[i].value; 
              	
          } 
 		
-		console.log(tipo_esame);
-		
+  	   $.ajax({
+	        url: url,
+	        type: "GET",
+	        success: function (result) { 
+
+	        	console.log(result);
+	        	
+	        	$('#modalNuovoEsame').modal('hide');
+	        	document.getElementById('tbody_tabella_esami').innerHTML="";	
+	        	
+	        	result.lista_esami.forEach(el =>{
+	        		
+	        		
+	        	$("#tbody_tabella_esami").append("<tr><td align=\"center\" style=\"vertical-align:middle\">" + el.nome_esame + "</td><td  align=\"center\" style=\"vertical-align:middle\"><button onclick= \"ajaxRemoveEsami('"+el.id_esame+"');\" class=\"btn btn-outline-danger\">Elimina</button></td>");
+					
+	        		           
+	        	});
+	        	
+	            $('#modalCompilazione').modal('show');
+	        	
+	        	
+	        	
+	            },
+	         error: function (err){
+	        	
+	        	console.log(err);
+				
+	        }
+	        });
+			
 
 			
 		};
 		
+
 	
 
 function modal_compilazione_visita_base(id){
@@ -253,17 +366,21 @@ function modal_compilazione_visita_base(id){
 	        	document.getElementById('compila_badge_numero_footer').innerHTML="Codice prenotazione: " + id;
 	        	
 	            $('#modalCompilazione').modal('show');
+	            
+	   
+	             
+		
+	            
 	            },
 	         error: function (err){
 	        	
 	        	console.log(err);
-				document.getElementById('compila_badge_numero_footer').innerHTML="Codice prenotazione: " + id;
-	        	
-	            $('#modalCompilazione').modal('show');
+				
 	        }
 	        });
 	    
-	  
+	   
+	
 	};
 	
 	
@@ -331,6 +448,7 @@ function modal_svolta_base(id){
 		            document.getElementById('prenotazione_data_base').innerHTML=result.data;
 		            document.getElementById('prenotazione_numero_footer_base').innerHTML="Codice prenotazione: " + id;
 		            document.getElementById('bottone_annullamento_prenotazione').outerHTML= "<a id=\"bottone_annullamento_prenotazione\" href=\"#\" class=\"btn btn-danger\" onclick=\"modalCancellazionePrenotazione(" + id + ")\">Annulla prenotazione</a>"
+		            document.getElementById('bottone_compila_modal_prenotazione').outerHTML= "<a id=\"bottone_compila_modal_prenotazione\" href=\"#\" class=\"btn btn-success\" onclick=\"modal_compilazione_visita_base(" + id + ")\">Compila</a>"
 		            $('#modalPrenotazioneBase').modal('show');
 		            },
 		            
@@ -358,7 +476,6 @@ function modal_svolta_base(id){
 			            document.getElementById('prenotazione_numero_footer_spec').innerHTML="Codice prenotazione: " + id;
 			            document.getElementById('prenotazione_nome_visita_spec').innerHTML=result.nome_visita;
 			            document.getElementById('prenotazione_medico_spec').innerHTML=result.nome_medico + " " + result.cognome_medico;
-			            
 			            $('#modalPrenotazioneSpecialistica').modal('show');
 			            },
 			            
@@ -385,7 +502,7 @@ function modal_svolta_base(id){
 
 
 <div class="modal fade modalToClose" id="modalPrenotazioneBase">
-  <div class="modal-dialog">
+ <div class="modal-dialog">
     <div class="modal-content"> 
       
       <!-- Modal Header -->
@@ -408,7 +525,7 @@ function modal_svolta_base(id){
           <h5>
             <p class="badge badge-info">Compila visita</p>
           </h5>
-          <a href="#" data-toggle="modal" data-target="#modalCompilazione" class="btn btn-success">Compila visita</a> </div>
+          <a id="bottone_compila_modal_prenotazione" href="#"  class="btn btn-success">Compila visita</a> </div>
       </div>
       
       <!-- Modal footer -->
@@ -419,7 +536,6 @@ function modal_svolta_base(id){
     </div>
   </div>
 </div>
-
 <div class="modal  fade" id="modalPrenotazioneSpecialistica">
   <div class="modal-dialog">
     <div class="modal-content"> 
@@ -469,15 +585,16 @@ function modal_svolta_base(id){
       </div>
       
       <!-- Modal body -->
+
       <div class="modal-body">
         <div class="container  bg-light text-center" style="padding: 10px;border-radius: 20px">
           <h5>
             <p class="badge badge-info">Data visita</p>
           </h5>
           <div class="form-group text-center container" style="border-radius: 20px; ; max-width: 60%">
-            <form action="#" method="post" class="text-center" style="display: inline-block">
+            <form id="formConcludiVisita" action="./concludiVisita" method="post" class="text-center" style="display: inline-block">
               <div class="input-group date" id="datePickerVisita" data-target-input="nearest" style="max-width: 200px;">
-                <input required name="dataVisita" type="text" class="form-control datetimepicker-input text-center" readonly data-target="#datetimepickerVisita" id="dataVisita">
+                <input required name="data" type="text" class="form-control datetimepicker-input text-center" readonly data-target="#datetimepickerVisita" id="dataVisita">
                 <div class="input-group-append" data-target="#datetimepickerVisita" data-toggle="datetimepicker">
                   <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                 </div>
@@ -488,43 +605,47 @@ function modal_svolta_base(id){
           <h5>
             <p class="badge badge-info">Ricette</p>
           </h5>
-          <table class="table datatable table-light table table-hover table-striped tabellaRicetteEsami" id="tabellaRicette" style="width: 100%;">
+          <br>
+          <div class="container" >
+          <table class="table datatable table-light table-bordered table-hover table-striped tabellaRicetteEsami" id="tabellaRicette" style="width: 100%;">
             <thead>
               <tr>
-                <th>Farmaci</th>
-                <th>Dettagli</th>
+                <th align="center">Farmaci</th>
+                <th align="center">Rimuovi</th>
               </tr>
             </thead>
             <tbody id="tbody_tabella_ricette">
             </tbody>
           </table>
+          </div>
+          <br>
           <a href="#" data-toggle="modal" data-target="#modalNuovaRicetta" class="btn btn-success"><i class="fa fa-plus-circle"></i> Aggiungi ricetta</a>
           <hr class="bg-light">
           <h5>
             <p class="badge badge-info">Esami</p>
           </h5>
-          <table class="table table-light table-hover table-striped tabellaRicetteEsami" id="tabellaEsami">
-            <thead style="width:100%">
+     
+             <div class="container" >
+          <table class="table datatable table-light table-hover table-bordered table-striped tabellaRicetteEsami" id="tabellaEsami" style="width:100%">
+            <thead>
               <tr>
-                <th>Esame</th>
-                <th>Dettagli</th>
+                <th align="center">Esame</th>
+                <th align="center">Rimuovi</th>
               </tr>
             </thead>
-            <tbody>
-              <tr>
-                <td> 123456789067677 </td>
-                <td><a class="btn btn-outline-info">Dettagli</a></td>
-              </tr>
-             
+            <tbody  id="tbody_tabella_esami">
             </tbody>
           </table>
+          </div>
+ 	<br>
           <a href="#" class="btn btn-success" data-toggle="modal" data-target="#modalNuovoEsame"><i class="fa fa-plus-circle"></i> Prescrivi esame</a> </div>
       </div>
       
       <!-- Modal footer -->
       <div class="modal-footer">
         <h6 id="compila_badge_numero_footer" class="badge badgeNumeroVisitaEsame"></h6>
-        <button type="button" class="btn btn-danger" data-dismiss="modal">Chiudi</button>
+        <button onclick="$('#formConcludiVisita').submit()" class="btn btn-success" >Compila visita</button>
+        <button class="btn btn-danger" data-dismiss="modal">Annulla</button>
       </div>
     </div>
   </div>
@@ -812,12 +933,12 @@ function modal_svolta_base(id){
           <input class="form-control" id="cercaEsame" type="text" placeholder="Cerca un esame..">
           &nbsp;
           <ul class="list-group striped overflow-auto text-left" style="height: 200px; width:100%" id="listaEsami">
-            <div id="tipo_esame" class="form-check">
+            <div required id="tipo_esame" class="custom-radio">
             
             <c:forEach items="${tipi_esame}" var="tipo_esame">
               <li class="list-group-item list-group-item-action" href="#"> &nbsp;
-                <input type="checkbox" class="custom-control-input" id="exam${tipo_esame.nome_esame}" name="exam" value="${tipo_esame.nome_esame}">
-                <label class="custom-control-label" for="exam${tipo_esame.nome_esame}"></label>
+                <input type="radio" class="custom-control-input" id="exam${tipo_esame.id_esame}" name="exam" value="${tipo_esame.id_esame}">
+                <label class="custom-control-label" for="exam${tipo_esame.id_esame}"></label>
                 <span class="badge badge-info">${tipo_esame.area_esame}</span> &nbsp; ${tipo_esame.nome_esame}</li>
               </c:forEach>
               

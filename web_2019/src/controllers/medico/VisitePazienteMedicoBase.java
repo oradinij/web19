@@ -39,7 +39,7 @@ public class VisitePazienteMedicoBase extends HttpServlet {
 		visita_corrente.setPaziente(paziente);
 		visita_corrente.setId_medico(user.getId_medico());
 		ArrayList<TipologiaVisitaDTO> tipi_visita = TipologiaVisitaDAO.getAll();
-		ArrayList<TipologiaEsameDTO> tipi_esame = TipologiaEsameDAO.getAll();
+		ArrayList<TipologiaEsameDTO> tipi_esame = new TipologiaEsameDAO().getAll();
 		request.getSession().setAttribute("visita_corrente", visita_corrente);
 		request.getSession().setAttribute("tipi_visita", tipi_visita);
 		request.getSession().setAttribute("tipi_esame", tipi_esame);

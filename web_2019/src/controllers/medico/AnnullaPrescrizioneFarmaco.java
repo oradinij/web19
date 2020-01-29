@@ -1,6 +1,7 @@
 package controllers.medico;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -33,6 +34,14 @@ public class AnnullaPrescrizioneFarmaco extends HttpServlet {
 		else {
 			Logger.log("ERRORE");
 		}
-		response.sendRedirect(request.getContextPath()+"/medico/riepilogoVisita.jsp");
+		
+		PrintWriter out = response.getWriter();
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.setHeader("Access-Control-Allow-Origin", "*");
+        response.setHeader("Access-Control-Allow-Methods", "GET");
+        out.print(visita_corrente.toJson());
+		return;
+		
 	}
 }

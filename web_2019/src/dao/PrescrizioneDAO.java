@@ -42,16 +42,19 @@ public class PrescrizioneDAO {
 		return listaPrescrizioni;
 	}
 
-	public PrescrizioneDTO  creaPrescrizione(int id_paziente, int id_medico,String farmaco) { 
+	public PrescrizioneDTO  creaPrescrizione(int id_paziente, int id_medico,String farmaco, String timestamp, int id_riferimento) { 
 		Connection conn =DatabaseService.getDbConnection();
 		PreparedStatement stmt;
 		PrescrizioneDTO ultima_prescrizione = null;
 		
 		try {
-			stmt = conn.prepareStatement("INSERT INTO prescrizioni (id_medico, id_paziente, farmaco)	VALUES (?, ?, ?);");
+			//timestamp 
+			stmt = conn.prepareStatement("INSERT INTO prescrizioni (id_medico, id_paziente, farmaco, timestamp, id_riferimento)	VALUES (?, ?, ?,  TO_TIMESTAMP(?, 'YYYY-MM-DD HH24:MI:SS'),?);");
 			stmt.setInt(1, id_medico);
 			stmt.setInt(2, id_paziente);
 			stmt.setString(3, farmaco);
+			stmt.setString(4, timestamp);
+			stmt.setInt(5, id_riferimento);
 			stmt.execute();
 			stmt.close();
 		}

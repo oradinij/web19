@@ -61,14 +61,14 @@ public class VisitaCorrente {
 		lista_prescrizioni.add(farmaco);		
 	}
 
-	public void aggiungiEsami(String[] id_esami) {
-
-		for (String id_esame : id_esami) {
+	public void aggiungiEsame(String id_esame) {
+		
 			int id = Integer.parseInt(id_esame);
 			lista_esami.add(new TipologiaEsameDTO(id));
+			
 		}
 
-	}
+
 
 	public void setLista_visite(ArrayList<TipologiaVisitaDTO> lista_visite) {
 		this.lista_visite = lista_visite;
@@ -94,6 +94,8 @@ public class VisitaCorrente {
 
 	}
 
+	
+	
 
 
 	public JsonObject toJson() {
@@ -107,7 +109,7 @@ public class VisitaCorrente {
 
 		JsonArray array_esami = new JsonArray();
 		for (TipologiaEsameDTO esame : lista_esami) {
-			array_prescrizioni.add(esame.toJson());	
+			array_esami.add(esame.toJson());	
 		}
 		json.add("lista_esami", array_esami);
 
@@ -115,8 +117,7 @@ public class VisitaCorrente {
 		for (TipologiaVisitaDTO visita : lista_visite) {
 			array_prescrizioni.add(visita.toJson());	
 		}
-		json.add("lista_esami", array_visite);
-
+		json.add("lista_visite", array_visite);
 
 		Logger.log("JSON visita corrente, relativa alla  prenotazione %d: \n", id_prenotazione_visita_corrente, json.toString());
 		return json;

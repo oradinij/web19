@@ -10,26 +10,32 @@ public class TipologiaEsameDTO {
 	private String area;
 	private String nome_esame;
 	private String costo_esame;
+	private int id_specialiazzazione;
 
 	public JsonObject toJson() {
 		JsonObject json = new JsonObject();
 		json.addProperty("id_esame", id_esame);
+		json.addProperty("id_specialiazzazione", id_specialiazzazione);
 		json.addProperty("area", area);
 		json.addProperty("nome_esame", nome_esame);
 		json.addProperty("costo_esame", costo_esame);
 		return json;
 	}
-	public TipologiaEsameDTO(int id_esame, String area, String nome_esame, String costo_esame2) {
+	public TipologiaEsameDTO(int id_esame, int id_specialiazzazione, String area, String nome_esame, String costo_esame) {
 
 		this.id_esame = id_esame;
+		this.id_specialiazzazione = id_specialiazzazione;
 		this.nome_esame = nome_esame;
-		this.costo_esame = costo_esame2;
-		this.area = area;
+		this.costo_esame = costo_esame;
+		this.area = getArea_esame();
 	}
 	public TipologiaEsameDTO(int id_esame) {
 		this.id_esame = id_esame;
 		this.nome_esame = new TipologiaEsameDAO().getNameById(id_esame);
+		this.area= new TipologiaEsameDAO().getDescrizione(id_esame);
 	}
+	
+	
 	@Override
 	public boolean equals(Object obj) {
 		if(obj == null)
@@ -64,6 +70,7 @@ public class TipologiaEsameDTO {
 	public void setNome_esame(String nome_esame) {
 		this.nome_esame = nome_esame;
 	}
+	
 
 
 

@@ -130,19 +130,19 @@ public class PazienteDTO implements Serializable{
 		new PazienteDAO().setMedico(getId(), id_medico);
 
 	}
-	public PrescrizioneDTO aggiugiPrescrizioneFarmaco(String farmaco, int id_medico) {
-		return new PrescrizioneDAO().creaPrescrizione(getId(), id_medico, farmaco);
+	public PrescrizioneDTO aggiugiPrescrizioneFarmaco(String farmaco, int id_medico, String timestamp, int id_riferimento) {
+		return new PrescrizioneDAO().creaPrescrizione(getId(), id_medico, farmaco, timestamp, id_riferimento);
 
 	}
-	public PrescrizioneDTO aggiugiPrescrizioneFarmaco(String farmaco) {
-		return aggiugiPrescrizioneFarmaco(farmaco, this.getId_medico());
 
+	public void aggiungiPrenotazioneEsame(int id_esame, int id_medico, String data, int id_riferimento) {
+		new EsameDAO().creaPrenotazioneEsame(id_esame, this.getId(), data, id_medico, id_riferimento);
 	}
-	public void aggiungiPrenotazioneEsame(int id_esame) {
-		new EsameDAO().creaPrenotazioneEsame(id_esame, this.id);
-	}
-	public void aggiungiPrenotazioneVisita(String data_ora) {
-		new VisitaDAO().creaPrenotazioneVisita(this.getId(), this.getId_medico(), data_ora, 1);//stato = 1 vuol dire prenotata
+	public void aggiungiPrenotazioneVisita(int id_visita, String data_ora, int id_medico, int id_riferimento) {
+		int stato = Assets.DA_PRENOTARE;
+		if(id_medico == getId_medico())
+			stato = Assets.PRENOTAZIONE_EFFETTUATA;
+		new VisitaDAO().creaPrenotazioneVisita(id_visita, this.getId(), id_medico, data_ora, stato, id_riferimento);//stato = 1 vuol dire prenotata
 
 	}
 	/**
