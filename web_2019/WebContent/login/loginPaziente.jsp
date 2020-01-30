@@ -8,8 +8,7 @@
 </head>
 <body>
 Login PAZIENTI
-
-
+<%@include file="../notifica.jspf" %>
 	<br>
 	<br>
 	<form action="./loginPaziente">

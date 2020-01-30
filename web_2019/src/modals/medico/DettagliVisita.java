@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.gson.JsonObject;
 
 import dao.VisitaDAO;
+import dto.VisitaDTO;
 import utils.Logger;
 
 
@@ -21,9 +22,9 @@ public class DettagliVisita extends HttpServlet {
        
     
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String id_visitaStr = request.getParameter("id_prenotazione");
-		if(id_visitaStr!= null) {
-			Integer id_prenotazione = Integer.parseInt(id_visitaStr);
+		String id_prenotazioneStr = request.getParameter("id_prenotazione");
+		if(id_prenotazioneStr!= null) {
+			Integer id_prenotazione = Integer.parseInt(id_prenotazioneStr);
 			JsonObject visita_json = new VisitaDAO().getById(id_prenotazione).toJson();
 			PrintWriter out = response.getWriter();
 	        response.setContentType("application/json");

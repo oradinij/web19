@@ -18,7 +18,7 @@ import web_2019.VisitaCorrente;
 public class AggiungiVisita extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		String[] id_visite = request.getParameterValues("visite_selezionate");
 		VisitaCorrente visita_corrente = (VisitaCorrente) request.getSession().getAttribute("visita_corrente");
@@ -28,9 +28,9 @@ public class AggiungiVisita extends HttpServlet {
 				request.getSession().setAttribute("visita_corrente", visita_corrente);
 			}
 			visita_corrente.aggiungiVisite(id_visite);
-			Logger.log("aggiunti %d nuovi esami alla visita corrente", id_visite.length);
+			Logger.log("aggiunta %d nuove VISITE SPECIALISTICHE a visita corrente", id_visite.length);
 		}
-		response.sendRedirect(request.getContextPath()+"/medico/dettagliPaziente.jsp");
+		response.sendRedirect(request.getContextPath()+"/medico/visitePazienteMedicoBase.jsp");
 		return;
 	}
 }

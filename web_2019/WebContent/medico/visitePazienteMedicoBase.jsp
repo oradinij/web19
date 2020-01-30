@@ -22,6 +22,7 @@
 <script src="../js/dataTables.bootstrap4.min.js"></script>
 <script src="../js/moment-with-locales.min.js"></script>
 <script src="../js/tempusdominus-bootstrap-4.min.js"></script>
+
 </head>
 
 <body class="bg-light">
@@ -95,7 +96,7 @@
           <tr>
             <td style="vertical-align: middle">${visita.data}</td>
             <td style="vertical-align: middle"><span class="badge badge-pill badge-info">${visita.nome_visita}</span></td>
-            <td style="vertical-align: middle"><ar onclick="modalDettagliPrenotazioneSpecialistica(${visita.id_prenotazione})" class="btn btn-outline-info"><i class="fa fa-info-circle"></i> Dettagli</a></td>
+            <td style="vertical-align: middle"><a onclick="modalDettagliPrenotazioneSpecialistica(${visita.id_prenotazione})" class="btn btn-outline-info"><i class="fa fa-info-circle"></i> Dettagli</a></td>
           </tr>
          </c:forEach>
         </tbody>
@@ -116,7 +117,6 @@
       <table id="tabellaVisiteEffettuate" class="table datatable table-striped table table-hover tabella_visite" style="width: 100%;">
         <thead>
           <tr>
-            <th>Data</th>
             <th>Tipo</th>
             <th>Dottore</th>
             <th></th>
@@ -457,7 +457,7 @@ function modal_svolta_base(id){
 		        	console.log(result);
 		        	
 		        	
-		        	}
+		        	}   
 		        });
 		    
 		  
@@ -682,7 +682,7 @@ function modal_svolta_base(id){
             <p class="badge badge-info">Ricette</p>
           </h5>
           <div class="container">
-            <table class="table datatable table-hover table-striped table-bordered tabellaRicetteEsami">
+            <table class="table  table-hover table-striped table-bordered tabellaRicetteEsami">
               <thead style="max">
                 <tr>
                   <th>Numero Ricetta</th>
@@ -714,7 +714,7 @@ function modal_svolta_base(id){
             <p class="badge badge-info">Esami</p>
           </h5>
           <div class="container">
-            <table class="table datatable table-hover table-bordered table-striped tabellaRicetteEsami">
+            <table class="table  table-hover table-bordered table-striped tabellaRicetteEsami">
               <thead style="max">
                 <tr>
                   <th>Numero Esame</th>
@@ -799,7 +799,7 @@ function modal_svolta_base(id){
             <p class="badge badge-info">Ricette</p>
           </h5>
           <div class="container">
-            <table class="table datatable table-hover table-striped table-bordered  tabellaRicetteEsami">
+            <table class="table  table-hover table-striped table-bordered  tabellaRicetteEsami">
               <thead style="width:100%">
                 <tr>
                   <th>Numero Ricetta</th>
@@ -831,7 +831,7 @@ function modal_svolta_base(id){
             <p class="badge badge-info">Esami</p>
           </h5>
           <div class="container">
-            <table class="table  datatable table-hover table-striped table-bordered  tabellaRicetteEsami">
+            <table class="table   table-hover table-striped table-bordered  tabellaRicetteEsami">
               <thead style="width:100%">
                 <tr>
                   <th>Numero Esame</th>
@@ -961,25 +961,25 @@ function modal_svolta_base(id){
         <h4 class="modal-title">Prescrivi una visita specialistica</h4>
         <button type="button" class="close text-light" data-dismiss="modal">&times;</button>
       </div>
-      <form>
+     <form action="AggiungiVisita" method="post">
         <!-- Modal body -->
         <div class="modal-body text-center">
           <input class="form-control" id="cercaArea" type="text" placeholder="Cerca una visita..">
           &nbsp;
-          <ul class="list-group striped overflow-auto text-left" style="height: 200px; width:100%" id="listaAree">
-            <div class="custom-radio">
-     
+          <ul class="list-group striped overflow-auto text-left" style="height: 200px;" id="listaAree">
+            <div class="custom-control custom-checkbox">
+     		
         	<c:forEach items="${tipi_visita}" var="tipo_visita">
               <li class="list-group-item list-group-item-action" href="#"> &nbsp;
-                <input type="radio" class="custom-control-input" id="area${tipo_visita.nome_visita}" name="area" value="${tipo_visita.nome_visita}">
+                <input type="checkbox" class="custom-control-input" id="area${tipo_visita.nome_visita}" name="visite_selezionate" value="${tipo_visita.id_visita}">
                 <label class="custom-control-label" for="area${tipo_visita.nome_visita}"></label>
                 <span class="badge badge-info">${tipo_visita.nome_visita}</span> </li>
-                </c:forEach>
+                </c:forEach> 
             </div>
           </ul>
         </div>
-        <div class="modal-footer"> <a href="#" class="btn btn-success"><i class="fa fa-check-circle"></i> Prescrivi visita</a>
-          <button type="button" action="submit" class="btn btn-danger" data-dismiss="modal">Annulla</button>
+        <div class="modal-footer"> <button href="#"  type="submit" class="btn btn-success"><i class="fa fa-check-circle"></i> Prescrivi visita</button>
+          <button  class="btn btn-danger" data-dismiss="modal">Annulla</button>
         </div>
       </form>
     </div>
@@ -987,8 +987,9 @@ function modal_svolta_base(id){
 </div>
 
 <footer class="text-center text-light">©2019 Oradini & Bertamini</footer>
-<script src="../js/medico_base/utils_visite_paziente_medico_base.js"></script> 
+
 <script src="../js/medico_base/prenota_visita_timepicker.js"></script> 
 <script src="../js/medico_base/modals_visite_medico_base.js"></script>
+<script src="../js/medico_base/utils_visite_paziente_medico_base.js"></script>
 </body>
 </html>

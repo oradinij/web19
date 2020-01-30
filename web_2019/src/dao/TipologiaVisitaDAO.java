@@ -30,6 +30,8 @@ public class TipologiaVisitaDAO  implements Serializable{
 			String sql = "SELECT * FROM visite_specialistiche";
 			rs = stmt.executeQuery(sql);
 			while(rs.next()){
+				//TODO aggiungere durata
+				//String durata = rs.getString("durata");
 				nomeVisita = rs.getString("nome_visita");
 				id_visita = rs.getInt("id_visita");
 				String costo_visita = rs.getString("costo_visita");
@@ -72,6 +74,37 @@ public class TipologiaVisitaDAO  implements Serializable{
 			e.printStackTrace();
 		}
 		return nome_visita;
+	}
+
+	public TipologiaVisitaDTO getById(int id_visita) {
+
+		Connection conn =DatabaseService.getDbConnection();
+		ResultSet rs = null;
+		PreparedStatement stmt;
+		TipologiaVisitaDTO visita = null;
+		try {
+			String sql = "SELECT * FROM visite_specialistiche where id_visita = ?;";
+			stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, id_visita);
+			rs = stmt.executeQuery();
+			while(rs.next()){
+				//TODO aggiungere durata
+				//String durata = rs.getString("durata");
+				int id_specializzazione = rs.getInt("id_specializzazione");
+				String nome_visita = rs.getString("nome_visita");
+				String costo_visita = rs.getString("costo_visita");
+				visita = new TipologiaVisitaDTO(id_visita, nome_visita, costo_visita);
+
+			}
+			rs.close();
+			stmt.close();
+			conn.close();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		return visita;
+
 	}
 
 }

@@ -45,8 +45,7 @@ public class TipologiaVisitaDTO {
 	}
 
 	public TipologiaVisitaDTO(int id_visita) {
-		this.id_visita = id_visita;
-		this.nome_visita = new TipologiaVisitaDAO().getNameById(id_visita);
+		TipologiaVisitaDTO visita_tmp = new TipologiaVisitaDAO().getById(id_visita);
 	}
 	@Override
 	public boolean equals(Object obj) {

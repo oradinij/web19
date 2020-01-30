@@ -103,7 +103,7 @@ public class VisitaCorrente {
 	public void aggiungiVisite(String[] id_visite) {
 		for (String id_visita : id_visite) {
 			int id = Integer.parseInt(id_visita);
-			lista_esami.add(new TipologiaEsameDTO(id));
+			lista_visite.add(new TipologiaVisitaDTO(id));
 		}
 
 	}
@@ -114,6 +114,7 @@ public class VisitaCorrente {
 
 	public JsonObject toJson() {
 		JsonObject json = new JsonObject();
+		try {
 
 		JsonArray array_prescrizioni = new JsonArray();
 		for (String prescrizione : lista_prescrizioni) {
@@ -135,6 +136,12 @@ public class VisitaCorrente {
 
 		Logger.log("JSON visita corrente, relativa alla  prenotazione %d: \n", id_prenotazione_visita_corrente, json.getAsString());
 		return json;
+		}
+		catch (Exception e) {
+			
+			json.addProperty("Errore", "impossibile stapare il JSON");
+			return json;
+		}
 
 
 	}
