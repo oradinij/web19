@@ -308,6 +308,24 @@ public class PazienteDAO {
 		}	
 		
 	}
+	public void annullaPrenotazioneVisita(Integer id_prenotazione) {
+		Connection conn =DatabaseService.getDbConnection();
+
+		try {
+			String sql = "DELETE FROM prenotazioni_visite WHERE id_prenotazione = ?";
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, id_prenotazione);
+			stmt.executeUpdate();
+
+			stmt.close();
+			conn.close();
+		}
+
+		catch (Exception e) {
+			e.printStackTrace();
+		}	
+		
+	}
 	
 
 }

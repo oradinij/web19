@@ -30,6 +30,8 @@ public class FarmaciaDAO {
 	 * @param id_sessione @see {@link UUID#randomUUID()}
 	 * @return
 	 */
+	
+	
 	public FarmaciaDTO getUserBySession(String id_sessione) {
 		FarmaciaDTO user=null;
 		Connection conn =DatabaseService.getDbConnection();
@@ -72,7 +74,8 @@ public class FarmaciaDAO {
 			while(rs.next()){
 				String mail = rs.getString("email");		
 				String indirizzo = rs.getString("indirizzo");
-				user= new FarmaciaDTO(id_farmacia, mail, indirizzo);
+				String nome_farmacia = rs.getString("nome_farmacia");
+				user= new FarmaciaDTO(id_farmacia, mail, indirizzo, nome_farmacia);
 			}
 			rs.close();
 			stmt.close();
@@ -96,7 +99,8 @@ public class FarmaciaDAO {
 			while(rs.next()){
 				Integer id_farmacia = rs.getInt("id_farmacia");		
 				String indirizzo = rs.getString("indirizzo");
-				user= new FarmaciaDTO(id_farmacia, email, indirizzo);
+				String nome_farmacia = rs.getString("nome_farmacia");
+				user= new FarmaciaDTO(id_farmacia, email, indirizzo, nome_farmacia);
 			}
 			rs.close();
 			stmt.close();
@@ -136,7 +140,8 @@ public class FarmaciaDAO {
 				}
 				Integer id_farmacia = rs.getInt("id_farmacia");	
 				String indirizzo = rs.getString("indirizzo");
-				user= new FarmaciaDTO(id_farmacia, email, indirizzo);
+				String nome_farmacia = rs.getString("nome_farmacia");
+				user= new FarmaciaDTO(id_farmacia, email, indirizzo, nome_farmacia);
 
 				rs.close();
 				stmt.close();

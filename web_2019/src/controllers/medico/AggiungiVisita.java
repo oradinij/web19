@@ -1,6 +1,7 @@
 package controllers.medico;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -18,7 +19,7 @@ import web_2019.VisitaCorrente;
 public class AggiungiVisita extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		String[] id_visite = request.getParameterValues("visite_selezionate");
 		VisitaCorrente visita_corrente = (VisitaCorrente) request.getSession().getAttribute("visita_corrente");
@@ -30,7 +31,13 @@ public class AggiungiVisita extends HttpServlet {
 			visita_corrente.aggiungiVisite(id_visite);
 			Logger.log("aggiunta %d nuove VISITE SPECIALISTICHE a visita corrente", id_visite.length);
 		}
-		response.sendRedirect(request.getContextPath()+"/medico/visitePazienteMedicoBase.jsp");
+		
+		PrintWriter out = response.getWriter();
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.setHeader("Access-Control-Allow-Origin", "*");
+        response.setHeader("Access-Control-Allow-Methods", "GET");
+        out.print(visita_corrente.toJson());
 		return;
 	}
 }

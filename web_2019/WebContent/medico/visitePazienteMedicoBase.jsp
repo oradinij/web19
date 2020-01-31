@@ -56,14 +56,14 @@
     <table id="tabellaVisitePrenotate" class="table datatable table-striped table-hover table-light tabella_visite text-center" style="width: 100%;">
       <thead>
         <tr>
-          <th>Data Prenotazione</th>
+          <th>Data e ora Prenotazione</th>
           <th></th>
           <th></th>
         </tr>
       </thead>
       <tbody>
       <c:forEach items="${visita_corrente.paziente.lista_visite_prenotate}" var="visita">
-      <c:if test="${visita.nome_visita=='Base'}">
+      <c:if test="${visita.id_visita == 1}">
         <tr>
           <td style="vertical-align: middle">${visita.data}</td>
           <td style="vertical-align: middle"><a href="#" data-toggle="modal" onclick="modalDettagliPrenotazioneBase(${visita.id_prenotazione})" class="btn btn-outline-info"> <i class="fa fa-info-circle"></i> Dettagli</a></td>
@@ -102,7 +102,7 @@
         </tbody>
       </table>
       <hr>
-      <button href="#" data-toggle="modal" data-target="#modalNuovaVisitaSpecialistica" class="btn btn-success"><i class="fa fa-plus-circle" style=" font-size: 20px; vertical-align: middle; padding: 5px 5px"></i> Prescrivi nuova visita specialistica</button>
+		<h5>Per prescrivere una visita specialistica, compila una visita di base. </h5>
     </div>
   </div>
 </div>
@@ -114,9 +114,10 @@
     <h3>Le tue visite effettuate: </h3>
     &nbsp;
     <div class="container">
-      <table id="tabellaVisiteEffettuate" class="table datatable table-striped table table-hover tabella_visite" style="width: 100%;">
+      <table id="tabellaVisiteEffettuate" class="table datatable table-striped table-hover table-light tabella_visite text-center" style="width: 100%;">
         <thead>
           <tr>
+            <th>Data</th>
             <th>Tipo</th>
             <th>Dottore</th>
             <th></th>
@@ -126,17 +127,19 @@
         <c:forEach items="${visita_corrente.paziente.lista_visite_svolte}" var="visita">
           <tr>
             <td style="vertical-align: middle">${visita.data}</td>
-            <c:if test="${visita.nome_visita=='Base'}">
-            <td style="vertical-align: middle"><span class="badge badge-pill badge-secondary">${visita.nome_visita}</span></td>
+    
+         <c:if test="${visita.id_visita!=1}">
+                     <td style="vertical-align: middle"><span class="badge badge-pill badge-info">${visita.nome_visita}</span></td>
             </c:if>
-            <c:if test="${visita.nome_visita!='Base'}">
-            <td style="vertical-align: middle"><span class="badge badge-pill badge-info">${visita.nome_visita}</span></td>
+              <c:if test="${visita.id_visita==1}">
+                     <td style="vertical-align: middle"><span class="badge badge-pill badge-secondary">${visita.nome_visita}</span></td>
             </c:if>
             <td style="vertical-align: middle">${visita.nome_medico} ${visita.cognome_medico}</td>
-              <c:if test="${visita.nome_visita!='Base'}">
+              <c:if test="${visita.id_visita!=1}">
             <td style="vertical-align: middle"><button onclick="modal_svolta_specialistica(${visita.id_prenotazione})" href="#" class="btn btn-outline-info"><i class="fa fa-info-circle"></i> Dettagli</button></td>
             </c:if>
-            <c:if test="${visita.nome_visita=='Base'}">
+            <c:if test="${visita.id_visita==1}">
+            
             <td style="vertical-align: middle"><button onclick="modal_svolta_base(${visita.id_prenotazione})" href="#" class="btn btn-outline-info"><i class="fa fa-info-circle"></i> Dettagli</button></td>
             </c:if>
           </tr>
@@ -155,6 +158,48 @@
 
 var id_visita_da_cancellare;
 var ricetta_da_eliminare;
+
+function ajaxRemoveVisite(visita){
+	
+	$.ajax({
+		
+		url: 'annullaPrescrizioneVisita?id_visita='+ visita,
+        type: "GET",
+        success: function (result){
+
+        	document.getElementById('tbody_tabella_visite').innerHTML="";	
+        	
+        	result.lista_visite.forEach(el =>{
+        		
+        		
+        	$("#tbody_tabella_visite").append("<tr><td align=\"center\" style=\"vertical-align:middle\">" + el.nome_visita + "</td><td  align=\"center\" style=\"vertical-align:middle\"><button onclick= \"ajaxRemoveVisite('"+el.id_visita+"');\" class=\"btn btn-outline-danger\">Elimina</button></td>");
+				
+        		           
+        	});
+        	
+          
+        	
+        	if(result.lista_visite.length==0){
+
+        	$('#tabellaVisite').DataTable().columns.adjust().draw();
+        	}
+        	
+        }, 
+        
+        error: function(err){
+        	
+        	console.log(err);
+        	
+        	
+        }
+	
+	});
+	
+	
+	
+	
+	
+}
 
 
 function ajaxRemoveEsami(esame){
@@ -355,7 +400,53 @@ function aggiungiPrescrizione() {
 		};
 		
 
-	
+		function aggiungiVisita() {
+			
+			
+			var tipo_visita = [];
+			var url="AggiungiVisita"
+			 var radios = document.getElementsByName('visit'); 
+	      
+			 
+	         for(i = 0; i < radios.length; i++) { 
+	             if(radios[i].checked) 
+	            	 url=url + "?visite_selezionate="+ radios[i].value; 
+	         }
+			
+	  	   $.ajax({
+		        url: url,
+		        type: "GET",
+		        success: function (result) { 
+
+		        	console.log(result);
+		        	
+		        	$('#modalNuovaVisitaSpecialistica').modal('hide');
+		        	document.getElementById('tbody_tabella_visite').innerHTML="";	
+		        	
+		        	result.lista_visite.forEach(el =>{
+		        		
+		        		
+		        	$("#tbody_tabella_visite").append("<tr><td align=\"center\" style=\"vertical-align:middle\">" + el.nome_visita + "</td><td  align=\"center\" style=\"vertical-align:middle\"><button onclick= \"ajaxRemoveVisite('"+el.id_visita+"');\" class=\"btn btn-outline-danger\">Elimina</button></td>");
+						
+		        		           
+		        	});
+		        	
+		            $('#modalCompilazione').modal('show');
+		        	
+		        	
+		        	
+		            },
+		         error: function (err){
+		        	
+		        	console.log(err);
+					
+		        }
+		        });
+				
+
+				
+			};
+			
 
 function modal_compilazione_visita_base(id){
 	 
@@ -394,12 +485,75 @@ function modal_compilazione_visita_base(id){
         type: "GET",
         success: function (result) { 
         	console.log(result);
-            document.getElementById('completata_data_spec').innerHTML=result.data;
-            document.getElementById('completata_nome_medico_spec').innerHTML=result.nome_medico + " " + result.cognome_medico;
-            document.getElementById('completata_referto_spec').innerHTML=result.referto;
-            document.getElementById('completata_tipo_visita_spec').innerHTML=result.nome_visita;
-            document.getElementById('completata_luogo_spec').innerHTML=result.luogo;
+            document.getElementById('completata_data_spec').innerHTML=result.visita.data;
+            document.getElementById('completata_nome_medico_spec').innerHTML=result.visita.nome_medico + " " + result.visita.cognome_medico;
+            document.getElementById('completata_referto_spec').innerHTML=result.visita.referto;
+            document.getElementById('completata_tipo_visita_spec').innerHTML=result.visita.nome_visita;
+            document.getElementById('completata_luogo_spec').innerHTML=result.visita.luogo;
             document.getElementById('completata_numero_footer_specialistica').innerHTML="Codice visita: " + id; 
+            
+
+            document.getElementById('tbody_ricette_specialistica_completata').innerHTML="";
+            
+            if(result.figli.lista_prescrizioni.length==0){
+	            	
+	            	$('#tabella_ricette_specialistica_completata').DataTable().columns.adjust().draw();
+	            	
+	            	
+	            }
+            
+            result.figli.lista_prescrizioni.forEach(el =>{
+        		
+        		
+            	
+            	
+	        	$("#tbody_ricette_specialistica_completata").append("<tr><td align=\"center\" style=\"vertical-align:middle\">" + el.id_prescrizione + "</td><td  align=\"center\" style=\"vertical-align:middle\">"+el.farmaco+ "</td>");
+				
+	        	
+	        		           
+	        	});
+            
+           
+
+            document.getElementById('tbody_esami_specialistica_completata').innerHTML="";
+
+				if(result.figli.lista_esami.length==0){
+	            	
+	            	$('#tabella_esami_specialistica_completata').DataTable().columns.adjust().draw();
+				}
+            
+				result.figli.lista_esami.forEach(el =>{
+        		
+        		
+	        	$("#tbody_esami_specialistica_completata").append("<tr><td align=\"center\" style=\"vertical-align:middle\">" + el.id_prenotazione + "</td><td  align=\"center\" style=\"vertical-align:middle\">"+el.nome_esame+ "</td>");
+					
+	        		           
+	        	});
+				
+				
+				
+	            	
+	            
+				
+				  document.getElementById('tbody_visite_specialistica_completata').innerHTML="";
+
+				 if(result.figli.lista_visite.length==0){
+	            	
+	            	$('#tabella_visite_specialistica_completata').DataTable().columns.adjust().draw();
+	            	
+	            	
+	            }
+		            
+	 				result.figli.lista_visite.forEach(el =>{
+		        		
+		        		
+			        	$("#tbody_visite_specialistica_completata").append("<tr><td align=\"center\" style=\"vertical-align:middle\">" + el.id_prenotazione + "</td><td  align=\"center\" style=\"vertical-align:middle\">"+el.nome_visita+ "</td>");
+							
+			        		           
+			        	});
+	 				
+	 				
+            
             
             $('#modalVisitaSpecialistica').modal('show');
             },
@@ -413,6 +567,7 @@ function modal_compilazione_visita_base(id){
     
   
 };
+
 function modal_svolta_base(id){
 	 
 	   $.ajax({
@@ -420,13 +575,81 @@ function modal_svolta_base(id){
 	        type: "GET",
 	        success: function (result) { 
 	        	console.log(result);
-	            document.getElementById('completata_data_base').innerHTML=result.data;
-	            document.getElementById('completata_nome_medico_base').innerHTML=result.nome_medico + " " + result.cognome_medico;    
-	            document.getElementById('completata_tipo_visita_base').innerHTML=result.nome_visita;
-	            document.getElementById('completata_luogo_spec').innerHTML=result.luogo;
+	            document.getElementById('completata_data_base').innerHTML=result.visita.data;
+	            document.getElementById('completata_nome_medico_base').innerHTML=result.visita.nome_medico + " " + result.visita.cognome_medico;    
+	            document.getElementById('completata_tipo_visita_base').innerHTML=result.visita.nome_visita;
+	            document.getElementById('completata_luogo_spec').innerHTML=result.visita.luogo;
 	            document.getElementById('completata_numero_footer_base').innerHTML="Codice visita: " + id; 
+	            
+	            
+	            document.getElementById('tbody_ricette_base_completata').innerHTML="";
+	            
+
+           	 if(result.figli.lista_prescrizioni.length==0){
+	            	
+	            	$('#tabella_ricette_base_completata').DataTable().columns.adjust().draw();
+	            	
+	            	
+	            }
+	            
+	            result.figli.lista_prescrizioni.forEach(el =>{
+	        		
+	        		
+	            	
+		        	$("#tbody_ricette_base_completata").append("<tr><td align=\"center\" style=\"vertical-align:middle\">" + el.id_prescrizione + "</td><td  align=\"center\" style=\"vertical-align:middle\">"+el.farmaco+ "</td>");
+					
+		        	
+		        		           
+		        	});
+	            
+	           
+
+	            document.getElementById('tbody_esami_base_completata').innerHTML="";
+
+ 				if(result.figli.lista_esami.length==0){
+ 	            	
+ 	            	$('#tabella_esami_base_completata').DataTable().columns.adjust().draw();
+ 				}
+	            
+ 				result.figli.lista_esami.forEach(el =>{
+	        		
+	        		
+		        	$("#tbody_esami_base_completata").append("<tr><td align=\"center\" style=\"vertical-align:middle\">" + el.id_prenotazione + "</td><td  align=\"center\" style=\"vertical-align:middle\">"+el.nome_esame+ "</td>");
+						
+		        		           
+		        	});
+ 				
+ 				
+ 				
+ 	            	
+ 	            
+ 				
+ 				  document.getElementById('tbody_visite_base_completata').innerHTML="";
+
+ 				 if(result.figli.lista_visite.length==0){
+		            	
+		            	$('#tabella_visite_base_completata').DataTable().columns.adjust().draw();
+		            	
+		            	
+		            }
+ 		            
+ 	 				result.figli.lista_visite.forEach(el =>{
+ 		        		
+ 		        		
+ 			        	$("#tbody_visite_base_completata").append("<tr><td align=\"center\" style=\"vertical-align:middle\">" + el.id_prenotazione + "</td><td  align=\"center\" style=\"vertical-align:middle\">"+el.nome_visita+ "</td>");
+ 							
+ 			        		           
+ 			        	});
+ 	 				
+ 	 				
+ 	 				 
+	            
+	            
 	            $('#modalVisitaBase').modal('show');
+	            
+	            
 	            },
+	            
 	         error: function (result){
 	        	
 	        	console.log(result);
@@ -445,7 +668,7 @@ function modal_svolta_base(id){
 		        type: "GET",
 		        success: function (result) { 
 		        	console.log(result);
-		            document.getElementById('prenotazione_data_base').innerHTML=result.data;
+		            document.getElementById('prenotazione_data_base').innerHTML=result.visita.data;
 		            document.getElementById('prenotazione_numero_footer_base').innerHTML="Codice prenotazione: " + id;
 		            document.getElementById('bottone_annullamento_prenotazione').outerHTML= "<a id=\"bottone_annullamento_prenotazione\" href=\"#\" class=\"btn btn-danger\" onclick=\"modalCancellazionePrenotazione(" + id + ")\">Annulla prenotazione</a>"
 		            document.getElementById('bottone_compila_modal_prenotazione').outerHTML= "<a id=\"bottone_compila_modal_prenotazione\" href=\"#\" class=\"btn btn-success\" onclick=\"modal_compilazione_visita_base(" + id + ")\">Compila</a>"
@@ -492,11 +715,17 @@ function modal_svolta_base(id){
 		
 		function modalCancellazionePrenotazione(id){
 		
-			id_visita_da_cancellare=id;
-			console.log(id_visita_da_cancellare);
+			
+			
 			$('#modalCancellazionePrenotazione').modal('show');
 			
+			document.getElementById('id_to_delete').innerHTML=id;
+			document.getElementById('input_to_delete').value = id;
+			
 		}
+		
+		
+		
 </script>
 
 
@@ -638,7 +867,35 @@ function modal_svolta_base(id){
           </table>
           </div>
  	<br>
-          <a href="#" class="btn btn-success" data-toggle="modal" data-target="#modalNuovoEsame"><i class="fa fa-plus-circle"></i> Prescrivi esame</a> </div>
+          <a href="#" class="btn btn-success" data-toggle="modal" data-target="#modalNuovoEsame"><i class="fa fa-plus-circle"></i> Prescrivi esame</a>
+          
+          
+                <hr class="bg-light">
+          <h5>
+            <p class="badge badge-info">Visite specialistiche</p>
+          </h5>
+     
+             <div class="container" >
+          <table class="table datatable table-light table-hover table-bordered table-striped tabellaRicetteEsami" id="tabellaVisite" style="width:100%">
+            <thead>
+              <tr>
+                <th align="center">Visita</th>
+                <th align="center">Rimuovi</th>
+              </tr>
+            </thead>
+            <tbody  id="tbody_tabella_visite">
+            </tbody>
+          </table>
+          </div>
+ 	<br>
+          <a href="#" class="btn btn-success" data-toggle="modal" data-target="#modalNuovaVisitaSpecialistica"><i class="fa fa-plus-circle"></i> Prescrivi visita</a>
+          
+          
+           </div>
+      
+
+      
+      
       </div>
       
       <!-- Modal footer -->
@@ -682,62 +939,46 @@ function modal_svolta_base(id){
             <p class="badge badge-info">Ricette</p>
           </h5>
           <div class="container">
-            <table class="table  table-hover table-striped table-bordered tabellaRicetteEsami">
-              <thead style="max">
+            <table id="tabella_ricette_base_completata" class="table datatable table-hover table-striped table-bordered tabellaRicetteEsami" style="width:100%">
+              <thead >
                 <tr>
                   <th>Numero Ricetta</th>
-                  <th>Dettagli</th>
+                  <th>Farmaco</th>
                 </tr>
               </thead>
-              <tbody>
-                <tr>
-                  <td> 123456789067677 </td>
-                  <td><a class="btn btn-outline-info">Dettagli</a></td>
-                </tr>
-                <tr>
-                  <td> 123456789067677 </td>
-                  <td><a class="btn btn-outline-info">Dettagli</a></td>
-                </tr>
-                <tr>
-                  <td> 123456789067677 </td>
-                  <td><a class="btn btn-outline-info">Dettagli</a></td>
-                </tr>
-                <tr>
-                  <td> 123456789067677 </td>
-                  <td><a class="btn btn-outline-info">Dettagli</a></td>
-                </tr>
+              <tbody id="tbody_ricette_base_completata">
               </tbody>
-            </table>
+            </table id="tabella_esami_base_completata">
           </div>
           <hr class="bg-light">
           <h5>
             <p class="badge badge-info">Esami</p>
           </h5>
           <div class="container">
-            <table class="table  table-hover table-bordered table-striped tabellaRicetteEsami">
-              <thead style="max">
+            <table id="tabella_esami_base_completata" class="table datatable table-hover table-bordered table-striped tabellaRicetteEsami" style="width:100%">
+              <thead style="width:100%">
                 <tr>
                   <th>Numero Esame</th>
-                  <th>Dettagli</th>
+                  <th>Esame</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody id="tbody_esami_base_completata">
+              </tbody>
+            </table>
+          </div>
+          <hr class="bg-light">
+          <h5>
+            <p class="badge badge-info">Visite</p>
+          </h5>
+          <div class="container">
+            <table id="tabella_visite_base_completata" class="table datatable table-hover table-bordered table-striped tabellaRicetteEsami" style="width:100%">
+              <thead >
                 <tr>
-                  <td> 123456789067677 </td>
-                  <td><a class="btn btn-outline-info">Dettagli</a></td>
+                  <th>Numero Visita</th>
+                  <th>Tipo</th>
                 </tr>
-                <tr>
-                  <td> 123456789067677 </td>
-                  <td><a class="btn btn-outline-info">Dettagli</a></td>
-                </tr>
-                <tr>
-                  <td> 123456789067677 </td>
-                  <td><a class="btn btn-outline-info">Dettagli</a></td>
-                </tr>
-                <tr>
-                  <td> 123456789067677 </td>
-                  <td><a class="btn btn-outline-info">Dettagli</a></td>
-                </tr>
+              </thead>
+              <tbody id="tbody_visite_base_completata">
               </tbody>
             </table>
           </div>
@@ -795,72 +1036,56 @@ function modal_svolta_base(id){
           </h5>
           <p id="completata_referto_spec" class="card-body text-left" style="border-style: solid; border-radius: 20px;"></p>
           <hr class="bg-light">
-          <h5>
+         <h5>
             <p class="badge badge-info">Ricette</p>
           </h5>
           <div class="container">
-            <table class="table  table-hover table-striped table-bordered  tabellaRicetteEsami">
-              <thead style="width:100%">
+            <table id="tabella_ricette_specialistica_completata" class="table datatable table-hover table-striped table-bordered tabellaRicetteEsami" style="width:100%">
+              <thead >
                 <tr>
                   <th>Numero Ricetta</th>
-                  <th>Dettagli</th>
+                  <th>Farmaco</th>
                 </tr>
               </thead>
-              <tbody>
-                <tr>
-                  <td> 123456789067677 </td>
-                  <td><a class="btn btn-outline-info">Dettagli</a></td>
-                </tr>
-                <tr>
-                  <td> 123456789067677 </td>
-                  <td><a class="btn btn-outline-info">Dettagli</a></td>
-                </tr>
-                <tr>
-                  <td> 123456789067677 </td>
-                  <td><a class="btn btn-outline-info">Dettagli</a></td>
-                </tr>
-                <tr>
-                  <td> 123456789067677 </td>
-                  <td><a class="btn btn-outline-info">Dettagli</a></td>
-                </tr>
+              <tbody id="tbody_ricette_specialistica_completata">
               </tbody>
-            </table>
+            </table id="tabella_esami_base_completata">
           </div>
           <hr class="bg-light">
           <h5>
             <p class="badge badge-info">Esami</p>
           </h5>
           <div class="container">
-            <table class="table   table-hover table-striped table-bordered  tabellaRicetteEsami">
+            <table id="tabella_esami_specialistica_completata" class="table datatable table-hover table-bordered table-striped tabellaRicetteEsami" style="width:100%">
               <thead style="width:100%">
                 <tr>
                   <th>Numero Esame</th>
-                  <th>Dettagli</th>
+                  <th>Esame</th>
                 </tr>
               </thead>
-              <tbody>
-                <tr>
-                  <td> 123456789067677 </td>
-                  <td><a class="btn btn-outline-info">Dettagli</a></td>
-                </tr>
-                <tr>
-                  <td> 123456789067677 </td>
-                  <td><a class="btn btn-outline-info">Dettagli</a></td>
-                </tr>
-                <tr>
-                  <td> 123456789067677 </td>
-                  <td><a class="btn btn-outline-info">Dettagli</a></td>
-                </tr>
-                <tr>
-                  <td> 123456789067677 </td>
-                  <td><a class="btn btn-outline-info">Dettagli</a></td>
-                </tr>
+              <tbody id="tbody_esami_specialistica_completata">
               </tbody>
             </table>
           </div>
-        </div>
+          <hr class="bg-light">
+          <h5>
+            <p class="badge badge-info">Visite</p>
+          </h5>
+          <div class="container">
+            <table id="tabella_visite_specialistica_completata" class="table datatable table-hover table-bordered table-striped tabellaRicetteEsami" style="width:100%">
+              <thead >
+                <tr>
+                  <th>Numero Visita</th>
+                  <th>Tipo</th>
+                </tr>
+              </thead>
+              <tbody id="tbody_visite_specialistica_completata">
+              </tbody>
+            </table>
+          </div>
+			 <hr class="bg-light">
       </div>
-      
+      </div>
       <!-- Modal footer -->
       <div class="modal-footer">
         <h6 id="completata_numero_footer_specialistica" class="badge badgeNumeroVisitaEsame"></h6>
@@ -881,7 +1106,7 @@ function modal_svolta_base(id){
       
       <!-- Modal body -->
       <div class="modal-body">
-        <h5 class="bg-warning text-center" style="border-radius: 20px; padding: 10px;">Sei sicuro di voler cancellare la prenotazione <span id="id_to_delete"></span> per il paziente?</h5>
+        <h5 class="bg-warning text-center" id="delete_confirm_message" style="border-radius: 20px; padding: 10px;">Sei sicuro di voler cancellare la prenotazione <span id="id_to_delete"></span> per il paziente?</h5>
       </div>
       
       <!-- Modal footer -->
@@ -953,7 +1178,7 @@ function modal_svolta_base(id){
   </div>
 </div>
 <div class="modal fade text-center" id="modalNuovaVisitaSpecialistica">
-  <div class="modal-dialog">
+  	<div class="modal-dialog">
     <div class="modal-content"> 
       
       <!-- Modal Header -->
@@ -961,27 +1186,27 @@ function modal_svolta_base(id){
         <h4 class="modal-title">Prescrivi una visita specialistica</h4>
         <button type="button" class="close text-light" data-dismiss="modal">&times;</button>
       </div>
-     <form action="AggiungiVisita" method="post">
         <!-- Modal body -->
         <div class="modal-body text-center">
           <input class="form-control" id="cercaArea" type="text" placeholder="Cerca una visita..">
           &nbsp;
           <ul class="list-group striped overflow-auto text-left" style="height: 200px;" id="listaAree">
-            <div class="custom-control custom-checkbox">
+           <div class=" custom-radio">
      		
         	<c:forEach items="${tipi_visita}" var="tipo_visita">
+        	<c:if test="${tipo_visita.id_visita!=1}">
               <li class="list-group-item list-group-item-action" href="#"> &nbsp;
-                <input type="checkbox" class="custom-control-input" id="area${tipo_visita.nome_visita}" name="visite_selezionate" value="${tipo_visita.id_visita}">
+                <input type="radio" class="custom-control-input" id="area${tipo_visita.nome_visita}" name="visit" value="${tipo_visita.id_visita}">
                 <label class="custom-control-label" for="area${tipo_visita.nome_visita}"></label>
                 <span class="badge badge-info">${tipo_visita.nome_visita}</span> </li>
+                </c:if>
                 </c:forEach> 
             </div>
           </ul>
         </div>
-        <div class="modal-footer"> <button href="#"  type="submit" class="btn btn-success"><i class="fa fa-check-circle"></i> Prescrivi visita</button>
+        <div class="modal-footer"> <button href="#"   class="btn btn-success" onclick="aggiungiVisita()"><i class="fa fa-check-circle"></i> Prescrivi visita</button>
           <button  class="btn btn-danger" data-dismiss="modal">Annulla</button>
         </div>
-      </form>
     </div>
   </div>
 </div>

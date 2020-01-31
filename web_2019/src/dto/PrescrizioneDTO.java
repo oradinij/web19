@@ -1,7 +1,15 @@
 package dto;
 
+import java.util.ArrayList;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+
 import dao.MedicoDAO;
+import dao.PrescrizioneDAO;
 import web_2019.Assets;
+
 
 public class PrescrizioneDTO {
 
@@ -27,7 +35,29 @@ public class PrescrizioneDTO {
 		this.farmaco = farmaco;
 		this.stato = stato;
 	}
+	
+	public PrescrizioneDTO() {
+		
+		
+	}
 
+	public JsonObject toJson (int id_ricetta) {
+		
+		JsonObject json = new PrescrizioneDAO().toJson(id_ricetta);
+	
+		return json;
+		
+	}
+	
+public JsonObject toJson () {
+		
+		JsonObject json = new PrescrizioneDAO().toJson(this.id_prescrizione);
+	
+		return json;
+		
+	}
+
+	
 	public String getNome_medico() {
 		MedicoDTO med = new MedicoDAO().getUserById(id_medico);
 		return med.getNome() + " "+ med.getCognome();
@@ -37,10 +67,20 @@ public class PrescrizioneDTO {
 		return id_prescrizione;
 	}
 
+
+	
 	public int getId_paziente() {
 		return id_paziente;
 	}
 
+	
+	public ArrayList <PrescrizioneDTO> getPrescrizioniByIdRiferimento(int id_riferimento){
+		
+		 ArrayList <PrescrizioneDTO> prescrizioni = new PrescrizioneDAO().getByRiferimento(id_riferimento);
+		 return prescrizioni;
+		
+	}
+	
 	public int getId_medico() {
 		return id_medico;
 	}

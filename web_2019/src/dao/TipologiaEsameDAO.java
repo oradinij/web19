@@ -17,6 +17,40 @@ public class TipologiaEsameDAO  implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = 8893820252947975277L;
+	
+	public String getAreaById(int id_esame) {
+		
+		String area="";
+		int id_specializzazione;
+
+		Connection conn =DatabaseService.getDbConnection();
+		ResultSet rs = null;
+		Statement stmt;
+		
+		try {
+			stmt = conn.createStatement();
+			String sql = "SELECT * FROM esami WHERE id_esame=" + id_esame +";";
+			rs = stmt.executeQuery(sql);
+			while(rs.next()){
+				id_specializzazione = rs.getInt("id_specializzazione");
+				area = getDescrizione(id_specializzazione);
+
+			}
+			rs.close();
+			stmt.close();
+			conn.close();
+		}
+
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return area;
+
+	}
+	
+	
+	
 	public ArrayList<TipologiaEsameDTO> getAll() {
 		String nomeEsame;
 		String area;
@@ -121,15 +155,14 @@ public class TipologiaEsameDAO  implements Serializable{
 		PreparedStatement stmt;
 		ArrayList<TipologiaEsameDTO> listaEsami = new ArrayList<TipologiaEsameDTO>();
 		try {
-			String sql = "SELECT * FROM esami where id_esame = ?";
-			stmt = conn.prepareStatement(sql);
+			stmt = conn.prepareStatement("SELECT * FROM esami where id_esame = ?");
 			stmt.setInt(1, id_esame);
-			rs = stmt.executeQuery(sql);
+			rs = stmt.executeQuery();
 			while(rs.next()){
 				nomeEsame = rs.getString("nome_esame");
 				id_esame = rs.getInt("id_esame");
 				int id_specializzazione = rs.getInt("id_specializzazione");
-				area = rs.getString("area_esame");
+				area = getDescrizione(id_specializzazione);
 				costo_esame = rs.getString("costo_esame");
 				return (new TipologiaEsameDTO(id_esame,id_specializzazione, area, nomeEsame, costo_esame));
 

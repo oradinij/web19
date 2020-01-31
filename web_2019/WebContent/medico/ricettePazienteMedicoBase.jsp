@@ -22,6 +22,7 @@
 <script src="../js/dataTables.bootstrap4.min.js"></script>
 <script src="../js/moment-with-locales.min.js"></script>
 <script src="../js/tempusdominus-bootstrap-4.min.js"></script>
+<script src="../js/qrcode.js"></script>
 </head>
 <body class="bg-light">
 <nav class="navbar navbar-expand-lg navbar-dark"><a class="navbar-brand" href="#"></a>
@@ -71,7 +72,12 @@
             <td style="vertical-align: middle"><span class="badge badge-pill badge-secondary">Erogata</span></td>
             </c:if>
             <td style="vertical-align: middle">${prescrizione.data}</td>
-            <td style="vertical-align: middle"><a href="#" data-toggle="modal" data-target="#modalRicettaErogata" class="btn btn-outline-info"><i class="fa fa-info-circle"></i> Dettagli</a></td>
+            <c:if test="${prescrizione.stato==0}">
+            <td style="vertical-align: middle"><a href="#" onclick="modal_ricetta_da_erogare(${prescrizione.id_prescrizione})" class="btn btn-outline-info"><i class="fa fa-info-circle"></i> Dettagli</a></td>
+            </c:if>
+             <c:if test="${prescrizione.stato!=0}">
+            <td style="vertical-align: middle"><a href="#" onclick="modal_ricetta_erogata(${prescrizione.id_prescrizione})" class="btn btn-outline-info"><i class="fa fa-info-circle"></i> Dettagli</a></td>
+            </c:if>
           </tr>
          </c:forEach>
         </tbody>
@@ -100,54 +106,160 @@
       
       <!-- Modal body -->
       <div class="modal-body" style="background-color:  #C1D4D9">
-        <div class="container  bg-light text-center" style="padding: 10px;border-radius: 20px; margin-bottom: 20px;">
+         <div class="container  bg-light text-center" style="padding: 10px;border-radius: 20px; margin-bottom: 20px;">
           <h5>
             <p class="badge badge-info">Medico prescrittore</p>
           </h5>
-          <h5> Nome Medico</h5>
+          <h5 id="nome_medico_erogata"></h5>
           <hr class="bg-light">
           <h5>
             <p class="badge badge-info">Data prescrizione</p>
           </h5>
-          <h5>23/04/2019</h5>
-          <hr class="bg-light">
-          <h5>
-            <p class="badge badge-info">Data erogazione</p>
-          </h5>
-          <h5>25/04/2019</h5>
+          <h5 id="data_erogata"></h5>
           <hr class="bg-light">
           <h5>
             <p class="badge badge-info">Visita di riferimento</p>
           </h5>
-          <a href="#" data-toggle="modal" data-target="#modalCancellazioneVisita1" class="btn btn-success">Vai alla visita</a>
+         <h5 id="visita_riferimento_erogata"></h5>
+          <hr class="bg-light">
+          <h5>
+            <p class="badge badge-info">Farmacia erogatrice</p>
+          </h5>
+         <h5 id="farmacia_erogata"></h5>
           <hr class="bg-light">
           <h5>
             <p class="badge badge-info">Prescrizione</p>
           </h5>
-          <p class="card-body text-left" style="border-style: solid; border-radius: 20px;"> kjljlkjljljljljluhihihhih.hih hu hiuihihpuhiuh iuh  . uihih iuh iuilh7yo8 y ugihiuih iuh puih hul òoòjh òhlk. hiuh </p>
-        
-<hr class="bg-light">
+          <p id="farmaco_erogata" class="card-body text-left" style="border-style: solid; border-radius: 20px;"></p>
+          <hr class="bg-light">
           <h5>
-            <p class="badge badge-info">Faramacia erogatrice</p>
+            <p class="badge badge-info">PDF ricetta</p>
           </h5>
-          <h5>Farmacia Comunale Arco</h5>
+          <a href="#" class="btn btn-success">Scarica PDF</a>
           <hr class="bg-light">
           <h5>
             <p class="badge badge-info">Codice QR</p>
           </h5>
-          <button class="btn btn-success" data-toggle="collapse" data-target="#QR">Mostra QR</button>
-          <div id="QR" class="collapse" style="margin-top: 20px;"> <img src="../images/QRCode.png" alt="qr code" style="width: 300px; height: 300px;"> </div>
+          <button class="btn btn-success" data-toggle="collapse" data-target="#collpase_qr_erogata">Mostra QR</button>
+          <div id="collpase_qr_erogata" class="collapse text-center" style="margin-top: 20px;"> <div id="qr_erogata" class="text-center container" style="width: 300px; height: 300px;"></div> </div>
         </div>
+         </div>
         
         <!-- Modal footer -->
         <div class="modal-footer text-light" style="background-color: #205373">
-          <h6 class="badge text-dark badgeNumeroVisitaEsame" style="margin-top:10px;">Codice ricetta: 1223456599843882 </h6>
+          <h6 id="codice_footer_erogata" class="badge text-dark badgeNumeroVisitaEsame" style="margin-top:10px;"></h6>
           <button type="button" class="btn btn-danger" data-dismiss="modal">Chiudi</button>
         </div>
       </div>
     </div>
   </div>
 </div>
+
+<script>
+
+function modal_ricetta_erogata(id){
+	 
+	   $.ajax({
+	        url: 'http://localhost:8080/web2019/medico/modal/dettagli_ricetta?id_ricetta='+id,
+	        type: "GET",
+	        success: function (result) { 
+	        	console.log(result);
+	            document.getElementById('data_erogata').innerHTML=result.data;
+	            document.getElementById('nome_medico_erogata').innerHTML=result.nome_medico + " " + result.cognome_medico;    
+	            document.getElementById('visita_riferimento_erogata').innerHTML=result.id_riferimento;
+	            document.getElementById('farmaco_erogata').innerHTML=result.farmaco;
+	            document.getElementById('codice_footer_erogata').innerHTML="Codice ricetta: " + id; 
+	            document.getElementById('farmaco_erogata').innerHTML=result.farmaco;
+	            document.getElementById('farmacia_erogata').innerHTML=result.farmacia;
+	            var qrcode = new QRCode("qr_erogata");
+
+	            function makeCode () {		
+	            	var elText = "Ricetta numero: "+ id + ", data prescrizione: " + result.data + ", medico prescrittore: " +
+								result.nome_medico + " " + result.cognome_medico + ", prescrizione: "+ result.farmaco + ", farmacia erogatrice: "+ result.farmacia + ".";
+	            	
+	            	qrcode.makeCode(elText);
+	            }
+
+	            makeCode();
+
+	            
+	            
+	            
+	            
+	            
+	            
+	            $('#modalRicettaErogata').modal('show');
+	            
+	            
+	            },
+	            
+	         error: function (result){
+	        	
+	        	console.log(result);
+	        	
+	        	
+	        }
+	        });
+	    
+	  
+	};
+
+
+
+function modal_ricetta_da_erogare(id){
+	 
+	   $.ajax({
+	        url: 'http://localhost:8080/web2019/medico/modal/dettagli_ricetta?id_ricetta='+id,
+	        type: "GET",
+	        success: function (result) { 
+	        	console.log(result);
+	            document.getElementById('data_non_erogata').innerHTML=result.data;
+	            document.getElementById('nome_medico_non_erogata').innerHTML=result.nome_medico + " " + result.cognome_medico;    
+	            document.getElementById('visita_riferimento_non_erogata').innerHTML=result.id_riferimento;
+	            document.getElementById('farmaco_non_erogata').innerHTML=result.farmaco;
+	            document.getElementById('codice_footer_non_erogata').innerHTML="Codice ricetta: " + id; 
+	            
+	            
+	            var qrcode = new QRCode("qr_non_erogata");
+
+	            function makeCode () {		
+	            	var elText = "Ricetta numero: "+ id + ", data prescrizione: " + result.data + ", medico prescrittore: " +
+								result.nome_medico + " " + result.cognome_medico + ", prescrizione: "+ result.farmaco + ".";
+	            	
+	            	qrcode.makeCode(elText);
+	            }
+
+	            makeCode();
+
+	            
+	            
+	            
+	            
+	            
+	            
+	            $('#modalRicettaDaErogare').modal('show');
+	            
+	            
+	            },
+	            
+	         error: function (result){
+	        	
+	        	console.log(result);
+	        	
+	        	
+	        }
+	        });
+	    
+	  
+	};
+
+
+
+
+
+</script>
+
+
 <div class="modal fade modalPrenotazione" id="modalRicettaDaErogare">
   <div class="modal-dialog">
     <div class="modal-content"> 
@@ -164,22 +276,22 @@
           <h5>
             <p class="badge badge-info">Medico prescrittore</p>
           </h5>
-          <h5> Nome Medico</h5>
+          <h5 id="nome_medico_non_erogata"></h5>
           <hr class="bg-light">
           <h5>
             <p class="badge badge-info">Data prescrizione</p>
           </h5>
-          <h5>23/04/2019</h5>
+          <h5 id="data_non_erogata"></h5>
           <hr class="bg-light">
           <h5>
             <p class="badge badge-info">Visita di riferimento</p>
           </h5>
-          <a href="#" class="btn btn-success">Vai alla visita</a>
+         <h5 id="visita_riferimento_non_erogata"></h5>
           <hr class="bg-light">
           <h5>
             <p class="badge badge-info">Prescrizione</p>
           </h5>
-          <p class="card-body text-left" style="border-style: solid; border-radius: 20px;"> kjljlkjljljljljluhihihhih.hih hu hiuihihpuhiuh iuh  . uihih iuh iuilh7yo8 y ugihiuih iuh puih hul òoòjh òhlk. hiuh </p>
+          <p id="farmaco_non_erogata" class="card-body text-left" style="border-style: solid; border-radius: 20px;"></p>
           <hr class="bg-light">
           <h5>
             <p class="badge badge-info">PDF ricetta</p>
@@ -189,13 +301,13 @@
           <h5>
             <p class="badge badge-info">Codice QR</p>
           </h5>
-          <button class="btn btn-success" data-toggle="collapse" data-target="#QR2">Mostra QR</button>
-          <div id="QR2" class="collapse" style="margin-top: 20px;"> <img src="../images/QRCode.png" alt="qr code" style="width: 300px; height: 300px;"> </div>
+          <button class="btn btn-success" data-toggle="collapse" data-target="#collpase_qr_non_erogata">Mostra QR</button>
+          <div id="collpase_qr_non_erogata" class="collapse text-center" style="margin-top: 20px;"> <div id="qr_non_erogata" class="text-center container" style="width: 300px; height: 300px;"></div> </div>
         </div>
-        
+         </div>
         <!-- Modal footer -->
         <div class="modal-footer text-light" style="background-color: #205373">
-          <h6 class="badge text-dark badgeNumeroVisitaEsame" style="margin-top:10px;">Codice ricetta: 1223456599843882 </h6>
+          <h6 id="codice_footer_non_erogata" class="badge text-dark badgeNumeroVisitaEsame" style="margin-top:10px;"> </h6>
           <button type="button" class="btn btn-danger" data-dismiss="modal">Chiudi</button>
         </div>
       </div>

@@ -8,11 +8,49 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import dto.EsameDTO;
+import dto.PrescrizioneDTO;
 import dto.TipologiaEsameDTO;
 import web_2019.DatabaseService;
 
 public class EsameDAO {
 
+	
+	public ArrayList<EsameDTO>  getByRiferimento(int id_riferimento) { 
+		ArrayList<EsameDTO> listaEsami= new ArrayList<EsameDTO>();
+		Connection conn =DatabaseService.getDbConnection();
+		ResultSet rs = null;
+		PreparedStatement stmt;
+
+		try {
+			stmt = conn.prepareStatement("SELECT * FROM prenotazioni_esami WHERE id_riferimento = ?");
+			stmt.setInt(1, id_riferimento);
+			rs = stmt.executeQuery();
+			while(rs.next()){
+				Date data = rs.getDate("data_ora");
+				int id_esame= rs.getInt("id_esame");
+				int id_paziente= rs.getInt("id_paziente");
+				int id_prenotazione= rs.getInt("id_prenotazione");
+				int id_medico = rs.getInt("id_medico");
+				int stato = rs.getInt("stato");
+				String referto = rs.getString("referto");
+				String nomeEsame = getNameById(id_esame);
+				String area = getAreaById(id_esame);
+
+
+				listaEsami.add(new EsameDTO(id_esame, area, id_paziente, id_medico, data, nomeEsame, referto, id_prenotazione, stato ));
+			}
+			rs.close();
+			stmt.close();
+			conn.close();
+		}
+
+		catch (Exception e) {
+			e.printStackTrace();//puo essere che semplicemente non nulla
+		}
+
+		return listaEsami;
+	}
+	
 	public ArrayList<EsameDTO>  getListaEsamiByUserId(int id_paziente) { 
 		ArrayList<EsameDTO> listaEsami= new ArrayList<EsameDTO>();
 		Connection conn =DatabaseService.getDbConnection();
@@ -75,20 +113,30 @@ public class EsameDAO {
 	
 
 	private String getAreaById(int id_esame) {
-		String area = "";
+		Integer id_spec=null;
+		String area="";
 		Connection conn =DatabaseService.getDbConnection();
 		ResultSet rs = null;
 		Statement stmt;
+		Statement stmt2;
 
 		try {
 			stmt = conn.createStatement();
-			String sql = "SELECT area_esame FROM esami WHERE id_esame = "+id_esame+";";
+			String sql = "SELECT * FROM esami WHERE id_esame = "+id_esame+";";
 			rs = stmt.executeQuery(sql);
 			while(rs.next()){
-				area = rs.getString("area_esame");
+				id_spec = rs.getInt("id_specializzazione");
 			}
 			rs.close();
 			stmt.close();
+			
+			stmt2= conn.createStatement();
+			String sql2 = "SELECT * FROM specializzazioni WHERE id_specializzazione= "+id_spec+";";
+			rs = stmt2.executeQuery(sql2);
+			while(rs.next()){
+				area = rs.getString("descrizione");
+			}
+			
 			conn.close();
 		}
 
@@ -127,6 +175,9 @@ public class EsameDAO {
 		
 	}
 
-	
+	public String getSpecializzazioneEsame(int id_esame) {
+		return new TipologiaEsameDAO().getAreaById(id_esame);
+		
+	}
 
 }

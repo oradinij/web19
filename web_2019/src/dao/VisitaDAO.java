@@ -6,11 +6,53 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 
+import dto.TipologiaEsameDTO;
+import dto.TipologiaVisitaDTO;
 import dto.VisitaDTO;
+import utils.Logger;
 import web_2019.DatabaseService;
 
 public class VisitaDAO {
 
+	public ArrayList<VisitaDTO> getByRiferimento( int id_riferimento) {
+		ArrayList<VisitaDTO> listaVisite = new ArrayList<VisitaDTO>();
+		Connection conn =DatabaseService.getDbConnection();
+		ResultSet rs = null;
+		PreparedStatement stmt;
+
+		try {
+			String sql = "SELECT * FROM prenotazioni_visite WHERE id_riferimento = ?;";
+			stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, id_riferimento);
+			rs = stmt.executeQuery();
+			while(rs.next()){
+
+				Date data = rs.getDate("data");
+				Integer id_prenotazione = rs.getInt("id_prenotazione");
+				Integer id_medico = rs.getInt("id_medico");
+				Integer id_visita = rs.getInt("id_visita");
+				Integer stato = rs.getInt("stato");
+				Integer id_paziente = rs.getInt("id_paziente");
+				String referto= rs.getString("referto");
+				String luogo= getLuogo(id_medico);
+				
+				String nome_visita = new TipologiaVisitaDTO(id_visita).getNome_visita();
+				listaVisite.add(new VisitaDTO(id_prenotazione, id_medico, id_paziente, stato, referto, data, id_visita, luogo, nome_visita));
+			}
+			rs.close();
+			stmt.close();
+			conn.close();
+		}
+
+		catch (Exception e) {
+			e.printStackTrace();//puo essere che semplicemente non nulla
+		}
+
+		return listaVisite;
+	}
+	
+	
+	
 	public ArrayList<VisitaDTO> getListaVisiteByUserId(int id_paziente) {
 		ArrayList<VisitaDTO> listaVisite = new ArrayList<VisitaDTO>();
 		Connection conn =DatabaseService.getDbConnection();
@@ -31,7 +73,9 @@ public class VisitaDAO {
 				Integer stato = rs.getInt("stato");
 				String referto= rs.getString("referto");
 				String luogo= getLuogo(id_medico);
-				listaVisite.add(new VisitaDTO(id_prenotazione, id_medico, id_paziente, stato, referto, data, id_visita, luogo));
+				
+				String nome_visita = new TipologiaVisitaDTO(id_visita).getNome_visita();
+				listaVisite.add(new VisitaDTO(id_prenotazione, id_medico, id_paziente, stato, referto, data, id_visita, luogo, nome_visita));
 			}
 			rs.close();
 			stmt.close();
@@ -44,7 +88,6 @@ public class VisitaDAO {
 
 		return listaVisite;
 	}
-	
 	
 	public String getLuogo(int id_medico) {
 		String luogoVisita= new String();
@@ -158,7 +201,8 @@ public class VisitaDAO {
 				Integer stato = rs.getInt("stato");
 				String referto= rs.getString("referto");
 				String luogo= getLuogo(id_medico);
-				return new VisitaDTO(id_prenotazione, id_medico, id_paziente, stato, referto, data, id_visita, luogo);
+				String nome_visita = new TipologiaVisitaDTO(id_visita).getNome_visita();
+				return new VisitaDTO(id_prenotazione, id_medico, id_paziente, stato, referto, data, id_visita, luogo, nome_visita);
 			}
 			rs.close();
 			stmt.close();

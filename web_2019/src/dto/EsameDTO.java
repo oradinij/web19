@@ -1,8 +1,12 @@
 package dto;
 
+import java.util.ArrayList;
 import java.util.Date;
 
+import com.google.gson.JsonObject;
+
 import dao.EsameDAO;
+import dao.PrescrizioneDAO;
 import web_2019.Assets;
 
 public class EsameDTO {
@@ -33,6 +37,33 @@ public class EsameDTO {
 	}
 	
 	
+	public EsameDTO() {
+		
+		
+	}
+	
+	
+public JsonObject toJson () {
+		
+		JsonObject json= new JsonObject();
+		
+		json.addProperty("nome_esame", getNomeEsame());
+		json.addProperty("id_prenotazione", getId_prenotazione());
+		json.addProperty("data", getData().toString());
+		json.addProperty("stato", getStato());
+		json.addProperty("specializzazione", getArea());
+
+		
+		return json;
+		
+	}
+	
+	public ArrayList <EsameDTO> getEsamiByIdRiferimento(int id_riferimento){
+		
+		 ArrayList <EsameDTO> esami = new EsameDAO().getByRiferimento(id_riferimento);
+		 return esami;
+		
+	}
 	
 	public int getId_esame() {
 		return id_esame;
@@ -55,7 +86,7 @@ public class EsameDTO {
 	
 	
 	public String getArea() {
-		return new EsameDAO().getTipologiaEsame(this.id_esame).getArea_esame();
+		return new EsameDAO().getSpecializzazioneEsame(this.id_esame);
 	}
 
 	public void setArea(String area) {

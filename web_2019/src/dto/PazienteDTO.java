@@ -285,5 +285,9 @@ public class PazienteDTO implements Serializable{
 		}
 
 	}
+	public void annullaPrenotazioneVisita(Integer id_prenotazione) {
+		new PazienteDAO().annullaPrenotazioneVisita(id_prenotazione);
+		
+	}
 	
 }

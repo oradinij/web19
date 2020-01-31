@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import dao.VisitaDAO;
 import dto.TipologiaVisitaDTO;
 import utils.Logger;
 import web_2019.VisitaCorrente;
@@ -17,7 +18,7 @@ import web_2019.VisitaCorrente;
  * @see VisitaCorrente
  */
 @WebServlet("/medico/annullaPrenotazioneVisita")
-public class AnnullaPrenotazioneVisitaMedicoBase extends HttpServlet {
+public class AnnullaPrenotazioneVisita extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 
@@ -25,17 +26,18 @@ public class AnnullaPrenotazioneVisitaMedicoBase extends HttpServlet {
 		Integer id_prenotazione = Integer.parseInt(request.getParameter("id_prenotazione"));
 		VisitaCorrente visita_corrente = (VisitaCorrente) request.getSession().getAttribute("visita_corrente");
 		if(id_prenotazione != null && visita_corrente!= null) {
-			TipologiaVisitaDTO visita = new TipologiaVisitaDTO(id_prenotazione);
-			Boolean visita_rimossa = visita_corrente.getVisitePrenotate().remove(visita);
-			if (visita_rimossa)//TODO: messaggistica di errore
-				Logger.log("rimossa visita '%s'", visita.getNome_visita());
+
+			Boolean visita_rimossa = visita_corrente.getPaziente().getListaVisite().remove(new VisitaDAO().getById(id_prenotazione));
+
+			if (visita_rimossa) {
+				visita_corrente.getPaziente().annullaPrenotazioneVisita(id_prenotazione);
+				Logger.log("rimossa prenotazione visita %d", id_prenotazione);
+			}
 			else
 				Logger.log("Nessuna visita rimossa");
 		}
-		else {
-			Logger.log("id_esame %d:", id_prenotazione);
-			
-		}
+
 		response.sendRedirect(request.getContextPath()+"/medico/visitePazienteMedicoBase.jsp");
 	}
+
 }

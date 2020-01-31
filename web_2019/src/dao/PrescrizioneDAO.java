@@ -6,10 +6,93 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Date;
 
+import com.google.gson.JsonObject;
+
 import dto.PrescrizioneDTO;
 import web_2019.DatabaseService;
 
 public class PrescrizioneDAO {
+	
+
+	public JsonObject  toJson(int id_ricetta) { 
+		JsonObject json = new JsonObject();
+		Connection conn =DatabaseService.getDbConnection();
+		ResultSet rs = null;
+		PreparedStatement stmt;
+
+		try {
+			stmt = conn.prepareStatement("SELECT * FROM prescrizioni WHERE id_prescrizione = ?");
+			stmt.setInt(1, id_ricetta);
+			rs = stmt.executeQuery();
+			while(rs.next()){
+				int id_riferimento= rs.getInt("id_riferimento");
+				int id_paziente= rs.getInt("id_paziente");
+				int id_medico = rs.getInt("id_medico");
+				int id_farmacia = rs.getInt("id_farmacia");
+				String data = rs.getString("timestamp");
+				String farmaco = rs.getString("farmaco");
+				int stato = rs.getInt("stato");
+				String nome_medico = new MedicoDAO().getUserById(id_medico).getNome();
+				String cognome_medico =  new MedicoDAO().getUserById(id_medico).getCognome();
+				String nome_farmacia = new FarmaciaDAO().getUserById(id_farmacia).getNome();
+				json.addProperty("farmaco", farmaco);
+				json.addProperty("data", data);
+				json.addProperty("id_prescrizione", id_ricetta);
+				json.addProperty("stato", stato);
+				json.addProperty("id_riferimento", id_riferimento);
+				json.addProperty("nome_medico", nome_medico);
+				json.addProperty("cognome_medico", cognome_medico);
+				json.addProperty("farmacia", nome_farmacia);
+				
+				
+			}
+			rs.close();
+			stmt.close();
+			conn.close();
+		}
+
+		catch (Exception e) {
+			e.printStackTrace();//puo essere che semplicemente non nulla
+		}
+
+		return json;
+	}
+	
+	
+	
+	
+	public ArrayList<PrescrizioneDTO>  getByRiferimento(int id_riferimento) { 
+		ArrayList<PrescrizioneDTO> listaPrescrizioni= new ArrayList<PrescrizioneDTO>();
+		Connection conn =DatabaseService.getDbConnection();
+		ResultSet rs = null;
+		PreparedStatement stmt;
+
+		try {
+			stmt = conn.prepareStatement("SELECT * FROM prescrizioni WHERE id_riferimento = ?");
+			stmt.setInt(1, id_riferimento);
+			rs = stmt.executeQuery();
+			while(rs.next()){
+				int id_prescrizione= rs.getInt("id_prescrizione");
+				int id_paziente= rs.getInt("id_paziente");
+				int id_medico = rs.getInt("id_medico");
+				String data = rs.getString("timestamp");
+				String farmaco = rs.getString("farmaco");
+				int stato = rs.getInt("stato");
+
+				listaPrescrizioni.add(new PrescrizioneDTO(id_prescrizione, id_paziente, id_medico, data, farmaco, stato));
+			}
+			rs.close();
+			stmt.close();
+			conn.close();
+		}
+
+		catch (Exception e) {
+			e.printStackTrace();//puo essere che semplicemente non nulla
+		}
+
+		return listaPrescrizioni;
+	}
+	
 
 	public ArrayList<PrescrizioneDTO>  getListaPrescrizioniByUserId(int id_paziente) { 
 		ArrayList<PrescrizioneDTO> listaPrescrizioni= new ArrayList<PrescrizioneDTO>();

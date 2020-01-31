@@ -9,7 +9,95 @@ $(document).on('shown.bs.modal','.modal', function () {
 });
 
 $(document).ready(function () {
+	
 
+	$('#tabella_ricette_specialistica_completata').DataTable({
+
+		ordering: false,
+		paging: false,
+		scrollY: 200,
+		scrollX: true,
+		bInfo: false,
+		scrollCollapse: false,
+		searching: false
+		
+
+	});
+	
+	
+	$('#tabella_esami_specialistica_completata').DataTable({
+
+		ordering: false,
+		paging: false,
+		scrollY: 200,
+		scrollX: true,
+		bInfo: false,
+		scrollCollapse: false,
+		searching: false
+		
+
+	});
+	
+	
+
+	$('#tabella_visite_specialistica_completata').DataTable({
+
+		ordering: false,
+		paging: false,
+		scrollY: 200,
+		scrollX: true,
+		bInfo: false,
+		scrollCollapse: false,
+		searching: false
+		
+
+	});
+	
+	
+	$('#tabella_ricette_base_completata').DataTable({
+
+		ordering: false,
+		paging: false,
+		scrollY: 200,
+		scrollX: true,
+		bInfo: false,
+		scrollCollapse: false,
+		searching: false
+		
+
+	});
+	
+	
+	$('#tabella_visite_base_completata').DataTable({
+
+		ordering: false,
+		paging: false,
+		scrollY: 200,
+		scrollX: true,
+		bInfo: false,
+		scrollCollapse: false,
+		searching: false
+		
+
+	});
+	
+	
+
+	$('#tabella_esami_base_completata').DataTable({
+
+		ordering: false,
+		paging: false,
+		scrollY: 200,
+		scrollX: true,
+		bInfo: false,
+		scrollCollapse: false,
+		searching: false
+		
+
+	});
+	
+	
+	
 
 	$('#tabellaEsami').DataTable({
 
@@ -37,6 +125,20 @@ $(document).ready(function () {
 		
 
 	});
+	
+	$('#tabellaVisite').DataTable({
+
+		ordering: false,
+		paging: false,
+		scrollY: 200,
+		scrollX: true,
+		bInfo: false,
+		scrollCollapse: false, 
+		searching: false
+		
+
+	});
+	
 	
 	
 	$('#tabellaVisitePrenotate').DataTable({

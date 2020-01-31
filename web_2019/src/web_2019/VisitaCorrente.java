@@ -130,16 +130,19 @@ public class VisitaCorrente {
 
 		JsonArray array_visite = new JsonArray();
 		for (TipologiaVisitaDTO visita : lista_visite) {
-			array_prescrizioni.add(visita.toJson());	
+			array_visite.add(visita.toJson());	
 		}
 		json.add("lista_visite", array_visite);
 
-		Logger.log("JSON visita corrente, relativa alla  prenotazione %d: \n", id_prenotazione_visita_corrente, json.getAsString());
+		//Logger.log("JSON visita corrente, relativa alla  prenotazione %d: \n", id_prenotazione_visita_corrente, json.getAsString());
 		return json;
 		}
 		catch (Exception e) {
 			
+			e.printStackTrace();
+			
 			json.addProperty("Errore", "impossibile stapare il JSON");
+			
 			return json;
 		}
 
