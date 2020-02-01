@@ -186,6 +186,7 @@ public class VisitaDAO {
 		Connection conn =DatabaseService.getDbConnection();
 		ResultSet rs = null;
 		PreparedStatement stmt;
+		VisitaDTO result = new VisitaDTO();
 
 		try {
 			String sql = "SELECT * FROM prenotazioni_visite WHERE id_prenotazione = ?;";
@@ -202,7 +203,7 @@ public class VisitaDAO {
 				String referto= rs.getString("referto");
 				String luogo= getLuogo(id_medico);
 				String nome_visita = new TipologiaVisitaDTO(id_visita).getNome_visita();
-				return new VisitaDTO(id_prenotazione, id_medico, id_paziente, stato, referto, data, id_visita, luogo, nome_visita);
+				result = new VisitaDTO(id_prenotazione, id_medico, id_paziente, stato, referto, data, id_visita, luogo, nome_visita);
 			}
 			rs.close();
 			stmt.close();
@@ -212,6 +213,8 @@ public class VisitaDAO {
 			e.printStackTrace();
 
 		}
-		return null;
+		
+		return result;
+	
 	}
 }

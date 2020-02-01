@@ -52,7 +52,7 @@
     <h3>Esami prescritti: </h3>
     &nbsp;
     <div class="container">
-      <table id="tabellaEsamiPrescritti" class="table datatable table-striped table-hover table-light tabella_visite" style="width: 100%;">
+      <table id="tabellaEsamiPrescritti" class="table text-center datatable table-striped table-hover table-light tabella_visite" style="width: 100%;">
         <thead>
           <tr>
             <th>Esame</th>
@@ -63,7 +63,7 @@
         </thead>
         <tbody>
         <c:forEach items="${visita_corrente.paziente.listaEsami}" var="esame">
-        <c:if test="${esame.stato==1}">
+        <c:if test="${esame.stato!=2}">
           <tr>
             <td>${esame.nomeEsame}</td>
             <td style="vertical-align: middle"><span class="badge badge-pill badge-info">${esame.area}</span></td>
@@ -92,7 +92,7 @@
     <h3>Esami effettuati: </h3>
     &nbsp;
     <div class="container">
-      <table id="tabellaEsamiEffettuati" class="table datatable table-striped table table-hover tabella_visite" style="width: 100%;">
+      <table id="tabellaEsamiEffettuati" class="table text-center datatable table-striped table table-hover tabella_visite" style="width: 100%;">
         <thead>
           <tr>
             <th>Esame</th>
@@ -103,12 +103,12 @@
         </thead>
         <tbody>
         <c:forEach items="${visita_corrente.paziente.listaEsami}" var="esame">
-        <c:if test="${esame.stato==0}">
+        <c:if test="${esame.stato==2}">
           <tr>
-            <td>${esame.nomeEsame}</td>
-            <td style="vertical-align: middle"><span class="badge badge-pill badge-info">${esame.area}</span></td>
-            <td style="vertical-align: middle">${esame.data}</td>
-            <td style="vertical-align: middle"><a href="#" data-toggle="modal" data-target="#modalPrenotazioneEsame" class="btn btn-outline-info"><i class="fa fa-info-circle"></i> Dettagli</a></td>
+            <td class="text-center" style="vertical-align: middle">${esame.nomeEsame}</td>
+            <td class="text-center" style="vertical-align: middle"><span class="badge badge-pill badge-info">${esame.area}</span></td>
+            <td class="text-center" style="vertical-align: middle">${esame.data}</td>
+            <td class="text-center" style="vertical-align: middle"><a href="#" data-toggle="modal" data-target="#modalPrenotazioneEsame" class="btn btn-outline-info"><i class="fa fa-info-circle"></i> Dettagli</a></td>
           </tr>
           </c:if>
           </c:forEach>
@@ -134,22 +134,22 @@
           <h5>
             <p class="badge badge-info">Esame</p>
           </h5>
-          <h5>Radiografia delle feci</h5>
+          <h5 id="nome_esame_prescritto"></h5>
           <hr class="bg-light">
           <h5>
             <p class="badge badge-info">Specializzazione</p>
           </h5>
-          <h5>Dermatologia</h5>
+          <h5 id="area_prescritto"></h5>
           <hr>
           <h5>
             <p class="badge badge-info">Medico prescrivente</p>
           </h5>
-          <h5>Nome Medico</h5>
+          <h5 id="medico_prescritto"></h5>
           <hr class="bg-light">
           <h5>
             <p class="badge badge-info">Data prescrizione</p>
           </h5>
-          <h5>23/01/2020</h5>
+          <h5 id="data_prescritto"></h5>
           <hr class="bg-light">
           <h5>
             <p class="badge badge-info">Visita di riferimento</p>
@@ -159,7 +159,7 @@
       
       <!-- Modal footer -->
       <div class="modal-footer">
-        <h6 class="badge badgeNumeroVisitaEsame" style="margin-top:10px;">Codice visita: 1223456599843882 </h6>
+        <h6 id="codice_footer_prescritto" class="badge badgeNumeroVisitaEsame" style="margin-top:10px;"></h6>
         <button type="button" class="btn btn-danger" data-dismiss="modal">Chiudi</button>
       </div>
     </div>

@@ -37,12 +37,47 @@
     </ul>
   </div>
 </nav>
+
+
+<div class="modal fade" id="loading_modal" style="border-radius:20px;">
+  <div class="modal-dialog" role="document" >
+    <div class="modal-content">
+     
+      <div class="modal-body text-center">
+        
+		<div class="spinner-border text-info" role="status">
+ 			 
+		</div>
+		<h5><span>Caricamento...</span></h5>
+      </div>
+     
+    </div>
+  </div>
+  </div>
+  
+  <script type="text/javascript">
+
+  function loadingModal() {
+  
+$('#loading_modal').modal({
+    backdrop: 'static',
+    keyboard: false
+})
+
+
+  
+  }
+  
+</script>
+  
+
+
 &nbsp;
 <div class="container text-center" style="background-color: #C1D4D9; border-radius: 20px; padding:20px; max-width: 70%"><img class="rounded-circle " src="../images/utente1img.jpg" width="150" height="150" alt="user" style="margin-bottom: 10px;">
   <h2>Ricette di: <span class="badge badge-info">${visita_corrente.paziente.nome} ${visita_corrente.paziente.cognome}</span></h2>
   <form id="formPaziente${visita_corrente.paziente.id}" action="DettagliPaziente">  
        <input type="hidden" value="${visita_corrente.paziente.id}" name="id"> 
-  <button class="btn btn-success" type="submit"><i class="fa fa-arrow-circle-left" style="vertical-align: middel"></i> Torna al paziente</button>
+  <button class="btn btn-success" type="submit" onclick="loadingModal()"><i class="fa fa-arrow-circle-left" style="vertical-align: middel"></i> Torna al paziente</button>
   </form>
 </div>
 &nbsp;
@@ -71,7 +106,12 @@
             <c:if test="${prescrizione.stato==1}">
             <td style="vertical-align: middle"><span class="badge badge-pill badge-secondary">Erogata</span></td>
             </c:if>
+            <c:if test="${prescrizione.stato==1}">
             <td style="vertical-align: middle">${prescrizione.data}</td>
+            </c:if>
+             <c:if test="${prescrizione.stato==0}">
+            <td style="vertical-align: middle">${prescrizione.solo_data}</td>
+            </c:if>
             <c:if test="${prescrizione.stato==0}">
             <td style="vertical-align: middle"><a href="#" onclick="modal_ricetta_da_erogare(${prescrizione.id_prescrizione})" class="btn btn-outline-info"><i class="fa fa-info-circle"></i> Dettagli</a></td>
             </c:if>
@@ -87,7 +127,7 @@
       <br>
       <form id="formVisite" action="VisitePaziente">  
        <input type="hidden" value="${visita_corrente.paziente.id}" name="id"> 
-      <button href="#" type="submit" class="btn btn-success"><i class="fa fa-arrow-circle-right" style=" font-size: 20px; vertical-align: middle; padding: 5px 5px"></i> Vai alle visite del paziente</button>
+      <button href="#" type="submit" class="btn btn-success" onclick="loadingModal()"><i class="fa fa-arrow-circle-right" style=" font-size: 20px; vertical-align: middle; padding: 5px 5px"></i> Vai alle visite del paziente</button>
     </form>
     </div>
   </div>
@@ -113,7 +153,7 @@
           <h5 id="nome_medico_erogata"></h5>
           <hr class="bg-light">
           <h5>
-            <p class="badge badge-info">Data prescrizione</p>
+            <p class="badge badge-info">Data e ora erogazione</p>
           </h5>
           <h5 id="data_erogata"></h5>
           <hr class="bg-light">
@@ -121,6 +161,7 @@
             <p class="badge badge-info">Visita di riferimento</p>
           </h5>
          <h5 id="visita_riferimento_erogata"></h5>
+         <button id="bottone_riferimento_erogata" class="btn btn-info">Vedi visita</button>
           <hr class="bg-light">
           <h5>
             <p class="badge badge-info">Farmacia erogatrice</p>
@@ -171,6 +212,18 @@ function modal_ricetta_erogata(id){
 	            document.getElementById('codice_footer_erogata').innerHTML="Codice ricetta: " + id; 
 	            document.getElementById('farmaco_erogata').innerHTML=result.farmaco;
 	            document.getElementById('farmacia_erogata').innerHTML=result.farmacia;
+	            if(result.tipo_riferimento==1){
+		            document.getElementById('bottone_riferimento_erogata').outerHTML="<button id=\"bottone_riferimento_erogata\" class=\"btn btn-info\" onclick=\"modal_svolta_base("+ result.id_riferimento + ")\">Vedi visita</button>"
+		            } else{
+		            	
+					document.getElementById('bottone_riferimento_erogata').outerHTML="<button id=\"bottone_riferimento_erogata\" class=\"btn btn-info\" onclick=\"modal_svolta_specialistica("+ result.id_riferimento + ")\">Vedi visita</button>"
+		            	
+		            }
+	            
+	            
+	            
+	            document.getElementById('qr_erogata').innerHTML="";
+	            
 	            var qrcode = new QRCode("qr_erogata");
 
 	            function makeCode () {		
@@ -212,18 +265,29 @@ function modal_ricetta_da_erogare(id){
 	        url: 'http://localhost:8080/web2019/medico/modal/dettagli_ricetta?id_ricetta='+id,
 	        type: "GET",
 	        success: function (result) { 
+	        	
+	        	var data = result.data.split(' ')[0];
+	        	
 	        	console.log(result);
-	            document.getElementById('data_non_erogata').innerHTML=result.data;
+	            document.getElementById('data_non_erogata').innerHTML=data;
 	            document.getElementById('nome_medico_non_erogata').innerHTML=result.nome_medico + " " + result.cognome_medico;    
 	            document.getElementById('visita_riferimento_non_erogata').innerHTML=result.id_riferimento;
 	            document.getElementById('farmaco_non_erogata').innerHTML=result.farmaco;
 	            document.getElementById('codice_footer_non_erogata').innerHTML="Codice ricetta: " + id; 
+	            if(result.tipo_riferimento==1){
+	            document.getElementById('bottone_riferimento_non_erogata').outerHTML="<button id=\"bottone_riferimento_non_erogata\" class=\"btn btn-info\" onclick=\"modal_svolta_base("+ result.id_riferimento + ")\">Vedi visita</button>"
+	            } else{
+	            	
+				document.getElementById('bottone_riferimento_non_erogata').outerHTML="<button id=\"bottone_riferimento_non_erogata\" class=\"btn btn-info\" onclick=\"modal_svolta_specialistica("+ result.id_riferimento + ")\">Vedi visita</button>"
+	            	
+	            }
 	            
-	            
+	            document.getElementById('qr_non_erogata').innerHTML="";
+
 	            var qrcode = new QRCode("qr_non_erogata");
 
 	            function makeCode () {		
-	            	var elText = "Ricetta numero: "+ id + ", data prescrizione: " + result.data + ", medico prescrittore: " +
+	            	var elText = "Ricetta numero: "+ id + ", data prescrizione: " + data + ", medico prescrittore: " +
 								result.nome_medico + " " + result.cognome_medico + ", prescrizione: "+ result.farmaco + ".";
 	            	
 	            	qrcode.makeCode(elText);
@@ -254,9 +318,299 @@ function modal_ricetta_da_erogare(id){
 	};
 
 
+	
+	
+	
+	  function modal_svolta_specialistica(id){
+	 
+	   $.ajax({
+	        url: 'http://localhost:8080/web2019/medico/modal/dettagli_visita?id_prenotazione='+id,
+	        type: "GET",
+	        success: function (result) { 
+	        	console.log(result);
+	            document.getElementById('completata_data_spec').innerHTML=result.visita.data;
+	            document.getElementById('completata_nome_medico_spec').innerHTML=result.visita.nome_medico + " " + result.visita.cognome_medico;
+	            document.getElementById('completata_referto_spec').innerHTML=result.visita.referto;
+	            document.getElementById('completata_tipo_visita_spec').innerHTML=result.visita.nome_visita;
+	            document.getElementById('completata_luogo_spec').innerHTML=result.visita.luogo;
+	            document.getElementById('completata_numero_footer_specialistica').innerHTML="Codice visita: " + id; 
+	            
 
+	            document.getElementById('tbody_ricette_specialistica_completata').innerHTML="";
+	            
+	            if(result.figli.lista_prescrizioni.length==0){
+		            	
+		            	$('#tabella_ricette_specialistica_completata').DataTable().columns.adjust().draw();
+		            	
+		            	
+		            }
+	            
+	            result.figli.lista_prescrizioni.forEach(el =>{
+	        		
+	        		
+	            	
+	            	
+		        	$("#tbody_ricette_specialistica_completata").append("<tr><td align=\"center\" style=\"vertical-align:middle\">" + el.id_prescrizione + "</td><td  align=\"center\" style=\"vertical-align:middle\">"+el.farmaco+ "</td>");
+					
+		        	
+		        		           
+		        	});
+	            
+	           
 
+	            document.getElementById('tbody_esami_specialistica_completata').innerHTML="";
 
+					if(result.figli.lista_esami.length==0){
+		            	
+		            	$('#tabella_esami_specialistica_completata').DataTable().columns.adjust().draw();
+					}
+	            
+					result.figli.lista_esami.forEach(el =>{
+	        		
+	        		
+		        	$("#tbody_esami_specialistica_completata").append("<tr><td align=\"center\" style=\"vertical-align:middle\">" + el.id_prenotazione + "</td><td  align=\"center\" style=\"vertical-align:middle\">"+el.nome_esame+ "</td>");
+						
+		        		           
+		        	});
+					
+					
+					
+		            	
+		            
+					
+					  document.getElementById('tbody_visite_specialistica_completata').innerHTML="";
+
+					 if(result.figli.lista_visite.length==0){
+		            	
+		            	$('#tabella_visite_specialistica_completata').DataTable().columns.adjust().draw();
+		            	
+		            	
+		            }
+			            
+		 				result.figli.lista_visite.forEach(el =>{
+			        		
+			        		
+				        	$("#tbody_visite_specialistica_completata").append("<tr><td align=\"center\" style=\"vertical-align:middle\">" + el.id_prenotazione + "</td><td  align=\"center\" style=\"vertical-align:middle\">"+el.nome_visita+ "</td>");
+								
+				        		           
+				        	});
+		 				
+		 				
+	            
+	            
+	            $('#modalVisitaSpecialistica').modal('show');
+	            },
+	         error: function (result){
+	        	
+	        	console.log(result);
+	        	
+	        	
+	        }
+	        });
+	    
+	  
+	};
+
+	function modal_svolta_base(id){
+		 
+		   $.ajax({
+		        url: 'http://localhost:8080/web2019/medico/modal/dettagli_visita?id_prenotazione='+id,
+		        type: "GET",
+		        success: function (result) { 
+		        	console.log(result);
+		            document.getElementById('completata_data_base').innerHTML=result.visita.data;
+		            document.getElementById('completata_nome_medico_base').innerHTML=result.visita.nome_medico + " " + result.visita.cognome_medico;    
+		            document.getElementById('completata_tipo_visita_base').innerHTML=result.visita.nome_visita;
+		            document.getElementById('completata_luogo_spec').innerHTML=result.visita.luogo;
+		            document.getElementById('completata_numero_footer_base').innerHTML="Codice visita: " + id; 
+		            
+		            
+		            document.getElementById('tbody_ricette_base_completata').innerHTML="";
+		            
+
+	           	 if(result.figli.lista_prescrizioni.length==0){
+		            	
+		            	$('#tabella_ricette_base_completata').DataTable().columns.adjust().draw();
+		            	
+		            	
+		            }
+		            
+		            result.figli.lista_prescrizioni.forEach(el =>{
+		        		
+		        		
+		            	
+			        	$("#tbody_ricette_base_completata").append("<tr><td align=\"center\" style=\"vertical-align:middle\">" + el.id_prescrizione + "</td><td  align=\"center\" style=\"vertical-align:middle\">"+el.farmaco+ "</td>");
+						
+			        	
+			        		           
+			        	});
+		            
+		           
+
+		            document.getElementById('tbody_esami_base_completata').innerHTML="";
+
+	 				if(result.figli.lista_esami.length==0){
+	 	            	
+	 	            	$('#tabella_esami_base_completata').DataTable().columns.adjust().draw();
+	 				}
+		            
+	 				result.figli.lista_esami.forEach(el =>{
+		        		
+		        		
+			        	$("#tbody_esami_base_completata").append("<tr><td align=\"center\" style=\"vertical-align:middle\">" + el.id_prenotazione + "</td><td  align=\"center\" style=\"vertical-align:middle\">"+el.nome_esame+ "</td>");
+							
+			        		           
+			        	});
+	 				
+	 				
+	 				
+	 	            	
+	 	            
+	 				
+	 				  document.getElementById('tbody_visite_base_completata').innerHTML="";
+
+	 				 if(result.figli.lista_visite.length==0){
+			            	
+			            	$('#tabella_visite_base_completata').DataTable().columns.adjust().draw();
+			            	
+			            	
+			            }
+	 		            
+	 	 				result.figli.lista_visite.forEach(el =>{
+	 		        		
+	 		        		
+	 			        	$("#tbody_visite_base_completata").append("<tr><td align=\"center\" style=\"vertical-align:middle\">" + el.id_prenotazione + "</td><td  align=\"center\" style=\"vertical-align:middle\">"+el.nome_visita+ "</td>");
+	 							
+	 			        		           
+	 			        	});
+	 	 				
+	 	 				
+	 	 				 
+		            
+		            
+		            $('#modalVisitaBase').modal('show');
+		            
+		            
+		            },
+		            
+		         error: function (result){
+		        	
+		        	console.log(result);
+		        	
+		        	
+		        }
+		        });
+		    
+		  
+		};
+		
+		
+		
+		
+
+		$(document).ready(function () {
+			
+
+			$('#tabella_ricette_specialistica_completata').DataTable({
+
+				ordering: false,
+				paging: false,
+				scrollY: 200,
+				scrollX: true,
+				bInfo: false,
+				scrollCollapse: false,
+				searching: false
+				
+
+			});
+			
+			
+			$('#tabella_esami_specialistica_completata').DataTable({
+
+				ordering: false,
+				paging: false,
+				scrollY: 200,
+				scrollX: true,
+				bInfo: false,
+				scrollCollapse: false,
+				searching: false
+				
+
+			});
+			
+			
+
+			$('#tabella_visite_specialistica_completata').DataTable({
+
+				ordering: false,
+				paging: false,
+				scrollY: 200,
+				scrollX: true,
+				bInfo: false,
+				scrollCollapse: false,
+				searching: false
+				
+
+			});
+			
+			
+			$('#tabella_ricette_base_completata').DataTable({
+
+				ordering: false,
+				paging: false,
+				scrollY: 200,
+				scrollX: true,
+				bInfo: false,
+				scrollCollapse: false,
+				searching: false
+				
+
+			});
+			
+			
+			$('#tabella_visite_base_completata').DataTable({
+
+				ordering: false,
+				paging: false,
+				scrollY: 200,
+				scrollX: true,
+				bInfo: false,
+				scrollCollapse: false,
+				searching: false
+				
+
+			});
+			
+			
+
+			$('#tabella_esami_base_completata').DataTable({
+
+				ordering: false,
+				paging: false,
+				scrollY: 200,
+				scrollX: true,
+				bInfo: false,
+				scrollCollapse: false,
+				searching: false
+				
+
+			});
+			
+		});
+		
+		window.onresize = function (event) {
+			$('.datatable').DataTable().columns.adjust();
+		};
+
+		$(document).on('shown.bs.modal','.modal', function () {
+
+			$('.datatable').DataTable().columns.adjust();
+
+		});
+		
+		
+		
+		
 </script>
 
 
@@ -287,6 +641,7 @@ function modal_ricetta_da_erogare(id){
             <p class="badge badge-info">Visita di riferimento</p>
           </h5>
          <h5 id="visita_riferimento_non_erogata"></h5>
+         <button id="bottone_riferimento_non_erogata" class="btn btn-info">Vedi visita</button>
           <hr class="bg-light">
           <h5>
             <p class="badge badge-info">Prescrizione</p>
@@ -313,7 +668,196 @@ function modal_ricetta_da_erogare(id){
       </div>
     </div>
   </div>
+
+<div class="modal fade " id="modalVisitaBase">
+  <div class="modal-dialog">
+    <div class="modal-content"> 
+      
+      <!-- Modal Header -->
+      <div class="modal-header text-light">
+        <h4 class="modal-title">Dettagli visita</h4>
+        <button type="button" class="close text-light" data-dismiss="modal">&times;</button>
+      </div>
+      
+      <!-- Modal body -->
+      <div class="modal-body">
+        <div class="container  bg-light text-center" style="padding: 10px;border-radius: 20px">
+          <h5>
+            <p class="badge badge-info">Tipologia</p>
+          </h5>
+          <h5 id="completata_tipo_visita_base"></h5>
+          <hr class="bg-light">
+          <h5>
+            <p class="badge badge-info">Medico</p>
+          </h5>
+          <h5 id="completata_nome_medico_base"></h5>
+          <hr class="bg-light">
+          <h5>
+            <p class="badge badge-info">Data e ora</p>
+          </h5>
+          <h5 id="completata_data_base"></h5>
+          <hr class="bg-light">
+          <h5>
+            <p class="badge badge-info">Ricette</p>
+          </h5>
+          <div class="container">
+            <table id="tabella_ricette_base_completata" class="table datatable table-hover table-striped table-bordered tabellaRicetteEsami" style="width:100%">
+              <thead >
+                <tr>
+                  <th>Numero Ricetta</th>
+                  <th>Farmaco</th>
+                </tr>
+              </thead>
+              <tbody id="tbody_ricette_base_completata">
+              </tbody>
+            </table id="tabella_esami_base_completata">
+          </div>
+          <hr class="bg-light">
+          <h5>
+            <p class="badge badge-info">Esami</p>
+          </h5>
+          <div class="container">
+            <table id="tabella_esami_base_completata" class="table datatable table-hover table-bordered table-striped tabellaRicetteEsami" style="width:100%">
+              <thead style="width:100%">
+                <tr>
+                  <th>Numero Esame</th>
+                  <th>Esame</th>
+                </tr>
+              </thead>
+              <tbody id="tbody_esami_base_completata">
+              </tbody>
+            </table>
+          </div>
+          <hr class="bg-light">
+          <h5>
+            <p class="badge badge-info">Visite</p>
+          </h5>
+          <div class="container">
+            <table id="tabella_visite_base_completata" class="table datatable table-hover table-bordered table-striped tabellaRicetteEsami" style="width:100%">
+              <thead >
+                <tr>
+                  <th>Numero Visita</th>
+                  <th>Tipo</th>
+                </tr>
+              </thead>
+              <tbody id="tbody_visite_base_completata">
+              </tbody>
+            </table>
+          </div>
+			 <hr class="bg-light">
+          <h5>
+            <p class="badge badge-info">Scarica referto</p>
+          </h5>
+			<a href="#" class="btn btn-success"><i class="fa fa-download"></i> Scarica referto</a>
+        </div>
+      </div>
+      
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <h6 id="completata_numero_footer_base" class="badge badgeNumeroVisitaEsame"> </h6>
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Chiudi</button>
+      </div>
+    </div>
+  </div>
 </div>
+<div class="modal fade " id="modalVisitaSpecialistica">
+  <div class="modal-dialog">
+    <div class="modal-content"> 
+      
+      <!-- Modal Header -->
+      <div class="modal-header text-light">
+        <h4 class="modal-title">Dettagli visita</h4>
+        <button type="button" class="close text-light" data-dismiss="modal">&times;</button>
+      </div>
+      
+      <!-- Modal body -->
+      <div class="modal-body">
+        <div class="container  bg-light text-center" style="padding: 10px;border-radius: 20px">
+          <h5>
+            <p class="badge badge-info">Tipologia</p>
+          </h5>
+          <h5 id="completata_tipo_visita_spec"></h5>
+          <hr class="bg-light">
+          <h5>
+            <p class="badge badge-info">Medico</p>
+          </h5>
+          <h5 id="completata_nome_medico_spec"></h5>
+          <hr class="bg-light">
+          <h5>
+            <p class="badge badge-info">Data</p>
+          </h5>
+          <h5 id="completata_data_spec"></h5>
+          <hr class="bg-light">
+          <h5>
+            <p class="badge badge-info">Luogo</p>
+          </h5>
+          <h5 id="completata_luogo_spec"></h5>
+          <hr class="bg-light">
+          <h5>
+            <p class="badge badge-info">Referto</p>
+          </h5>
+          <p id="completata_referto_spec" class="card-body text-left" style="border-style: solid; border-radius: 20px;"></p>
+          <hr class="bg-light">
+         <h5>
+            <p class="badge badge-info">Ricette</p>
+          </h5>
+          <div class="container">
+            <table id="tabella_ricette_specialistica_completata" class="table datatable table-hover table-striped table-bordered tabellaRicetteEsami" style="width:100%">
+              <thead >
+                <tr>
+                  <th>Numero Ricetta</th>
+                  <th>Farmaco</th>
+                </tr>
+              </thead>
+              <tbody id="tbody_ricette_specialistica_completata">
+              </tbody>
+            </table id="tabella_esami_base_completata">
+          </div>
+          <hr class="bg-light">
+          <h5>
+            <p class="badge badge-info">Esami</p>
+          </h5>
+          <div class="container">
+            <table id="tabella_esami_specialistica_completata" class="table datatable table-hover table-bordered table-striped tabellaRicetteEsami" style="width:100%">
+              <thead style="width:100%">
+                <tr>
+                  <th>Numero Esame</th>
+                  <th>Esame</th>
+                </tr>
+              </thead>
+              <tbody id="tbody_esami_specialistica_completata">
+              </tbody>
+            </table>
+          </div>
+          <hr class="bg-light">
+          <h5>
+            <p class="badge badge-info">Visite</p>
+          </h5>
+          <div class="container">
+            <table id="tabella_visite_specialistica_completata" class="table datatable table-hover table-bordered table-striped tabellaRicetteEsami" style="width:100%">
+              <thead >
+                <tr>
+                  <th>Numero Visita</th>
+                  <th>Tipo</th>
+                </tr>
+              </thead>
+              <tbody id="tbody_visite_specialistica_completata">
+              </tbody>
+            </table>
+          </div>
+			 <hr class="bg-light">
+      </div>
+      </div>
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <h6 id="completata_numero_footer_specialistica" class="badge badgeNumeroVisitaEsame"></h6>
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Chiudi</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 <footer class="text-center text-light">©2019 Oradini & Bertamini</footer>
 <script src="../js/medico_base/utils_ricette_paziente_medico_base.js"></script>
 </body>

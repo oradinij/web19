@@ -14,7 +14,7 @@ public class VisitaDTO {
 	
 	public JsonObject toJson() {
 		JsonObject json = new JsonObject();
-		json.addProperty("data",data.toString());
+		json.addProperty("data",getData().toString());
 		json.addProperty("id_prenotazione",getId_prenotazione());
 		json.addProperty("id_medico",getId_medico());
 		json.addProperty("id_paziente",getId_paziente());

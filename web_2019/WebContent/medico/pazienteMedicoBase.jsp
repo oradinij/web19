@@ -16,6 +16,10 @@
 <script src="../js/popper.min.js"></script>
 <script src="../js/jquery-3.3.1.min.js"></script>
 <script src="../js/bootstrap.js"></script>
+
+
+ 
+
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark"><a class="navbar-brand" href="#">Nome Cognome</a>
@@ -30,6 +34,39 @@
     </ul>
   </div>
 </nav>
+
+
+<div class="modal fade" id="loading_modal" style="border-radius:20px;">
+  <div class="modal-dialog" role="document" >
+    <div class="modal-content">
+     
+      <div class="modal-body text-center">
+        
+		<div class="spinner-border text-info" role="status">
+ 			 
+		</div>
+		<h5><span>Caricamento...</span></h5>
+      </div>
+     
+    </div>
+  </div>
+  </div>
+
+  <script type="text/javascript">
+
+  function loadingModal() {
+  
+$('#loading_modal').modal({
+    backdrop: 'static',
+    keyboard: false
+})
+
+
+  
+  }
+  
+</script>
+
 &nbsp;
 <div class="container bg-faded" style="background-color: #C1D4D9; padding:20px; border-radius: 20px;">
   <div class="container">
@@ -58,7 +95,7 @@
   <div class="card">
     <div class="card-img"> <img src="../images/pills.jpg" alt="pills" style="height:220px;">
       <div class="overlay">
-        <div class="overlay-content"><a class="hover" href="#" onclick="formRicette.submit();">Vai alle ricette del paziente</a></div>
+        <div class="overlay-content"><a class="hover" href="#" onclick="formRicette.submit(); loadingModal();">Vai alle ricette del paziente</a></div>
       </div>
     </div>
     <div class="card-content"> <a href="#!">
@@ -71,7 +108,7 @@
       <div class="overlay">
       <form id="formVisite" action="VisitePaziente">  
        <input type="hidden" value="${visita_corrente.paziente.id}" name="id"> 
-        <div class="overlay-content"><a class="hover" onclick="formVisite.submit();">Vai alle visite del paziente</a></div>
+        <div class="overlay-content"><a class="hover" onclick="formVisite.submit(); loadingModal();">Vai alle visite del paziente</a></div>
         </form>
       </div>
     </div>
@@ -85,7 +122,7 @@
       <div class="overlay">
       <form id="formEsami" action="EsamiPaziente">  
        <input type="hidden" value="${visita_corrente.paziente.id}" name="id"> 
-        <div class="overlay-content"><a class="hover" onclick="formEsami.submit();">Vai agli esami del paziente</a></div>
+        <div class="overlay-content"><a class="hover" onclick="formEsami.submit(); loadingModal();">Vai agli esami del paziente</a></div>
         </form>
       </div>
     </div>

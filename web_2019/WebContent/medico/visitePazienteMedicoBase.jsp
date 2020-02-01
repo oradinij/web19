@@ -151,10 +151,8 @@
 </div>
 
 
+
 <script>
-
-
-
 
 var id_visita_da_cancellare;
 var ricetta_da_eliminare;

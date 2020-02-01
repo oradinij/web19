@@ -9,6 +9,7 @@ import java.util.Date;
 import com.google.gson.JsonObject;
 
 import dto.PrescrizioneDTO;
+import dto.VisitaDTO;
 import web_2019.DatabaseService;
 
 public class PrescrizioneDAO {
@@ -34,7 +35,13 @@ public class PrescrizioneDAO {
 				int stato = rs.getInt("stato");
 				String nome_medico = new MedicoDAO().getUserById(id_medico).getNome();
 				String cognome_medico =  new MedicoDAO().getUserById(id_medico).getCognome();
-				String nome_farmacia = new FarmaciaDAO().getUserById(id_farmacia).getNome();
+				VisitaDTO visita_tmp = new VisitaDAO().getById(id_riferimento);	
+				Integer tipo_riferimento= visita_tmp.getId_visita();
+				
+				if(stato==1) {
+					String nome_farmacia = new FarmaciaDAO().getUserById(id_farmacia).getNome();
+					json.addProperty("farmacia", nome_farmacia);
+			}
 				json.addProperty("farmaco", farmaco);
 				json.addProperty("data", data);
 				json.addProperty("id_prescrizione", id_ricetta);
@@ -42,7 +49,7 @@ public class PrescrizioneDAO {
 				json.addProperty("id_riferimento", id_riferimento);
 				json.addProperty("nome_medico", nome_medico);
 				json.addProperty("cognome_medico", cognome_medico);
-				json.addProperty("farmacia", nome_farmacia);
+				json.addProperty("tipo_riferimento", tipo_riferimento);
 				
 				
 			}

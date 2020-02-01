@@ -29,7 +29,7 @@ public class DettagliRicetta extends HttpServlet {
 		if(id_ricettaStr!= null) {
 			Integer id_ricetta = Integer.parseInt(id_ricettaStr);
 			
-			JsonObject result = new PrescrizioneDTO().toJson(id_ricetta);
+			JsonObject result = new PrescrizioneDAO().toJson(id_ricetta);
 						
 			PrintWriter out = response.getWriter();
 	        response.setContentType("application/json");
