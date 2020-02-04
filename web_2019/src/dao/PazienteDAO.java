@@ -7,6 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.UUID;
 
 import javax.servlet.http.Cookie;
@@ -74,12 +75,13 @@ public class PazienteDAO {
 				String codice_fiscale = rs.getString("codice_fiscale");	
 				String mail = rs.getString("email");		
 				String luogo_nascita = rs.getString("luogo_nascita");		
+				String provincia = rs.getString("provincia");	
 				String nome = rs.getString("nome");	
 				String sesso = rs.getString("sesso");		
 				String data_nascita = rs.getString("data_nascita");		
 				String cognome = rs.getString("cognome");
 				String foto_path = rs.getString("immagine");	
-				user= new PazienteDTO(id_paziente, id_medico, codice_fiscale, mail, luogo_nascita, nome, sesso, data_nascita, cognome, foto_path);
+				user= new PazienteDTO(id_paziente, id_medico, codice_fiscale, mail, luogo_nascita, provincia, nome, sesso, data_nascita, cognome, foto_path);
 
 			}
 			rs.close();
@@ -92,6 +94,45 @@ public class PazienteDAO {
 
 		return user;
 	}
+	
+	
+	public ArrayList <PazienteDTO> getUserByProvincia(String provincia) {
+		ArrayList <PazienteDTO> users = new ArrayList <PazienteDTO>();
+		Connection conn =DatabaseService.getDbConnection();
+		ResultSet rs = null;
+		try {
+			String sql = "SELECT * FROM pazienti WHERE provincia = ?;";
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.setString(1, provincia);
+			rs = stmt.executeQuery();
+			while(rs.next()){
+
+				int id_medico = rs.getInt("id_medico");
+				int id_paziente = rs.getInt("id_paziente");
+				String codice_fiscale = rs.getString("codice_fiscale");	
+				String luogo_nascita = rs.getString("luogo_nascita");		
+				String nome = rs.getString("nome");	
+				String sesso = rs.getString("sesso");		
+				String data_nascita = rs.getString("data_nascita");		
+				String cognome = rs.getString("cognome");
+				String foto_path = rs.getString("immagine");
+				String email = rs.getString("email");
+				//TODO: String foto_path = rs.getString("");		
+				PazienteDTO user= new PazienteDTO(id_paziente, id_medico, codice_fiscale, email, luogo_nascita, provincia, nome, sesso, data_nascita, cognome, foto_path);
+				users.add(user);
+			}
+			rs.close();
+			stmt.close();
+			conn.close();
+		}
+		catch (Exception e) {
+			e.printStackTrace();//puo essere che semplicemente non trovi l' utente
+		}
+
+		return users;
+	}
+	
+	
 	public PazienteDTO getUserByEmail(String email) {
 		PazienteDTO user=null;
 		Connection conn =DatabaseService.getDbConnection();
@@ -112,8 +153,10 @@ public class PazienteDAO {
 				String data_nascita = rs.getString("data_nascita");		
 				String cognome = rs.getString("cognome");
 				String foto_path = rs.getString("immagine");
+				String provincia = rs.getString("provincia");	
+
 				//TODO: String foto_path = rs.getString("");		
-				user= new PazienteDTO(id_paziente, id_medico, codice_fiscale, email, luogo_nascita, nome, sesso, data_nascita, cognome, foto_path);
+				user= new PazienteDTO(id_paziente, id_medico, codice_fiscale, email, luogo_nascita, provincia, nome, sesso, data_nascita, cognome, foto_path);
 
 			}
 			rs.close();
@@ -161,9 +204,12 @@ public class PazienteDAO {
 				String sesso = rs.getString("sesso");		
 				String data_nascita = rs.getString("data_nascita");		
 				String luogo_nascita = rs.getString("luogo_nascita");		
-				String foto_path = rs.getString("immagine");	
+				String foto_path = rs.getString("immagine");
+				String provincia = rs.getString("provincia");	
+
 				
-				user= new PazienteDTO(id, id_medico, codice_fiscale, mail, luogo_nascita, nome, sesso, data_nascita, cognome, foto_path);
+				
+				user= new PazienteDTO(id, id_medico, codice_fiscale, mail, luogo_nascita, provincia, nome, sesso, data_nascita, cognome, foto_path);
 				rs.close();
 				stmt.close();
 				return user;
@@ -222,7 +268,9 @@ public class PazienteDAO {
 				String data_nascita = rs.getString("data_nascita");		
 				String cognome = rs.getString("cognome");
 				String foto_path = rs.getString("immagine");	
-				user= new PazienteDTO(id_paziente, id_medico, codice_fiscale, mail, luogo_nascita, nome, sesso, data_nascita, cognome, foto_path);
+				String provincia = rs.getString("provincia");	
+
+				user= new PazienteDTO(id_paziente, id_medico, codice_fiscale, mail, luogo_nascita, provincia, nome, sesso, data_nascita, cognome, foto_path);
 
 			}
 			rs.close();

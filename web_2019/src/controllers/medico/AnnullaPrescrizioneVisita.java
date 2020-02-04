@@ -25,10 +25,11 @@ public class AnnullaPrescrizioneVisita extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Integer id_visita = Integer.parseInt(request.getParameter("id_visita"));
+		System.out.println("dioporco "+ id_visita);
 		VisitaCorrente visita_corrente = (VisitaCorrente) request.getSession().getAttribute("visita_corrente");
 		if(id_visita != null && visita_corrente!= null) {
 			TipologiaVisitaDTO visita = new TipologiaVisitaDTO(id_visita);
-			Boolean visita_rimossa = visita_corrente.getPaziente().getListaVisite().remove(visita);
+			Boolean visita_rimossa = visita_corrente.getLista_visite().remove(visita);
 			if (visita_rimossa)//TODO: messaggistica di errore
 				Logger.log("rimossa visita '%s'", visita.getNome_visita());
 			else

@@ -16,8 +16,9 @@ public class MedicoDTO implements Serializable{
 	String telefono_cellulare;
 	String struttura;
 	String immagine;
+	String provincia;
 
-	public MedicoDTO(String email, int id, int idSpecializzazione, String nome, String cognome, String telefono_studio, String telefono_cellulare, String immagine, String struttura) {
+	public MedicoDTO(String email, int id, int idSpecializzazione, String nome, String cognome, String provincia, String telefono_studio, String telefono_cellulare, String immagine, String struttura) {
 		this.email = email;
 		this.id_medico = id;
 		this.idSpecializzazione =idSpecializzazione;
@@ -27,9 +28,14 @@ public class MedicoDTO implements Serializable{
 		this.telefono_cellulare=telefono_cellulare;
 		this.struttura=struttura;
 		this.immagine = immagine;
+		this.provincia = provincia;
 	}
 	
 	
+	
+	public String getProvincia() {
+		return provincia;
+	}
 	
 	public String getNome() {
 		return nome;
@@ -79,10 +85,13 @@ public class MedicoDTO implements Serializable{
 		}
 		return null;		
 	}
+	
 	public int getIdSpecializzazione() {
 		return this.idSpecializzazione;
 	}
 
+
+	
 
 
 }

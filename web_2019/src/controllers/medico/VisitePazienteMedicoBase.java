@@ -26,11 +26,11 @@ import web_2019.VisitaCorrente;
 @WebServlet("/medico/VisitePaziente")
 public class VisitePazienteMedicoBase extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-    
+
+
 	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		
+
+
 		//TODO per mettere le info nel parco pazienti devo caricare gia la lista pazienti con relative info
 		MedicoDTO user= (MedicoDTO) request.getSession().getAttribute("user");
 		int id_paziente = Integer.parseInt(request.getParameter("id"));
@@ -38,15 +38,19 @@ public class VisitePazienteMedicoBase extends HttpServlet {
 		VisitaCorrente visita_corrente = new VisitaCorrente();
 		visita_corrente.setPaziente(paziente);
 		visita_corrente.setId_medico(user.getId_medico());
-		ArrayList<TipologiaVisitaDTO> tipi_visita = TipologiaVisitaDAO.getAll();
-		ArrayList<TipologiaEsameDTO> tipi_esame = new TipologiaEsameDAO().getAll();
+		if(request.getSession().getAttribute("tipi_visita") == null) {
+			ArrayList<TipologiaVisitaDTO> tipi_visita = TipologiaVisitaDAO.getAll();
+			request.getSession().setAttribute("tipi_visita", tipi_visita);
+		}
+		if(request.getSession().getAttribute("tipi_visita") == null) {
+			ArrayList<TipologiaEsameDTO> tipi_esame = new TipologiaEsameDAO().getAll();
+			request.getSession().setAttribute("tipi_esame", tipi_esame);
+		}
 		request.getSession().setAttribute("visita_corrente", visita_corrente);
-		request.getSession().setAttribute("tipi_visita", tipi_visita);
-		request.getSession().setAttribute("tipi_esame", tipi_esame);
-		
-		
+
+
 		response.sendRedirect(request.getContextPath()+"/medico/visitePazienteMedicoBase.jsp");
-		
+
 	}
 
 }

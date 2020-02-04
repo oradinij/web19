@@ -54,7 +54,15 @@ public class LoginMedico extends HttpServlet {
 
 		String nextPage;
 		if(user != null) {
+			
+		if(user.getIdSpecializzazione()==0) {
 			nextPage = "/medico/homeMedicoBase.jsp";
+		} else {
+			
+			nextPage = "/medico/homeMedicoSpecialista.jsp";
+			
+		}
+			
 		request.getSession().setAttribute("notifica", new Notifica("Login corretto", Notifica.SUCCESS));}
 		else {
 			nextPage = "/login/loginMedico.jsp" ;

@@ -3,18 +3,30 @@ package dao;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.UUID;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+
 import dto.MedicoDTO;
 import dto.PazienteDTO;
+import dto.TipologiaVisitaDTO;
+import dto.VisitaDTO;
 import utils.Logger;
 import web_2019.DatabaseService;
 import web_2019.PasswordEncryptionService;
@@ -44,6 +56,175 @@ public class MedicoDAO {
 		return user;
 	}
 
+	
+	
+	private Calendar dateToCalendar(Date date) {
+
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		return calendar;
+
+	}
+ 
+	public JsonArray getJsonPrenotazioniVisiteBase(int id_medico){
+		Connection conn =DatabaseService.getDbConnection();
+		JsonArray result = new JsonArray ();
+		ResultSet rs = null;
+		try {
+			Statement stmt = conn.createStatement();
+			String sql = "SELECT * FROM prenotazioni_visite WHERE id_medico = "+id_medico+" AND stato=1 AND id_visita=1;";
+			rs = stmt.executeQuery(sql);
+			while(rs.next()){
+
+				Timestamp ts = rs.getTimestamp("data");
+				Date data = new Date(ts.getTime());
+				Integer id_prenotazione = rs.getInt("id_prenotazione");
+				Integer id_paziente = rs.getInt("id_paziente");
+				String nome_paziente = new PazienteDAO().getUserById(id_paziente).getNome();
+				String cognome_paziente = new PazienteDAO().getUserById(id_paziente).getCognome();
+				String codice_fiscale = new PazienteDAO().getUserById(id_paziente).getCodice_fiscale();
+				
+				JsonObject item = new JsonObject();
+								
+				SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+				f.format(data);
+				
+				
+				Calendar start_c = dateToCalendar(data);
+				Calendar end_c = dateToCalendar(data);
+				
+				end_c.add(Calendar.MINUTE, 30);
+				
+				item.addProperty("start",f.format(start_c.getTime()));
+				item.addProperty("end", f.format(end_c.getTime()));
+				item.addProperty("title", nome_paziente + " " + cognome_paziente + " " + codice_fiscale);
+		
+				
+				result.add(item);
+				
+				
+			}
+			rs.close();
+			stmt.close();
+			conn.close();
+		}
+		catch (Exception e) {
+			e.printStackTrace();//puo essere che semplicemente non trovi l' utente
+		}
+		
+		
+		return result;
+		
+	}
+	
+	
+	public JsonArray getJsonPrenotazioniVisiteSpecialista(int id_medico){
+		Connection conn =DatabaseService.getDbConnection();
+		JsonArray result = new JsonArray ();
+		ResultSet rs = null;
+		try {
+			Statement stmt = conn.createStatement();
+			String sql = "SELECT * FROM prenotazioni_visite WHERE id_medico = "+id_medico+" AND stato=1 AND id_visita!=1;";
+			rs = stmt.executeQuery(sql);
+			while(rs.next()){
+
+				Timestamp ts = rs.getTimestamp("data");
+				Date data = new Date(ts.getTime());
+			
+				Integer id_prenotazione = rs.getInt("id_prenotazione");
+				Integer id_paziente = rs.getInt("id_paziente");
+				String nome_paziente = new PazienteDAO().getUserById(id_paziente).getNome();
+				String cognome_paziente = new PazienteDAO().getUserById(id_paziente).getCognome();
+				String codice_fiscale = new PazienteDAO().getUserById(id_paziente).getCodice_fiscale();
+				String tipo_visita = new TipologiaVisitaDAO().getById(id_prenotazione).getNome_visita();
+				
+				JsonObject item = new JsonObject();
+								
+				SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+				f.format(data);
+				
+				
+				Calendar start_c = dateToCalendar(data);
+				Calendar end_c = dateToCalendar(data);
+				
+				end_c.add(Calendar.MINUTE, 30);
+				
+				item.addProperty("start",f.format(start_c.getTime()));
+				item.addProperty("end", f.format(end_c.getTime()));
+				item.addProperty("title", nome_paziente + " " + cognome_paziente + " " + codice_fiscale + " " + tipo_visita);
+				item.addProperty("backgroundColor","#6A95A6");
+				
+				result.add(item);
+				
+				
+			}
+			rs.close();
+			stmt.close();
+			conn.close();
+		}
+		catch (Exception e) {
+			e.printStackTrace();//puo essere che semplicemente non trovi l' utente
+		}
+		
+		
+		return result;
+		
+	}
+	
+	
+	public JsonArray getJsonPrenotazioniEsamiSpecialista(int id_medico){
+		Connection conn =DatabaseService.getDbConnection();
+		JsonArray result = new JsonArray ();
+		ResultSet rs = null;
+		try {
+			Statement stmt = conn.createStatement();
+			String sql = "SELECT * FROM prenotazioni_esami WHERE id_medico = "+id_medico+" AND stato=1;";
+			rs = stmt.executeQuery(sql);
+			while(rs.next()){
+
+				Timestamp ts = rs.getTimestamp("data_ora");
+				Date data = new Date(ts.getTime());
+				Integer id_paziente = rs.getInt("id_paziente");
+				Integer id_esame = rs.getInt("id_esame");
+				String nome_paziente = new PazienteDAO().getUserById(id_paziente).getNome();
+				String cognome_paziente = new PazienteDAO().getUserById(id_paziente).getCognome();
+				String codice_fiscale = new PazienteDAO().getUserById(id_paziente).getCodice_fiscale();
+				String tipo_esame = new TipologiaEsameDAO().getById(id_esame).getNome_esame();
+				
+				JsonObject item = new JsonObject();
+								
+				SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+				f.format(data);
+				
+				
+				Calendar start_c = dateToCalendar(data);
+				Calendar end_c = dateToCalendar(data);
+				
+				end_c.add(Calendar.MINUTE, 30);
+				
+				item.addProperty("start",f.format(start_c.getTime()));
+				item.addProperty("end", f.format(end_c.getTime()));
+				item.addProperty("title", nome_paziente + " " + cognome_paziente + " " + codice_fiscale + " " + tipo_esame);
+				item.addProperty("backgroundColor","#326173");
+				
+				result.add(item);
+				
+				
+			}
+			rs.close();
+			stmt.close();
+			conn.close();
+		}
+		catch (Exception e) {
+			e.printStackTrace();//puo essere che semplicemente non trovi l' utente
+		}
+		
+		
+		return result;
+		
+	}
+	
+	
 	public MedicoDTO getUserById(int id_medico) {
 		MedicoDTO user=null;
 		Connection conn =DatabaseService.getDbConnection();
@@ -63,7 +244,8 @@ public class MedicoDAO {
 				String telefono_cellulare = rs.getString("telefono_cellulare");
 				String immagine = rs.getString("immagine");
 				String struttura = rs.getString("struttura");
-				user= new MedicoDTO(email, id, idSpecializzazione, nome, cognome, telefono_stuidio, immagine, immagine, struttura);
+				String provincia = rs.getString("provincia");
+				user= new MedicoDTO(email, id, idSpecializzazione, nome, cognome, provincia, telefono_stuidio, immagine, immagine, struttura);
 
 			}
 			rs.close();
@@ -145,8 +327,10 @@ public class MedicoDAO {
 				String sesso = rs.getString("sesso");		
 				String data_nascita = rs.getString("data_nascita");		
 				String cognome = rs.getString("cognome");
-				String foto_path = rs.getString("immagine");	
-				PazienteDTO paziente= new PazienteDTO(id_paziente, id_medico, codice_fiscale, mail, luogo_nascita, nome, sesso, data_nascita, cognome, foto_path);
+				String foto_path = rs.getString("immagine");
+				String provincia = rs.getString("provincia");	
+
+				PazienteDTO paziente= new PazienteDTO(id_paziente, id_medico, codice_fiscale, mail, luogo_nascita,provincia, nome, sesso, data_nascita, cognome, foto_path);
 				listaPazienti.add(paziente);//accede ad db quarantordici volte per nulla ma ok
 			}
 			rs.close();

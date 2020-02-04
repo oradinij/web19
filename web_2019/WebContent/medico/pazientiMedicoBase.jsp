@@ -2,7 +2,7 @@
     pageEncoding="utf-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
-<!DOCTYPE html5>
+<!DOCTYPE html>
 <html lang="it">
 <head>
 <meta charset="utf-8">
@@ -34,7 +34,7 @@
   <h2> I tuoi pazienti</h2>
 </div>
 <hr>
-<div class="container" style="margin-bottom: 50px; padding: 20px; border-radius: 20px; background-color: #C1D4D9;"> 
+<div class="container text-center" style="margin-bottom: 50px; padding: 20px; border-radius: 20px; background-color: #C1D4D9;"> 
   <!-- contacts card -->
   <input class="form-control" id="myInput" type="text" placeholder="Cerca un paziente..">
   &nbsp;
@@ -44,7 +44,7 @@
       <c:forEach items="${user.listaPazienti}" var="paziente">
       <form id="formPaziente${paziente.id}" action="DettagliPaziente">  
        <input type="hidden" value="${paziente.id}" name="id">  
-      <li class="list-group-item list-group-item-action" onclick="formPaziente${paziente.id}.submit();">
+      <li class="list-group-item list-group-item-action" onclick="loadingModal(); formPaziente${paziente.id}.submit();">
           <div class="row w-100">
             <div class="col-12 col-sm-6 col-md-3 px-0"> <img src="${paziente.foto_path}" alt="${paziente.nome} ${paziente.cognome}" class="rounded-circle mx-auto d-block img-fluid"> </div>
             <div class="col-12 col-sm-6 col-md-9 text-center text-sm-left"> <span class="fa fa-mobile fa-2x text-success float-right pulse" title="online now"></span>
@@ -60,7 +60,44 @@
       </ul>
     </div>
   </div>
+  <br>
+    <a onclick="loadingModal()" class="btn btn-success" href="./homeMedicoBase.jsp"><i class="fa fa-arrow-circle-right" style="vertical-align: middlel"></i> Vai alla home</a>
+  
 </div>
+
+
+<div class="modal fade" id="loading_modal" style="border-radius:20px;">
+  <div class="modal-dialog" role="document" >
+    <div class="modal-content">
+     
+      <div class="modal-body text-center">
+        
+		<div class="spinner-border text-info" role="status">
+ 			 
+		</div>
+		<h5><span>Caricamento...</span></h5>
+      </div>
+     
+    </div>
+  </div>
+  </div>
+  
+  <script type="text/javascript">
+
+  function loadingModal() {
+  
+$('#loading_modal').modal({
+    backdrop: 'static',
+    keyboard: false
+})
+
+
+  
+  }
+  
+</script>
+
+
 <footer class="text-center text-light">©2019 Oradini & Bertamini</footer>
 <script src="../js/medico_base/cerca_paziente.js"></script>
 </body>

@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 
 import dto.TipologiaEsameDTO;
@@ -27,7 +28,8 @@ public class VisitaDAO {
 			rs = stmt.executeQuery();
 			while(rs.next()){
 
-				Date data = rs.getDate("data");
+				Timestamp ts = rs.getTimestamp("data");
+				Date data = new Date(ts.getTime());
 				Integer id_prenotazione = rs.getInt("id_prenotazione");
 				Integer id_medico = rs.getInt("id_medico");
 				Integer id_visita = rs.getInt("id_visita");
@@ -66,7 +68,8 @@ public class VisitaDAO {
 			rs = stmt.executeQuery();
 			while(rs.next()){
 
-				Date data = rs.getDate("data");
+				Timestamp ts = rs.getTimestamp("data");
+				Date data = new Date(ts.getTime());
 				Integer id_prenotazione = rs.getInt("id_prenotazione");
 				Integer id_medico = rs.getInt("id_medico");
 				Integer id_visita = rs.getInt("id_visita");
@@ -195,7 +198,8 @@ public class VisitaDAO {
 			rs = stmt.executeQuery();
 			while(rs.next()){
 
-				Date data = rs.getDate("data");
+				Timestamp ts = rs.getTimestamp("data"); 
+				Date data = new Date(ts.getTime());
 				Integer id_paziente = rs.getInt("id_paziente");
 				Integer id_medico = rs.getInt("id_medico");
 				Integer id_visita = rs.getInt("id_visita");

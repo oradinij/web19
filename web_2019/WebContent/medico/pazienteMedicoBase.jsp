@@ -2,7 +2,7 @@
     pageEncoding="utf-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
-<!DOCTYPE html5>
+<!DOCTYPE html>
 <html lang="it">
 <head>
 <meta charset="utf-8">
@@ -69,7 +69,7 @@ $('#loading_modal').modal({
 
 &nbsp;
 <div class="container bg-faded" style="background-color: #C1D4D9; padding:20px; border-radius: 20px;">
-  <div class="container">
+  <div class="container text-center">
     <div class="media">
       <div class="media-body text-center" style="background-color:  "> <img class="rounded-circle " src="../images/utente1img.jpg" width="150" height="150" alt="user">
         <h3 class="mt-0">${visita_corrente.paziente.nome} ${visita_corrente.paziente.cognome}</h3>
@@ -83,9 +83,15 @@ $('#loading_modal').modal({
         </div>
       </div>
     </div>
+     <br>
+    <a onclick="loadingModal()" class="btn btn-success" href="./homeMedicoBase.jsp"><i class="fa fa-arrow-circle-right" style="vertical-align: middlel"></i> Vai alla home</a>
+
+  
   </div>
+ 
 </div>
-&nbsp;
+<br>
+
 <hr>
 <form id="formRicette" action="RicettePaziente"> 
 <input type="hidden" value="${visita_corrente.paziente.id}" name="id"> 
@@ -95,7 +101,7 @@ $('#loading_modal').modal({
   <div class="card">
     <div class="card-img"> <img src="../images/pills.jpg" alt="pills" style="height:220px;">
       <div class="overlay">
-        <div class="overlay-content"><a class="hover" href="#" onclick="formRicette.submit(); loadingModal();">Vai alle ricette del paziente</a></div>
+        <div class="overlay-content"><a href="#" onclick="formRicette.submit(); loadingModal();">Vai alle ricette del paziente</a></div>
       </div>
     </div>
     <div class="card-content"> <a href="#!">
@@ -108,7 +114,7 @@ $('#loading_modal').modal({
       <div class="overlay">
       <form id="formVisite" action="VisitePaziente">  
        <input type="hidden" value="${visita_corrente.paziente.id}" name="id"> 
-        <div class="overlay-content"><a class="hover" onclick="formVisite.submit(); loadingModal();">Vai alle visite del paziente</a></div>
+        <div class="overlay-content"><a  onclick="formVisite.submit(); loadingModal();">Vai alle visite del paziente</a></div>
         </form>
       </div>
     </div>
@@ -122,7 +128,7 @@ $('#loading_modal').modal({
       <div class="overlay">
       <form id="formEsami" action="EsamiPaziente">  
        <input type="hidden" value="${visita_corrente.paziente.id}" name="id"> 
-        <div class="overlay-content"><a class="hover" onclick="formEsami.submit(); loadingModal();">Vai agli esami del paziente</a></div>
+        <div class="overlay-content"><a onclick="formEsami.submit(); loadingModal();">Vai agli esami del paziente</a></div>
         </form>
       </div>
     </div>
@@ -134,6 +140,6 @@ $('#loading_modal').modal({
 </div>
 <hr>
 <footer class="text-center text-light">©2019 Oradini & Bertamini</footer>
-<script src="../js/card_hover.js"></script>
+
 </body>
 </html>

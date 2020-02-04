@@ -43,7 +43,7 @@
   <h2 style="margin-bottom: 20px;">Visite di: <span class="badge badge-info">${visita_corrente.paziente.nome} ${visita_corrente.paziente.cognome}</span></h2>
   <form id="formPaziente${visita_corrente.paziente.id}" action="DettagliPaziente">  
        <input type="hidden" value="${visita_corrente.paziente.id}" name="id"> 
-  <button class="btn btn-success" type="submit"><i class="fa fa-arrow-circle-left" style="vertical-align: middel"></i> Torna al paziente</button>
+  <button class="btn btn-success" onclick="loading_modal()" type="submit"><i class="fa fa-arrow-circle-left" style="vertical-align: middel"></i> Torna al paziente</button>
   </form>
 </div>
 &nbsp;
@@ -66,8 +66,8 @@
       <c:if test="${visita.id_visita == 1}">
         <tr>
           <td style="vertical-align: middle">${visita.data}</td>
-          <td style="vertical-align: middle"><a href="#" data-toggle="modal" onclick="modalDettagliPrenotazioneBase(${visita.id_prenotazione})" class="btn btn-outline-info"> <i class="fa fa-info-circle"></i> Dettagli</a></td>
-          <td style="vertical-align: middle"><a href="#" data-toggle="modal" onclick="modal_compilazione_visita_base(${visita.id_prenotazione})" class="btn btn-outline-success"><i class="fa fa-clipboard-list-check"></i> Compila</a></td>
+          <td style="vertical-align: middle"><button href="#" id="bottone_dettagli${visita.id_prenotazione}" data-toggle="modal" onclick="modalDettagliPrenotazioneBase(${visita.id_prenotazione})" class="btn btn-outline-info"> <i class="fa fa-info-circle"></i> Dettagli</button></td>
+          <td style="vertical-align: middle"><button href="#"  data-toggle="modal" onclick="modal_compilazione_visita_base(${visita.id_prenotazione})" class="btn btn-outline-success"><i class="fa fa-clipboard-list-check"></i> Compila</button></td>
         </tr>
         </c:if>
     </c:forEach>
@@ -96,7 +96,14 @@
           <tr>
             <td style="vertical-align: middle">${visita.data}</td>
             <td style="vertical-align: middle"><span class="badge badge-pill badge-info">${visita.nome_visita}</span></td>
-            <td style="vertical-align: middle"><a onclick="modalDettagliPrenotazioneSpecialistica(${visita.id_prenotazione})" class="btn btn-outline-info"><i class="fa fa-info-circle"></i> Dettagli</a></td>
+            <td style="vertical-align: middle"><button id="bottone_dettagli${visita.id_prenotazione}" onclick="modalDettagliPrenotazioneSpecialistica(${visita.id_prenotazione})" class="btn btn-outline-info"><i class="fa fa-info-circle"></i> Dettagli</button></td>
+          </tr>
+         </c:forEach>
+         <c:forEach items="${visita_corrente.paziente.lista_visite_prenotate}" var="visita">
+          <tr>
+            <td style="vertical-align: middle">${visita.data}</td>
+            <td style="vertical-align: middle"><span class="badge badge-pill badge-info">${visita.nome_visita}</span></td>
+            <td style="vertical-align: middle"><button id="bottone_dettagli${visita.id_prenotazione}" onclick="modalDettagliPrenotazioneSpecialistica(${visita.id_prenotazione})" class="btn btn-outline-info"><i class="fa fa-info-circle"></i> Dettagli</button></td>
           </tr>
          </c:forEach>
         </tbody>
@@ -136,11 +143,11 @@
             </c:if>
             <td style="vertical-align: middle">${visita.nome_medico} ${visita.cognome_medico}</td>
               <c:if test="${visita.id_visita!=1}">
-            <td style="vertical-align: middle"><button onclick="modal_svolta_specialistica(${visita.id_prenotazione})" href="#" class="btn btn-outline-info"><i class="fa fa-info-circle"></i> Dettagli</button></td>
+            <td style="vertical-align: middle"><button  id="bottone_dettagli${visita.id_prenotazione}" onclick="modal_svolta_specialistica(${visita.id_prenotazione})" href="#" class="btn btn-outline-info"><i class="fa fa-info-circle"></i> Dettagli</button></td>
             </c:if>
             <c:if test="${visita.id_visita==1}">
             
-            <td style="vertical-align: middle"><button onclick="modal_svolta_base(${visita.id_prenotazione})" href="#" class="btn btn-outline-info"><i class="fa fa-info-circle"></i> Dettagli</button></td>
+            <td style="vertical-align: middle"><button id="bottone_dettagli${visita.id_prenotazione}" onclick="modal_svolta_base(${visita.id_prenotazione})" href="#" class="btn btn-outline-info"><i class="fa fa-info-circle"></i> Dettagli</button></td>
             </c:if>
           </tr>
           </c:forEach>
@@ -149,8 +156,40 @@
     </div>
   </div>
 </div>
+<br>
 
 
+<div class="modal fade" id="loading_modal" style="border-radius:20px;">
+  <div class="modal-dialog" role="document" >
+    <div class="modal-content">
+     
+      <div class="modal-body text-center">
+        
+		<div class="spinner-border text-info" role="status">
+ 			 
+		</div>
+		<h5><span>Caricamento...</span></h5>
+      </div>
+     
+    </div>
+  </div>
+  </div>
+  
+  <script type="text/javascript">
+
+  function loading_modal (){
+  
+$('#loading_modal').modal({
+    backdrop: 'static',
+    keyboard: false
+})
+
+
+  
+  }
+  
+</script>
+  
 
 <script>
 
@@ -429,6 +468,9 @@ function aggiungiPrescrizione() {
 		        		           
 		        	});
 		        	
+		        	
+		        	  $('#loading_modal').modal('hide');
+		        	
 		            $('#modalCompilazione').modal('show');
 		        	
 		        	
@@ -447,6 +489,7 @@ function aggiungiPrescrizione() {
 			
 
 function modal_compilazione_visita_base(id){
+
 	 
 	   $.ajax({
 	        url: 'http://localhost:8080/web2019/medico/nuovaCompilazioneVisita?id_visita='+id,
@@ -478,6 +521,9 @@ function modal_compilazione_visita_base(id){
 	
   function modal_svolta_specialistica(id){
  
+		document.getElementById("bottone_dettagli"+id).outerHTML="<div id=\"bottone_dettagli"+id+"\" class=\"spinner-grow text-info\"></div>";
+
+	  
    $.ajax({
         url: 'http://localhost:8080/web2019/medico/modal/dettagli_visita?id_prenotazione='+id,
         type: "GET",
@@ -554,6 +600,10 @@ function modal_compilazione_visita_base(id){
             
             
             $('#modalVisitaSpecialistica').modal('show');
+            
+        	document.getElementById("bottone_dettagli"+id).outerHTML="<button href=\"#\" id=\"bottone_dettagli"+id +"\" onclick=\"modal_svolta_specialistica("+ id +")\" class=\"btn btn-outline-info\"><i class=\"fa fa-info-circle\"></i> Dettagli</button>";
+
+            
             },
          error: function (result){
         	
@@ -567,6 +617,9 @@ function modal_compilazione_visita_base(id){
 };
 
 function modal_svolta_base(id){
+	
+	document.getElementById("bottone_dettagli"+id).outerHTML="<div id=\"bottone_dettagli"+id+"\" class=\"spinner-grow text-info\"></div>";
+
 	 
 	   $.ajax({
 	        url: 'http://localhost:8080/web2019/medico/modal/dettagli_visita?id_prenotazione='+id,
@@ -645,6 +698,9 @@ function modal_svolta_base(id){
 	            
 	            $('#modalVisitaBase').modal('show');
 	            
+	        	document.getElementById("bottone_dettagli"+id).outerHTML="<button href=\"#\" id=\"bottone_dettagli"+id +"\" onclick=\"modal_svolta_base("+ id +")\" class=\"btn btn-outline-info\"><i class=\"fa fa-info-circle\"></i> Dettagli</button>";
+
+	            
 	            
 	            },
 	            
@@ -660,6 +716,9 @@ function modal_svolta_base(id){
 	};
 	
 	function modalDettagliPrenotazioneBase(id){
+		
+		document.getElementById("bottone_dettagli"+id).outerHTML="<div id=\"bottone_dettagli"+id+"\" class=\"spinner-grow text-info\"></div>";
+
 		 
 		   $.ajax({
 		        url: 'http://localhost:8080/web2019/medico/modal/dettagli_visita?id_prenotazione='+id,
@@ -681,32 +740,40 @@ function modal_svolta_base(id){
 		        	}   
 		        });
 		    
-		  
+       	document.getElementById("bottone_dettagli"+id).outerHTML="<button href=\"#\" id=\"bottone_dettagli"+id +"\" onclick=\"modalDettagliPrenotazioneBase("+ id +")\" class=\"btn btn-outline-info\"><i class=\"fa fa-info-circle\"></i> Dettagli</button>";
+
 		};	
 		
 		
 		
 		function modalDettagliPrenotazioneSpecialistica(id){
+			
+			document.getElementById("bottone_dettagli"+id).outerHTML="<div id=\"bottone_dettagli"+id+"\" class=\"spinner-grow text-info\"></div>";
+
 			 
 			   $.ajax({
 			        url: 'http://localhost:8080/web2019/medico/modal/dettagli_visita?id_prenotazione='+id,
 			        type: "GET",
 			        success: function (result) { 
 			        	console.log(result);
-			            document.getElementById('prenotazione_data_spec').innerHTML=result.data;
+			            document.getElementById('prenotazione_data_spec').innerHTML=result.visita.data;
 			            document.getElementById('prenotazione_numero_footer_spec').innerHTML="Codice prenotazione: " + id;
-			            document.getElementById('prenotazione_nome_visita_spec').innerHTML=result.nome_visita;
-			            document.getElementById('prenotazione_medico_spec').innerHTML=result.nome_medico + " " + result.cognome_medico;
+			            document.getElementById('prenotazione_nome_visita_spec').innerHTML=result.visita.nome_visita;
+			            document.getElementById('prenotazione_medico_spec').innerHTML=result.visita.nome_medico + " " + result.visita.cognome_medico;
+			            			
 			            $('#modalPrenotazioneSpecialistica').modal('show');
 			            },
 			            
-			         error: function (result){
+			         error: function (err){
 			        	
-			        	console.log(result);
+			        	console.log(err);
 			        	
 			        	
 			        	}
 			        });
+			   
+	        	document.getElementById("bottone_dettagli"+id).outerHTML="<button href=\"#\" id=\"bottone_dettagli"+id +"\" onclick=\"modalDettagliPrenotazioneSpecialistica("+ id +")\" class=\"btn btn-outline-info\"><i class=\"fa fa-info-circle\"></i> Dettagli</button>";
+
 			    
 			  
 			};	
@@ -899,7 +966,7 @@ function modal_svolta_base(id){
       <!-- Modal footer -->
       <div class="modal-footer">
         <h6 id="compila_badge_numero_footer" class="badge badgeNumeroVisitaEsame"></h6>
-        <button onclick="$('#formConcludiVisita').submit()" class="btn btn-success" >Compila visita</button>
+        <button onclick=" $('#modalCompilazione').modal('hide'); loading_modal(); $('#formConcludiVisita').submit();" class="btn btn-success" >Compila visita</button>
         <button class="btn btn-danger" data-dismiss="modal">Annulla</button>
       </div>
     </div>

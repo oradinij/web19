@@ -33,7 +33,7 @@ public class PazienteDTO implements Serializable{
 	private String dataUltimaVisita;
 
 
-	public PazienteDTO(int id_paziente, int id_medico, String codice_fiscale, String email, String luogo_nascita, String nome, String sesso,
+	public PazienteDTO(int id_paziente, int id_medico, String codice_fiscale, String email, String luogo_nascita, String provincia, String nome, String sesso,
 			String data_nascita, String cognome, String foto_path) {
 		this.id =id_paziente;
 		this.medico = new MedicoDAO().getUserById(id_medico);

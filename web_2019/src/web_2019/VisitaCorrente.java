@@ -59,6 +59,8 @@ public class VisitaCorrente {
 	public ArrayList<TipologiaEsameDTO> getLista_esami() {
 		return lista_esami;
 	}
+		
+
 
 	public void aggiungiPrescrizione(String farmaco) {
 		lista_prescrizioni.add(farmaco);		

@@ -48,10 +48,10 @@
   <div class="card">
     <div class="card-img"> <img src="../images/people.jpg" alt="people" style="height:220px;">
       <div class="overlay">
-        <div class="overlay-content"> <a class="hover" href="./pazientiMedicoBase.jsp">Vai al parco pazienti</a> </div>
+        <div class="overlay-content"> <a onclick="loadingModal()"  href="./pazientiMedicoBase.jsp">Vai al parco pazienti</a> </div>
       </div>
     </div>
-    <div class="card-content"> <a href="#!">
+    <div class="card-content"> <a  onclick="loadingModal()"  href="./pazientiMedicoBase.jsp">
       <h2>Pazienti</h2>
       <p>I tuoi pazienti</p>
       </a> </div>
@@ -59,18 +59,51 @@
   <div class="card">
     <div class="card-img"> <img src="../images/visit.jpg" alt="pills" style="height:220px;">
       <div class="overlay">
-        <div class="overlay-content"> <a href="#!">Vai alle visite</a> </div>
+        <div class="overlay-content"> <a onclick="loadingModal()" href="./CalendarioVisiteBase">Vai alle visite</a> </div>
       </div>
     </div>
-    <div class="card-content"> <a href="#!">
+    <div class="card-content"> <a  onclick="loadingModal()" href="./CalendarioVisiteBase">
       <h2>Visite</h2>
       <p>Tutte le tue visite</p>
       </a> </div>
   </div>
 </div>
 <hr>
+
+
+<div class="modal fade" id="loading_modal" style="border-radius:20px;">
+  <div class="modal-dialog" role="document" >
+    <div class="modal-content">
+     
+      <div class="modal-body text-center">
+        
+		<div class="spinner-border text-info" role="status">
+ 			 
+		</div>
+		<h5><span>Caricamento...</span></h5>
+      </div>
+     
+    </div>
+  </div>
+  </div>
+  
+  <script type="text/javascript">
+
+  function loadingModal() {
+  
+$('#loading_modal').modal({
+    backdrop: 'static',
+    keyboard: false
+})
+
+
+  
+  }
+  
+</script>
+  
+
 <footer class="text-center text-light">©2019 Oradini & Bertamini</footer>
-<script src="../js/card_hover.js"></script>
-</body>
+
 </html>
     

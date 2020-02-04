@@ -77,7 +77,7 @@ $('#loading_modal').modal({
   <h2>Ricette di: <span class="badge badge-info">${visita_corrente.paziente.nome} ${visita_corrente.paziente.cognome}</span></h2>
   <form id="formPaziente${visita_corrente.paziente.id}" action="DettagliPaziente">  
        <input type="hidden" value="${visita_corrente.paziente.id}" name="id"> 
-  <button class="btn btn-success" type="submit" onclick="loadingModal()"><i class="fa fa-arrow-circle-left" style="vertical-align: middel"></i> Torna al paziente</button>
+  <button class="btn btn-success" type="submit" onclick="loadingModal()"><i class="fa fa-arrow-circle-left"></i> Torna al paziente</button>
   </form>
 </div>
 &nbsp;
@@ -87,7 +87,7 @@ $('#loading_modal').modal({
     
     &nbsp;
     <div class="container">
-      <table id="tabellaRicette" class="table datatable table-striped table-hover table-light tabella_visite" style="width: 100%;">
+      <table id="tabellaRicette" class="table datatable text-center table-striped table-hover table-light tabella_visite" style="width: 100%;">
         <thead>
           <tr>
             <th>Medico prescrittore</th>
@@ -113,10 +113,10 @@ $('#loading_modal').modal({
             <td style="vertical-align: middle">${prescrizione.solo_data}</td>
             </c:if>
             <c:if test="${prescrizione.stato==0}">
-            <td style="vertical-align: middle"><a href="#" onclick="modal_ricetta_da_erogare(${prescrizione.id_prescrizione})" class="btn btn-outline-info"><i class="fa fa-info-circle"></i> Dettagli</a></td>
+            <td style="vertical-align: middle"><button  id="bottone_dettagli${prescrizione.id_prescrizione}" onclick="modal_ricetta_da_erogare(${prescrizione.id_prescrizione})" class="btn btn-outline-info"><i class="fa fa-info-circle"></i> Dettagli</button></td>
             </c:if>
              <c:if test="${prescrizione.stato!=0}">
-            <td style="vertical-align: middle"><a href="#" onclick="modal_ricetta_erogata(${prescrizione.id_prescrizione})" class="btn btn-outline-info"><i class="fa fa-info-circle"></i> Dettagli</a></td>
+            <td style="vertical-align: middle"><button  id="bottone_dettagli${prescrizione.id_prescrizione}" onclick="modal_ricetta_erogata(${prescrizione.id_prescrizione})" class="btn btn-outline-info"><i class="fa fa-info-circle"></i> Dettagli</button></td>
             </c:if>
           </tr>
          </c:forEach>
@@ -127,7 +127,7 @@ $('#loading_modal').modal({
       <br>
       <form id="formVisite" action="VisitePaziente">  
        <input type="hidden" value="${visita_corrente.paziente.id}" name="id"> 
-      <button href="#" type="submit" class="btn btn-success" onclick="loadingModal()"><i class="fa fa-arrow-circle-right" style=" font-size: 20px; vertical-align: middle; padding: 5px 5px"></i> Vai alle visite del paziente</button>
+      <button href="#" type="submit"  class="btn btn-success" onclick="loadingModal()"><i class="fa fa-arrow-circle-right" ></i> Vai alle visite del paziente</button>
     </form>
     </div>
   </div>
@@ -199,6 +199,9 @@ $('#loading_modal').modal({
 <script>
 
 function modal_ricetta_erogata(id){
+	
+	document.getElementById("bottone_dettagli"+id).outerHTML="<div id=\"bottone_dettagli"+id+"\" class=\"spinner-grow text-info\"></div>";
+
 	 
 	   $.ajax({
 	        url: 'http://localhost:8080/web2019/medico/modal/dettagli_ricetta?id_ricetta='+id,
@@ -213,10 +216,10 @@ function modal_ricetta_erogata(id){
 	            document.getElementById('farmaco_erogata').innerHTML=result.farmaco;
 	            document.getElementById('farmacia_erogata').innerHTML=result.farmacia;
 	            if(result.tipo_riferimento==1){
-		            document.getElementById('bottone_riferimento_erogata').outerHTML="<button id=\"bottone_riferimento_erogata\" class=\"btn btn-info\" onclick=\"modal_svolta_base("+ result.id_riferimento + ")\">Vedi visita</button>"
+		            document.getElementById('bottone_riferimento_erogata').outerHTML="<button id=\"bottone_riferimento_erogata\" class=\"btn btn-info\" onclick=\"modal_svolta_base("+ result.id_riferimento + ",2)\">Vedi visita</button>"
 		            } else{
 		            	
-					document.getElementById('bottone_riferimento_erogata').outerHTML="<button id=\"bottone_riferimento_erogata\" class=\"btn btn-info\" onclick=\"modal_svolta_specialistica("+ result.id_riferimento + ")\">Vedi visita</button>"
+					document.getElementById('bottone_riferimento_erogata').outerHTML="<button id=\"bottone_riferimento_erogata\" class=\"btn btn-info\" onclick=\"modal_svolta_specialistica("+ result.id_riferimento + ",2)\">Vedi visita</button>"
 		            	
 		            }
 	            
@@ -238,7 +241,8 @@ function modal_ricetta_erogata(id){
 	            
 	            
 	            
-	            
+	        	document.getElementById("bottone_dettagli"+id).outerHTML="<button href=\"#\" id=\"bottone_dettagli"+id +"\" onclick=\"modal_ricetta_erogata("+ id +")\" class=\"btn btn-outline-info\"><i class=\"fa fa-info-circle\"></i> Dettagli</button>";
+
 	            
 	            
 	            $('#modalRicettaErogata').modal('show');
@@ -260,6 +264,9 @@ function modal_ricetta_erogata(id){
 
 
 function modal_ricetta_da_erogare(id){
+	
+	document.getElementById("bottone_dettagli"+id).outerHTML="<div id=\"bottone_dettagli"+id+"\" class=\"spinner-grow text-info\"></div>";
+
 	 
 	   $.ajax({
 	        url: 'http://localhost:8080/web2019/medico/modal/dettagli_ricetta?id_ricetta='+id,
@@ -275,10 +282,10 @@ function modal_ricetta_da_erogare(id){
 	            document.getElementById('farmaco_non_erogata').innerHTML=result.farmaco;
 	            document.getElementById('codice_footer_non_erogata').innerHTML="Codice ricetta: " + id; 
 	            if(result.tipo_riferimento==1){
-	            document.getElementById('bottone_riferimento_non_erogata').outerHTML="<button id=\"bottone_riferimento_non_erogata\" class=\"btn btn-info\" onclick=\"modal_svolta_base("+ result.id_riferimento + ")\">Vedi visita</button>"
+	            document.getElementById('bottone_riferimento_non_erogata').outerHTML="<button id=\"bottone_riferimento_non_erogata\" class=\"btn btn-info\" onclick=\"modal_svolta_base("+ result.id_riferimento + ",1)\">Vedi visita</button>"
 	            } else{
 	            	
-				document.getElementById('bottone_riferimento_non_erogata').outerHTML="<button id=\"bottone_riferimento_non_erogata\" class=\"btn btn-info\" onclick=\"modal_svolta_specialistica("+ result.id_riferimento + ")\">Vedi visita</button>"
+				document.getElementById('bottone_riferimento_non_erogata').outerHTML="<button id=\"bottone_riferimento_non_erogata\" class=\"btn btn-info\" onclick=\"modal_svolta_specialistica("+ result.id_riferimento + ",1)\">Vedi visita</button>"
 	            	
 	            }
 	            
@@ -302,6 +309,8 @@ function modal_ricetta_da_erogare(id){
 	            
 	            
 	            $('#modalRicettaDaErogare').modal('show');
+	        	document.getElementById("bottone_dettagli"+id).outerHTML="<button href=\"#\" id=\"bottone_dettagli"+id +"\" onclick=\"modal_ricetta_da_erogare("+ id +")\" class=\"btn btn-outline-info\"><i class=\"fa fa-info-circle\"></i> Dettagli</button>";
+
 	            
 	            
 	            },
@@ -314,6 +323,7 @@ function modal_ricetta_da_erogare(id){
 	        }
 	        });
 	    
+	   
 	  
 	};
 
@@ -321,7 +331,19 @@ function modal_ricetta_da_erogare(id){
 	
 	
 	
-	  function modal_svolta_specialistica(id){
+	  function modal_svolta_specialistica(id, stato){
+		  
+		  if(stato==1){
+			  
+				document.getElementById("bottone_riferimento_non_erogata").outerHTML="<div id=\"spinner_visita_non_erogata\" class=\"spinner-grow text-info\"></div>";
+			  } else {
+				  
+				  
+					document.getElementById("bottone_riferimento_erogata").outerHTML="<div id=\"spinner_visita_erogata\" class=\"spinner-grow text-info\"></div>";
+
+				  
+				  
+			  }
 	 
 	   $.ajax({
 	        url: 'http://localhost:8080/web2019/medico/modal/dettagli_visita?id_prenotazione='+id,
@@ -399,6 +421,20 @@ function modal_ricetta_da_erogare(id){
 	            
 	            
 	            $('#modalVisitaSpecialistica').modal('show');
+	            
+	            if(stato==1){
+		            
+	 				document.getElementById("spinner_visita_non_erogata").outerHTML="<button id=\"bottone_riferimento_non_erogata\" class=\"btn btn-info\" onclick=\"modal_svolta_specialistica("+ id + ",1)\">Vedi visita</button>";
+
+		            } else {
+		            	
+		 				document.getElementById("spinner_visita_erogata").outerHTML="<button id=\"spinner_visita_erogata\" class=\"btn btn-info\" onclick=\"modal_svolta_specialistica("+ id + ",2)\">Vedi visita</button>";
+		
+		            	
+		            }
+		            
+	            
+	            
 	            },
 	         error: function (result){
 	        	
@@ -411,7 +447,20 @@ function modal_ricetta_da_erogare(id){
 	  
 	};
 
-	function modal_svolta_base(id){
+	function modal_svolta_base(id, stato){
+		
+		 if(stato==1){
+			  
+				document.getElementById("bottone_riferimento_non_erogata").outerHTML="<div id=\"spinner_visita_non_erogata\" class=\"spinner-grow text-info\"></div>";
+			  } else {
+				  
+				  
+					document.getElementById("bottone_riferimento_erogata").outerHTML="<div id=\"spinner_visita_erogata\" class=\"spinner-grow text-info\"></div>";
+
+				  
+				  
+			  }
+		
 		 
 		   $.ajax({
 		        url: 'http://localhost:8080/web2019/medico/modal/dettagli_visita?id_prenotazione='+id,
@@ -489,6 +538,17 @@ function modal_ricetta_da_erogare(id){
 		            
 		            
 		            $('#modalVisitaBase').modal('show');
+		            
+		            if(stato==1){
+			            
+		 				document.getElementById("spinner_visita_non_erogata").outerHTML="<button id=\"bottone_riferimento_non_erogata\" class=\"btn btn-info\" onclick=\"modal_svolta_base("+ id + ",1)\">Vedi visita</button>";
+
+			            } else {
+			            	
+			 				document.getElementById("spinner_visita_erogata").outerHTML="<button id=\"spinner_visita_erogata\" class=\"btn btn-info\" onclick=\"modal_svolta_base("+ id + ",2)\">Vedi visita</button>";
+			
+			            	
+			            }
 		            
 		            
 		            },

@@ -7,13 +7,103 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
 
+import com.google.gson.JsonObject;
+
 import dto.EsameDTO;
 import dto.PrescrizioneDTO;
 import dto.TipologiaEsameDTO;
+import dto.TipologiaVisitaDTO;
+import dto.VisitaDTO;
 import web_2019.DatabaseService;
 
 public class EsameDAO {
 
+	public JsonObject toJson(Integer id_prenotazione) {
+		Connection conn =DatabaseService.getDbConnection();
+		ResultSet rs = null;
+		PreparedStatement stmt;
+		JsonObject result = new JsonObject();
+
+		try {
+			String sql = "SELECT * FROM prenotazioni_esami WHERE id_prenotazione = ?;";
+			stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, id_prenotazione);
+			rs = stmt.executeQuery();
+			while(rs.next()){
+
+				String data = rs.getDate("data_ora").toString().split(" ")[0];
+				Integer id_paziente = rs.getInt("id_paziente");
+				Integer id_medico = rs.getInt("id_medico");
+				Integer id_esame = rs.getInt("id_esame");
+				Integer id_riferimento = rs.getInt("id_riferimento");
+				Integer stato = rs.getInt("stato");
+				String referto= rs.getString("referto");
+				String luogo= getLuogo(id_medico);
+				String nome_esame= new TipologiaEsameDTO(id_esame).getNome_esame();
+				String nome_medico= new MedicoDAO().getUserById(id_medico).getNome();
+				String cognome_medico= new MedicoDAO().getUserById(id_medico).getCognome();
+				String area = getAreaById(id_esame);
+				VisitaDTO visita_tmp = new VisitaDAO().getById(id_riferimento);	
+				Integer tipo_riferimento= visita_tmp.getId_visita();
+				
+				result.addProperty("data", data);
+				result.addProperty("id_paziente", id_paziente);
+				result.addProperty("id_medico", id_medico);
+				result.addProperty("id_esame", id_esame);
+				result.addProperty("id_riferimento", id_riferimento);
+				result.addProperty("stato", stato);
+				result.addProperty("referto", referto);
+				result.addProperty("luogo", luogo);
+				result.addProperty("nome_esame", nome_esame);
+				result.addProperty("area", area);
+				result.addProperty("nome_medico", nome_medico);
+				result.addProperty("cognome_medico", cognome_medico);
+				result.addProperty("tipo_riferimento", tipo_riferimento);
+			}
+			rs.close();
+			stmt.close();
+			conn.close();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+
+		}
+		
+		return result;
+	
+	}
+	
+	
+
+	
+	
+	public String getLuogo(int id_medico) {
+		String luogoVisita= new String();
+		Connection conn =DatabaseService.getDbConnection();
+		ResultSet rs = null;
+		PreparedStatement stmt;
+
+		try {
+			String sql = "SELECT struttura FROM medici WHERE id_medico = ?;";
+			stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, id_medico);
+			rs = stmt.executeQuery();
+			while(rs.next()){
+
+				luogoVisita = rs.getString("struttura");
+
+			}
+			rs.close();
+			stmt.close();
+			conn.close();
+		}
+
+		catch (Exception e) {
+			e.printStackTrace();//puo essere che semplicemente non nulla
+		}
+
+		return luogoVisita;
+	}
 	
 	public ArrayList<EsameDTO>  getByRiferimento(int id_riferimento) { 
 		ArrayList<EsameDTO> listaEsami= new ArrayList<EsameDTO>();

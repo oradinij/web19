@@ -6,6 +6,7 @@ import java.util.Date;
 import com.google.gson.JsonObject;
 
 import dao.EsameDAO;
+import dao.MedicoDAO;
 import dao.PrescrizioneDAO;
 import web_2019.Assets;
 
@@ -84,6 +85,7 @@ public JsonObject toJson () {
 		return id_medico;
 	}
 	
+
 	
 	public String getArea() {
 		return new EsameDAO().getSpecializzazioneEsame(this.id_esame);
