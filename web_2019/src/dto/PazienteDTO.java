@@ -285,6 +285,18 @@ public class PazienteDTO implements Serializable{
 		}
 
 	}
+	
+	
+	public void completaEsame(int id, String referto, String data) {
+		new EsameDAO().aggiornaStato(id,2);
+		if(referto != null)
+			new EsameDAO().aggiornaReferto(id, referto);
+		    
+		if(data != null)
+			new EsameDAO().aggiornaData(id, data);
+
+	}
+	
 	public void annullaPrenotazioneVisita(Integer id_prenotazione) {
 		new PazienteDAO().annullaPrenotazioneVisita(id_prenotazione);
 		

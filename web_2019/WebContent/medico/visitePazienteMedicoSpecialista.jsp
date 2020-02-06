@@ -41,9 +41,9 @@
 &nbsp;
 <div class="container text-center" style="background-color: #C1D4D9; border-radius: 20px; padding:20px; max-width: 70%"><img class="rounded-circle " src="../images/utente1img.jpg" width="150" height="150" alt="user" style="margin-bottom: 10px;">
   <h2 style="margin-bottom: 20px;">Visite di: <span class="badge badge-info">${visita_corrente.paziente.nome} ${visita_corrente.paziente.cognome}</span></h2>
-  <form id="formPaziente${visita_corrente.paziente.id}" action="DettagliPaziente">  
+  <form id="formPaziente${visita_corrente.paziente.id}" action="DettagliPazienteSpecalista">  
        <input type="hidden" value="${visita_corrente.paziente.id}" name="id"> 
-  <button class="btn btn-success" onclick="loading_modal()" type="submit"><i class="fa fa-arrow-circle-left" style="vertical-align: middel"></i> Torna al paziente</button>
+  <button class="btn btn-success" onclick="loading_modal()" type="submit"><i class="fa fa-arrow-circle-left"></i> Torna al paziente</button>
   </form>
 </div>
 &nbsp;
@@ -63,13 +63,13 @@
       </thead>
       <tbody>
       <c:forEach items="${visita_corrente.paziente.lista_visite_prenotate}" var="visita">
-      <c:if test="${visita.id_visita == 1}">
+      <c:if test="${visita.id_visita != 1 && visita.stato==1 && visita.id_medico==visita_corrente.id_medico}">
         <tr>
           <td style="vertical-align: middle">${visita.data}</td>
-          <td style="vertical-align: middle"><button href="#" id="bottone_dettagli${visita.id_prenotazione}" data-toggle="modal" onclick="modalDettagliPrenotazioneBase(${visita.id_prenotazione})" class="btn btn-outline-info"> <i class="fa fa-info-circle"></i> Dettagli</button></td>
-          <td style="vertical-align: middle"><button href="#"  data-toggle="modal" onclick="modal_compilazione_visita_base(${visita.id_prenotazione})" class="btn btn-outline-success"><i class="fa fa-clipboard-list-check"></i> Compila</button></td>
+          <td style="vertical-align: middle"><button href="#" id="bottone_dettagli${visita.id_prenotazione}" data-toggle="modal" onclick="modalPrenotazioneSpecialisticaMia(${visita.id_prenotazione})" class="btn btn-outline-info"> <i class="fa fa-info-circle"></i> Dettagli</button></td>
+          <td style="vertical-align: middle"><button href="#"  data-toggle="modal" onclick="modal_compilazione_visita_specialistica(${visita.id_prenotazione})" class="btn btn-outline-success"><i class="fa fa-clipboard-list-check"></i> Compila</button></td>
         </tr>
-        </c:if>
+       </c:if>
     </c:forEach>
       </tbody>
     </table>
@@ -96,7 +96,7 @@
           <tr>
             <td style="vertical-align: middle">${visita.data}</td>
             <td style="vertical-align: middle"><span class="badge badge-pill badge-info">${visita.nome_visita}</span></td>
-            <td style="vertical-align: middle"><button id="bottone_dettagli${visita.id_prenotazione}" onclick="modalDettagliPrenotazioneSpecialistica(${visita.id_prenotazione})" class="btn btn-outline-info"><i class="fa fa-info-circle"></i> Dettagli</button></td>
+            <td style="vertical-align: middle"><button id="bottone_dettagli${visita.id_prenotazione}" onclick="modalDettagliPrescrizioneSpecialistica(${visita.id_prenotazione})" class="btn btn-outline-info"><i class="fa fa-info-circle"></i> Dettagli</button></td>
           </tr>
          </c:forEach>
          <c:forEach items="${visita_corrente.paziente.lista_visite_prenotate}" var="visita">
@@ -329,6 +329,50 @@ function ajaxRemoveRicetta(prescrizione){
 	
 }
 
+function aggiungiReferto() {
+	
+	var testo_referto;
+	
+	testo_referto=document.getElementById('testo_referto').value;
+	
+	console.log(testo_referto);
+	
+	if(testo_referto==""){
+		
+		window.alert("Compila il referto!");
+		
+	}
+	
+	else {
+	
+	$.ajax({
+		
+		url: 'http://localhost:8080/web2019/medico/AggiungiReferto?referto='+ testo_referto,
+        type: "GET",
+        success: function (result) { 
+        	
+        	document.getElementById('bottone_referto').innerHTML="<i class=\"fa fa-edit\"></i> Modifica referto";
+	
+        	
+        console.log(result);
+        	
+        document.getElementById('referto_compilazione').innerHTML=result.referto;
+        
+        $('#modalNuovoReferto').modal('hide');
+        
+        },   
+            
+        error: function (err){
+        	
+        	console.log(err);
+			
+        }
+        });
+	
+	}
+		
+	};
+
 
 function aggiungiPrescrizione() {
 	
@@ -488,7 +532,7 @@ function aggiungiPrescrizione() {
 			};
 			
 
-function modal_compilazione_visita_base(id){
+function modal_compilazione_visita_specialistica(id){
 
 	 
 	   $.ajax({
@@ -715,7 +759,7 @@ function modal_svolta_base(id){
 	  
 	};
 	
-	function modalDettagliPrenotazioneBase(id){
+	function modalPrenotazioneSpecialisticaMia(id){
 		
 		document.getElementById("bottone_dettagli"+id).outerHTML="<div id=\"bottone_dettagli"+id+"\" class=\"spinner-grow text-info\"></div>";
 
@@ -725,11 +769,11 @@ function modal_svolta_base(id){
 		        type: "GET",
 		        success: function (result) { 
 		        	console.log(result);
-		            document.getElementById('prenotazione_data_base').innerHTML=result.visita.data;
-		            document.getElementById('prenotazione_numero_footer_base').innerHTML="Codice prenotazione: " + id;
+		            document.getElementById('prenotazione_data_mia').innerHTML=result.visita.data;
+		            document.getElementById('prenotazione_numero_footer_mia').innerHTML="Codice prenotazione: " + id;
 		            document.getElementById('bottone_annullamento_prenotazione').outerHTML= "<a id=\"bottone_annullamento_prenotazione\" href=\"#\" class=\"btn btn-danger\" onclick=\"modalCancellazionePrenotazione(" + id + ")\">Annulla prenotazione</a>"
-		            document.getElementById('bottone_compila_modal_prenotazione').outerHTML= "<a id=\"bottone_compila_modal_prenotazione\" href=\"#\" class=\"btn btn-success\" onclick=\"modal_compilazione_visita_base(" + id + ")\">Compila</a>"
-		            $('#modalPrenotazioneBase').modal('show');
+		            document.getElementById('bottone_compila_modal_prenotazione').outerHTML= "<a id=\"bottone_compila_modal_prenotazione\" href=\"#\" class=\"btn btn-success\" onclick=\"modal_compilazione_visita_specialistica(" + id + ")\">Compila</a>"
+		            $('#modalPrenotazioneSpecialisticaMia').modal('show');
 		            },
 		            
 		         error: function (result){
@@ -740,7 +784,7 @@ function modal_svolta_base(id){
 		        	}   
 		        });
 		    
-       	document.getElementById("bottone_dettagli"+id).outerHTML="<button href=\"#\" id=\"bottone_dettagli"+id +"\" onclick=\"modalDettagliPrenotazioneBase("+ id +")\" class=\"btn btn-outline-info\"><i class=\"fa fa-info-circle\"></i> Dettagli</button>";
+       	document.getElementById("bottone_dettagli"+id).outerHTML="<button href=\"#\" id=\"bottone_dettagli"+id +"\" onclick=\"modalPrenotazioneSpecialisticaMia("+ id +")\" class=\"btn btn-outline-info\"><i class=\"fa fa-info-circle\"></i> Dettagli</button>";
 
 		};	
 		
@@ -777,9 +821,9 @@ function modal_svolta_base(id){
 			    
 			  
 			};	
+		
 			
-			
-function modalDettagliPrescrizioneSpecialistica(id){
+			function modalDettagliPrescrizioneSpecialistica(id){
 				
 				document.getElementById("bottone_dettagli"+id).outerHTML="<div id=\"bottone_dettagli"+id+"\" class=\"spinner-grow text-info\"></div>";
 
@@ -809,9 +853,11 @@ function modalDettagliPrescrizioneSpecialistica(id){
 
 				    
 				  
-				};		
-		
-		
+				};	
+				
+				
+				
+			
 		function modalCancellazionePrenotazione(id){
 		
 			
@@ -824,18 +870,39 @@ function modalDettagliPrescrizioneSpecialistica(id){
 		}
 		
 		
+		function concludiVisita(){
+			
+			
+			if(document.getElementById('referto_compilazione').innerHTML==""){
+				
+				window.alert("Compila il referto!");
+				
+			}
+			
+			else {
+			
+			 $('#modalPrenotazioneSpecialisticaMia').modal('hide');
+			 $('#modalCompilazione').modal('hide'); 
+			 loading_modal();
+			 $('#formConcludiVisita').submit();
+			
+			}
+			
+			
+		}
+		
 		
 </script>
 
 
 
-<div class="modal fade modalToClose" id="modalPrenotazioneBase">
+<div class="modal fade modalToClose" id="modalPrenotazioneSpecialisticaMia">
  <div class="modal-dialog">
     <div class="modal-content"> 
       
       <!-- Modal Header -->
       <div class="modal-header text-light">
-        <h4 class="modal-title">Dettagli prenotazione visita base</h4>
+        <h4 class="modal-title">Dettagli prenotazione visita specialistica</h4>
         <button type="button" class="close text-light" data-dismiss="modal">&times;</button>
       </div>
       
@@ -845,7 +912,7 @@ function modalDettagliPrescrizioneSpecialistica(id){
           <h5>
             <p class="badge badge-info">Data e ora prenotazione</p>
           </h5>
-          <h5 id="prenotazione_data_base"></h5>
+          <h5 id="prenotazione_data_mia"></h5>
           
           <a id="bottone_annullamento_prenotazione" href="#" class="btn btn-danger" onclick="">Annulla prenotazione</a>
           
@@ -853,12 +920,12 @@ function modalDettagliPrescrizioneSpecialistica(id){
           <h5>
             <p class="badge badge-info">Compila visita</p>
           </h5>
-          <a id="bottone_compila_modal_prenotazione" href="#"  class="btn btn-success">Compila visita</a> </div>
+          <a id="bottone_compila_modal_prenotazione" href="#"  class="btn btn-success"></a> </div>
       </div>
       
       <!-- Modal footer -->
       <div class="modal-footer">
-        <h6 class="badge badgeNumeroVisitaEsame" style="margin-top:10px;" id="prenotazione_numero_footer_base">Codice prenotazione: ${visita.id_prenotazione} </h6>
+        <h6 class="badge badgeNumeroVisitaEsame" style="margin-top:10px;" id="prenotazione_numero_footer_mia">Codice prenotazione: ${visita.id_prenotazione} </h6>
         <button type="button" class="btn btn-danger" data-dismiss="modal">Chiudi</button>
       </div>
     </div>
@@ -878,7 +945,7 @@ function modalDettagliPrescrizioneSpecialistica(id){
       <div class="modal-body">
         <div class="container  bg-light text-center" style="padding: 10px;border-radius: 20px">
           <h5>
-            <p class="badge badge-info">Data prescrizione</p>
+            <p class="badge badge-info">Data prenotazione</p>
           </h5>
           <h5 id="prenotazione_data_spec"></h5>
           <hr class="bg-light">
@@ -888,7 +955,7 @@ function modalDettagliPrescrizioneSpecialistica(id){
           <h5 id="prenotazione_nome_visita_spec"></h5>
           <hr class="bg-light">
           <h5>
-            <p class="badge badge-info">Medico prescrittore</p>
+            <p class="badge badge-info">Medico</p>
           </h5>
           <h5 id="prenotazione_medico_spec"></h5>
         </div>
@@ -902,8 +969,6 @@ function modalDettagliPrescrizioneSpecialistica(id){
     </div>
   </div>
 </div>
-
-
 
 <div class="modal  fade" id="modalPrescrizioneSpecialistica">
   <div class="modal-dialog">
@@ -944,15 +1009,13 @@ function modalDettagliPrescrizioneSpecialistica(id){
   </div>
 </div>
 
-
-
 <div class="modal fade modalToClose" id="modalCompilazione">
   <div class="modal-dialog">
     <div class="modal-content"> 
       
       <!-- Modal Header -->
       <div class="modal-header text-light">
-        <h4 class="modal-title">Compila visita base</h4>
+        <h4 class="modal-title">Compila visita specialistca</h4>
         <button type="button" class="close text-light" data-dismiss="modal">&times;</button>
       </div>
       
@@ -973,6 +1036,13 @@ function modalDettagliPrescrizioneSpecialistica(id){
               </div>
             </form>
           </div>
+          <hr class="bg-light">
+           <h5>
+            <p class="badge badge-info">Referto</p>
+          </h5>
+          <p id="referto_compilazione" class="card-body text-left" style="border-style: solid; border-radius: 20px;"></p>
+          <br>
+          <a id="bottone_referto" href="#" data-toggle="modal" data-target="#modalNuovoReferto" class="btn btn-success"><i class="fa fa-plus-circle"></i> Compila referto</a>
           <hr class="bg-light">
           <h5>
             <p class="badge badge-info">Ricette</p>
@@ -1044,7 +1114,7 @@ function modalDettagliPrescrizioneSpecialistica(id){
       <!-- Modal footer -->
       <div class="modal-footer">
         <h6 id="compila_badge_numero_footer" class="badge badgeNumeroVisitaEsame"></h6>
-        <button onclick=" $('#modalCompilazione').modal('hide'); loading_modal(); $('#formConcludiVisita').submit();" class="btn btn-success" >Compila visita</button>
+        <button onclick="concludiVisita()" class="btn btn-success" >Compila visita</button>
         <button class="btn btn-danger" data-dismiss="modal">Annulla</button>
       </div>
     </div>
@@ -1254,9 +1324,9 @@ function modalDettagliPrescrizioneSpecialistica(id){
       
       <!-- Modal footer -->
       <div class="modal-footer">
-      <form action="./annullaPrenotazioneVisita">
+      <form action="annullaPrenotazioneVisitaSpecialistica">
       <input name="id_prenotazione" id="input_to_delete" type="hidden">
-      <button type="submit" class="btn btn-warning">Cancella prenotazione</button>
+      <button type="submit" onclick="$('#modalCancellazionePrenotazione').modal('hide'); $('#modalPrenotazioneSpecialisticaMia').modal('hide'); loading_modal()" class="btn btn-warning">Cancella prenotazione</button>
        </form>
         <button type="button" class="btn btn-danger" data-dismiss="modal">Annulla</button>
       </div>
@@ -1281,6 +1351,29 @@ function modalDettagliPrescrizioneSpecialistica(id){
         </div>
       </div>
       <div class="modal-footer"> <a href="#" onclick="aggiungiPrescrizione()" class="btn btn-success"><i class="fa fa-check-circle"></i> Inserisci ricetta</a>
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Annulla</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade text-center" id="modalNuovoReferto">
+  <div class="modal-dialog">
+    <div class="modal-content"> 
+      
+      <!-- Modal Header -->
+      <div class="modal-header text-light">
+        <h4 class="modal-title">Compila referto</h4>
+        <button type="button" class="close text-light" data-dismiss="modal">&times;</button>
+      </div>
+      
+      <!-- Modal body -->
+      <div class="modal-body">
+        <h5><span class="badge badge-info">Referto</span></h5>
+        <div class="form-group">
+          <textarea id="testo_referto" class="form-control" name="referto" style="min-height: 400px;"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer"> <a href="#" onclick="aggiungiReferto()" class="btn btn-success"><i class="fa fa-check-circle"></i> Inserisci referto</a>
         <button type="button" class="btn btn-danger" data-dismiss="modal">Annulla</button>
       </div>
     </div>

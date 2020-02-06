@@ -85,7 +85,7 @@ $('#loading_modal').modal({
       </div>
     </div>
      <br>
-    <a onclick="loadingModal()" class="btn btn-success" href="./homeMedicoBase.jsp"><i class="fa fa-home-alt" ></i> Vai alla home</a>
+    <a onclick="loadingModal()" class="btn btn-success" href="./homeMedicoSpecialista.jsp"><i class="fa fa-home-alt"></i> Vai alla home</a>
 
   
   </div>
@@ -94,7 +94,7 @@ $('#loading_modal').modal({
 <br>
 
 <hr>
-<form id="formRicette" action="RicettePaziente"> 
+<form id="formRicette" action="RicettePazienteSpecialista"> 
 <input type="hidden" value="${visita_corrente.paziente.id}" name="id"> 
 </form>
 <div class="container text-center">
@@ -105,7 +105,7 @@ $('#loading_modal').modal({
         <div class="overlay-content"><a href="#" onclick="formRicette.submit(); loadingModal();">Vai alle ricette del paziente</a></div>
       </div>
     </div>
-    <div class="card-content"> <a href="#!">
+    <div class="card-content"> <a onclick="formRicette.submit(); loadingModal();">
       <h2>Ricette</h2>
       <p>Le prescrizioni fatte al paziente</p>
       </a> </div>
@@ -113,13 +113,13 @@ $('#loading_modal').modal({
   <div class="card">
     <div class="card-img"> <img src="../images/visit.jpg" alt="pills" style="height:220px;">
       <div class="overlay">
-      <form id="formVisite" action="VisitePaziente">  
+      <form id="formVisite" action="VisitePazienteSpecialista">  
        <input type="hidden" value="${visita_corrente.paziente.id}" name="id"> 
         <div class="overlay-content"><a  onclick="formVisite.submit(); loadingModal();">Vai alle visite del paziente</a></div>
         </form>
       </div>
     </div>
-    <div class="card-content"> <a href="#!">
+    <div class="card-content"> <a onclick="formVisite.submit(); loadingModal();">
       <h2>Visite</h2>
       <p>Le visite effettuate dal paziente</p>
       </a> </div>
@@ -127,13 +127,13 @@ $('#loading_modal').modal({
   <div class="card">
     <div class="card-img"> <img src="../images/exam.jpg" alt="pills" style="height:220px;">
       <div class="overlay">
-      <form id="formEsami" action="EsamiPaziente">  
+      <form id="formEsami" action="EsamiPazienteSpecialista">  
        <input type="hidden" value="${visita_corrente.paziente.id}" name="id"> 
         <div class="overlay-content"><a onclick="formEsami.submit(); loadingModal();">Vai agli esami del paziente</a></div>
         </form>
       </div>
     </div>
-    <div class="card-content"> <a href="#!">
+    <div class="card-content"> <a  onclick="formEsami.submit(); loadingModal();">
       <h2>Esami</h2>
       <p>Gli esami fatti dal paziente</p>
       </a> </div>

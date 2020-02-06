@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -268,6 +269,64 @@ public class EsameDAO {
 	public String getSpecializzazioneEsame(int id_esame) {
 		return new TipologiaEsameDAO().getAreaById(id_esame);
 		
+	}
+	
+	public void aggiornaStato(int id_prenotazione, int stato) {
+		Connection conn = DatabaseService.getDbConnection();
+		PreparedStatement stmt;
+		try {
+			String sql = "UPDATE public.prenotazioni_esami SET stato=? WHERE id_prenotazione = ?;";
+			stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, stato);
+			stmt.setInt(2, id_prenotazione);
+
+			stmt.executeUpdate();
+			stmt.close();
+			conn.close();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+
+		}
+	}
+
+	public void aggiornaReferto(int id_prenotazione, String referto) {
+		System.out.println("Pronto referto: "+ referto);
+		Connection conn = DatabaseService.getDbConnection();
+		PreparedStatement stmt;
+		try {
+			String sql = "UPDATE public.prenotazioni_esami SET referto=? WHERE id_prenotazione=?;";
+			stmt = conn.prepareStatement(sql);
+			stmt.setString(1, referto);
+			stmt.setInt(2, id_prenotazione);
+
+			stmt.executeUpdate();
+			stmt.close();
+			conn.close();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+
+		}
+	}
+
+	public void aggiornaData(int id_prenotazione, String data) {
+		Connection conn = DatabaseService.getDbConnection();
+		PreparedStatement stmt;
+		try {
+			String sql = "UPDATE public.prenotazioni_esami SET data_ora=to_date(?, 'YYYY-MM-DD') WHERE id_prenotazione=?;";
+			stmt = conn.prepareStatement(sql);
+			stmt.setString(1, data);
+			stmt.setInt(2, id_prenotazione);
+
+			stmt.executeUpdate();
+			stmt.close();
+			conn.close();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+
+		}
 	}
 
 }

@@ -8,7 +8,8 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Pazienti</title>
+<title>Pazienti provincia</title>
+<link rel="stylesheet" href="../css/fontawesome-pro-5.12.0-web/css/all.css">
 <link rel="stylesheet" href="../css/bootstrap.css">
 <link rel="stylesheet" href="../css/custom.css">
 <link rel="stylesheet" href="../css/medico_base/lista_pazienti.css">
@@ -42,17 +43,17 @@
     <div id="contacts" class="panel-collapse collapse show" aria-expanded="true" >
       <ul class="list-group striped pull-down overflow-auto" id="contact-list" style="height: 780px;">
       <c:forEach items="${pazienti}" var="paziente">
-      <form id="formPaziente${paziente.id}" action="DettagliPaziente">  
+      <form id="formPaziente${paziente.id}" action="DettagliPazienteSpecalista">  
        <input type="hidden" value="${paziente.id}" name="id">  
       <li class="list-group-item list-group-item-action" onclick="loadingModal(); formPaziente${paziente.id}.submit();">
           <div class="row w-100">
             <div class="col-12 col-sm-6 col-md-3 px-0"> <img src="${paziente.foto_path}" alt="${paziente.nome} ${paziente.cognome}" class="rounded-circle mx-auto d-block img-fluid"> </div>
-            <div class="col-12 col-sm-6 col-md-9 text-center text-sm-left"> <span class="fa fa-mobile fa-2x text-success float-right pulse" title="online now"></span>
+            <div class="col-12 col-sm-6 col-md-9 text-center text-sm-left">
               <label class="name lead">${paziente.nome} ${paziente.cognome} </label>
               <br>
               ${paziente.data_nascita}<br>
               ${paziente.codice_fiscale}<br>
-              <span class="fa fa-envelope fa-fw info-testo" data-toggle="tooltip"></span> <span class="info-testo small text-truncate">${paziente.dataUltimaVisita}</span></div>
+               <span class="info-testo"><strong>Ultima visita: </strong></span> <span class="info-testo small text-truncate">${paziente.dataUltimaVisita}</span></div>
           </div>
         </li>
       </form>   
@@ -61,7 +62,7 @@
     </div>
   </div>
   <br>
-    <a onclick="loadingModal()" class="btn btn-success" href="./homeMedicoSpecialista.jsp"><i class="fa fa-arrow-circle-right" style="vertical-align: middlel"></i> Vai alla home</a>
+    <a onclick="loadingModal()" class="btn btn-success" href="./homeMedicoSpecialista.jsp"><i class="fa fa-home-alt"></i> Vai alla home</a>
   
 </div>
 

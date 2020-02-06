@@ -19,27 +19,17 @@ import web_2019.VisitaCorrente;
 /**
  * Servlet implementation class ConcludiVisita
  */
-@WebServlet("/medico/concludiVisita")	
-public class ConcludiVisita extends HttpServlet {
+@WebServlet("/medico/concludiEsame")	
+public class ConcludiEsame extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		VisitaCorrente visita_corrente = (VisitaCorrente) request.getSession().getAttribute("visita_corrente");
 		PazienteDTO paziente = visita_corrente.getPaziente();
-		String data = request.getParameter("data") ; 
+		String data = request.getParameter("data"); 
+			
 		
-		for (String farmaco : visita_corrente.getLista_prescrizioni()) {
-			PrescrizioneDTO ultima_prescrizione = paziente.aggiugiPrescrizioneFarmaco(farmaco, visita_corrente.getId_medico(), data, visita_corrente.getId_prenotazione_visita_corrente());
-			PdfPrescrizione.inviaMail(paziente, ultima_prescrizione);
-		}
-		for (TipologiaEsameDTO esame : visita_corrente.getLista_esami()) {
-			paziente.aggiungiPrenotazioneEsame(esame.getId_esame(), visita_corrente.getId_medico(), data, visita_corrente.getId_prenotazione_visita_corrente());
-		}
-		for (TipologiaVisitaDTO visita : visita_corrente.getLista_visite()) {
-			paziente.aggiungiPrenotazioneVisita(visita.getId_visita(), data, visita_corrente.getId_medico(), visita_corrente.getId_prenotazione_visita_corrente());
-		}
-		
-		paziente.completaVisita(visita_corrente.getId_prenotazione_visita_corrente(), visita_corrente.getReferto());
+		paziente.completaEsame(visita_corrente.getId_prenotazione_esame_corrente(), visita_corrente.getEsame_corrente().getReferto(), data);
 		
 		VisitaCorrente nuova_visita = new VisitaCorrente();
 		nuova_visita.setPaziente(paziente);
@@ -51,9 +41,8 @@ public class ConcludiVisita extends HttpServlet {
 				visita_corrente.getLista_prescrizioni().size(), paziente.getNome(), paziente.getCognome());
 		
 		
-		String next_page = "/medico/visitePazienteMedicoSpecialista.jsp";
-		if(visita_corrente.getId_medico() == paziente.getId_medico())
-			next_page = "/medico/visitePazienteMedicoBase.jsp";
+		String next_page = "/medico/esamiPazienteMedicoSpecialista.jsp";
+		
 		response.sendRedirect(request.getContextPath()+next_page);
 	}
 

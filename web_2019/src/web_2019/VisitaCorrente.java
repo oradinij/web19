@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
+import dto.EsameDTO;
+import dto.MedicoDTO;
 import dto.PazienteDTO;
 import dto.TipologiaEsameDTO;
 import dto.TipologiaVisitaDTO;
@@ -18,6 +20,8 @@ public class VisitaCorrente {
 	private Integer id_medico;
 	private String referto = null;
 	PazienteDTO paziente; 
+	private EsameDTO esame_corrente;
+	private Integer id_prenotazione_esame_corrente;
 	
 	private ArrayList<VisitaDTO> visitePrenotate = new ArrayList<VisitaDTO>();//TODO rimuovere, non serve, duplicato di visita_corrente.paziente.getVisitePrenotate(id_medico);
 	
@@ -25,9 +29,40 @@ public class VisitaCorrente {
 		return lista_visite;
 	}
 
+	public Integer getId_prenotazione_esame_corrente() {
+		return id_prenotazione_esame_corrente;
+	}
+
+
+	public void setId_prenotazione_esame_corrente(Integer id_prenotazione_esame_corrente) {
+		this.id_prenotazione_esame_corrente = id_prenotazione_esame_corrente;
+	}
+
 	private int id_prenotazione_visita_corrente;
 
 
+	public EsameDTO getEsame_corrente() {	
+		return esame_corrente;	
+	}
+	
+	
+	public void setReferto_esame_corrente(String referto) {
+		
+		this.esame_corrente.setReferto(referto);
+		
+	}
+	
+	public String getReferto_esame_corrente() {
+		
+		return esame_corrente.getReferto();
+		
+	}
+	
+	public void setEsame_corrente(EsameDTO esame) {	
+		this.esame_corrente=esame;	
+	}
+	
+	
 	public int getId_prenotazione_visita_corrente() {
 		return id_prenotazione_visita_corrente;
 	}
@@ -40,10 +75,12 @@ public class VisitaCorrente {
 		return paziente;
 	}
 
+	
 	public void setPaziente(PazienteDTO paziente) {
 		this.paziente = paziente;
 	}
-
+	
+	
 	public int getId_medico() {
 		return id_medico;
 	}
@@ -135,6 +172,9 @@ public class VisitaCorrente {
 			array_visite.add(visita.toJson());	
 		}
 		json.add("lista_visite", array_visite);
+		
+		
+		json.addProperty("referto", referto);
 
 		//Logger.log("JSON visita corrente, relativa alla  prenotazione %d: \n", id_prenotazione_visita_corrente, json.getAsString());
 		return json;

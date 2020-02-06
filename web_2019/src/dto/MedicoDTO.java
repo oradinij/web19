@@ -91,7 +91,5 @@ public class MedicoDTO implements Serializable{
 	}
 
 
-	
-
 
 }

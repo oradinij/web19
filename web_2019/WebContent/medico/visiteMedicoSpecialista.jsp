@@ -15,7 +15,7 @@
 <script src="../js/popper.min.js"></script>
 <script src="../js/jquery-3.3.1.min.js"></script>
 <script src="../js/bootstrap.js"></script>
-
+<link rel="stylesheet" href="../css/fontawesome-pro-5.12.0-web/css/all.css">
 
 <link href="../css/fullcalendar/core/main.css" rel="stylesheet" />
 
@@ -100,7 +100,7 @@
       <br>
     
     
-  <a onclick="loadingModal()" class="btn btn-success" href="./homeMedicoSpecialista.jsp"><i class="fa fa-arrow-circle-right" style="vertical-align: middlel"></i> Vai alla home</a>
+  <a onclick="loadingModal()" class="btn btn-success" href="./homeMedicoSpecialista.jsp"><i class="fa fa-home" style="vertical-align: middlel"></i> Vai alla home</a>
 
     
 </div>

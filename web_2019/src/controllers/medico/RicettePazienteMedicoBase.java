@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import dao.PazienteDAO;
 import dto.MedicoDTO;
 import dto.PazienteDTO;
 import dto.PrescrizioneDTO;
@@ -28,7 +29,7 @@ public class RicettePazienteMedicoBase extends HttpServlet {
 		//TODO per mettere le info nel parco pazienti devo caricare gia la lista pazienti con relative info
 		MedicoDTO user= (MedicoDTO) request.getSession().getAttribute("user");
 		int id_paziente = Integer.parseInt(request.getParameter("id"));
-		PazienteDTO paziente = user.getPazienteById(id_paziente);//cerca il paziente corrispondente nella lista dei suoi pazienti
+		PazienteDTO paziente = new PazienteDAO().getUserById(id_paziente);//cerca il paziente corrispondente nella lista dei suoi pazienti
 		VisitaCorrente visita_corrente = new VisitaCorrente();
 		
 		visita_corrente.setPaziente(paziente);

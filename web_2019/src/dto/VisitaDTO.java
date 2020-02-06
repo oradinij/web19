@@ -148,6 +148,7 @@ public class VisitaDTO {
 	private int id_medico;
 	private int id_paziente;
 	private int stato;
+	private int id_riferimento;
 	private String referto;
 	private String nome_medico= null;
 	private String cognome_medico= null;
@@ -169,7 +170,9 @@ public class VisitaDTO {
 		return id_visita;
 	}
 
-
+	public Integer getId_riferimento() {
+		return id_riferimento;
+	}
 
 	
 
@@ -190,7 +193,7 @@ public class VisitaDTO {
 
 
 
-	public VisitaDTO(int id_prenotazione, int id_medico, int id_paziente, int stato, String referto, Date data, Integer id_visita, String luogo, String nome_visita) {
+	public VisitaDTO(int id_prenotazione, int id_medico, int id_paziente, int stato, String referto, Date data, Integer id_visita, String luogo, String nome_visita, int id_riferimento) {
 		this.data = data;
 		this.id_prenotazione = id_prenotazione;
 		this.id_medico = id_medico;
@@ -200,6 +203,7 @@ public class VisitaDTO {
 		this.id_visita = id_visita;
 		this.luogo = luogo;
 		this.nome_visita = nome_visita;
+		this.id_riferimento= id_riferimento;
 	}
 
 

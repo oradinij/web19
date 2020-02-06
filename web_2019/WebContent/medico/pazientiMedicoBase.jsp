@@ -42,17 +42,17 @@
     <div id="contacts" class="panel-collapse collapse show" aria-expanded="true" >
       <ul class="list-group striped pull-down overflow-auto" id="contact-list" style="height: 780px;">
       <c:forEach items="${user.listaPazienti}" var="paziente">
-      <form id="formPaziente${paziente.id}" action="DettagliPaziente">  
+      <form id="formPaziente${paziente.id}" action="DettagliPazienteBase">  
        <input type="hidden" value="${paziente.id}" name="id">  
       <li class="list-group-item list-group-item-action" onclick="loadingModal(); formPaziente${paziente.id}.submit();">
           <div class="row w-100">
             <div class="col-12 col-sm-6 col-md-3 px-0"> <img src="${paziente.foto_path}" alt="${paziente.nome} ${paziente.cognome}" class="rounded-circle mx-auto d-block img-fluid"> </div>
-            <div class="col-12 col-sm-6 col-md-9 text-center text-sm-left"> <span class="fa fa-mobile fa-2x text-success float-right pulse" title="online now"></span>
+            <div class="col-12 col-sm-6 col-md-9 text-center text-sm-left"></span>
               <label class="name lead">${paziente.nome} ${paziente.cognome} </label>
               <br>
               ${paziente.data_nascita}<br>
               ${paziente.codice_fiscale}<br>
-              <span class="fa fa-envelope fa-fw info-testo" data-toggle="tooltip"></span> <span class="info-testo small text-truncate">${paziente.dataUltimaVisita}</span></div>
+              <span class="info-testo"><strong>Ultima visita: </strong></span> <span class="info-testo small text-truncate">${paziente.dataUltimaVisita}</span></div>
           </div>
         </li>
       </form>   
@@ -61,7 +61,7 @@
     </div>
   </div>
   <br>
-    <a onclick="loadingModal()" class="btn btn-success" href="./homeMedicoBase.jsp"><i class="fa fa-arrow-circle-right" style="vertical-align: middlel"></i> Vai alla home</a>
+    <a onclick="loadingModal()" class="btn btn-success" href="./homeMedicoBase.jsp"><i class="fa fa-home-alt"></i> Vai alla home</a>
   
 </div>
 

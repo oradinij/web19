@@ -32,7 +32,7 @@ public class PazientiMedicoSpecialista extends HttpServlet {
 		//TODO per mettere le info nel parco pazienti devo caricare gia la lista pazienti con relative info
 		MedicoDTO user= (MedicoDTO) request.getSession().getAttribute("user");
 		String provincia = user.getProvincia();
-		System.out.println("Dio porco: " + provincia);
+
 		ArrayList <PazienteDTO> pazienti =new PazienteDAO().getUserByProvincia(provincia);
 		//System.out.println(visite);
 		
