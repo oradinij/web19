@@ -22,15 +22,14 @@ public class VisitaDAO {
 		PreparedStatement stmt;
 
 		try {
-			String sql = "SELECT * FROM prenotazioni_visite WHERE id_medico = ? AND id_paziente= ? AND stato=1;";
+			String sql = "SELECT  TO_CHAR(prenotazioni_visite.\"data\", 'DD-MM-YYYY HH24:MI')as data_ora, * FROM prenotazioni_visite WHERE id_medico = ? AND id_paziente= ? AND stato=1;";
 			stmt = conn.prepareStatement(sql);
 			stmt.setInt(1, id_medico);
 			stmt.setInt(2, id_paziente);
 			rs = stmt.executeQuery();
 			while(rs.next()){
 
-				Timestamp ts = rs.getTimestamp("data");
-				Date data = new Date(ts.getTime());
+				String data_ora = rs.getString("data_ora"); 
 				Integer id_prenotazione = rs.getInt("id_prenotazione");
 				Integer id_riferimento = rs.getInt("id_riferimento");
 				Integer id_visita = rs.getInt("id_visita");
@@ -39,7 +38,7 @@ public class VisitaDAO {
 				String luogo= getLuogo(id_medico);
 				
 				String nome_visita = new TipologiaVisitaDTO(id_visita).getNome_visita();
-				listaVisite.add(new VisitaDTO(id_prenotazione, id_medico, id_paziente, stato, referto, data, id_visita, luogo, nome_visita,id_riferimento));
+				listaVisite.add(new VisitaDTO(id_prenotazione, id_medico, id_paziente, stato, referto, data_ora, id_visita, luogo, nome_visita,id_riferimento));
 			}
 			rs.close();
 			stmt.close();
@@ -61,14 +60,13 @@ public class VisitaDAO {
 		PreparedStatement stmt;
 
 		try {
-			String sql = "SELECT * FROM prenotazioni_visite WHERE id_riferimento = ?;";
+			String sql = "SELECT TO_CHAR(prenotazioni_visite.\"data\", 'DD-MM-YYYY HH24:MI')as data_ora, * FROM prenotazioni_visite WHERE id_riferimento = ?;";
 			stmt = conn.prepareStatement(sql);
 			stmt.setInt(1, id_riferimento);
 			rs = stmt.executeQuery();
 			while(rs.next()){
 
-				Timestamp ts = rs.getTimestamp("data");
-				Date data = new Date(ts.getTime());
+				String data_ora = rs.getString("data_ora"); 
 				Integer id_prenotazione = rs.getInt("id_prenotazione");
 				Integer id_medico = rs.getInt("id_medico");
 				Integer id_visita = rs.getInt("id_visita");
@@ -78,7 +76,7 @@ public class VisitaDAO {
 				String luogo= getLuogo(id_medico);
 				
 				String nome_visita = new TipologiaVisitaDTO(id_visita).getNome_visita();
-				listaVisite.add(new VisitaDTO(id_prenotazione, id_medico, id_paziente, stato, referto, data, id_visita, luogo, nome_visita, id_riferimento));
+				listaVisite.add(new VisitaDTO(id_prenotazione, id_medico, id_paziente, stato, referto, data_ora, id_visita, luogo, nome_visita, id_riferimento));
 			}
 			rs.close();
 			stmt.close();
@@ -101,14 +99,13 @@ public class VisitaDAO {
 		PreparedStatement stmt;
 
 		try {
-			String sql = "SELECT * FROM prenotazioni_visite WHERE id_paziente = ?;";
+			String sql = "SELECT  TO_CHAR(prenotazioni_visite.\"data\", 'DD-MM-YYYY HH24:MI')as data_ora, * FROM prenotazioni_visite WHERE id_paziente = ?;";
 			stmt = conn.prepareStatement(sql);
 			stmt.setInt(1, id_paziente);
 			rs = stmt.executeQuery();
 			while(rs.next()){
 
-				Timestamp ts = rs.getTimestamp("data");
-				Date data = new Date(ts.getTime());
+				String data_ora = rs.getString("data_ora"); 
 				Integer id_prenotazione = rs.getInt("id_prenotazione");
 				Integer id_medico = rs.getInt("id_medico");
 				Integer id_visita = rs.getInt("id_visita");
@@ -118,7 +115,7 @@ public class VisitaDAO {
 				String luogo= getLuogo(id_medico);
 				
 				String nome_visita = new TipologiaVisitaDTO(id_visita).getNome_visita();
-				listaVisite.add(new VisitaDTO(id_prenotazione, id_medico, id_paziente, stato, referto, data, id_visita, luogo, nome_visita, id_riferimento));
+				listaVisite.add(new VisitaDTO(id_prenotazione, id_medico, id_paziente, stato, referto, data_ora, id_visita, luogo, nome_visita, id_riferimento));
 			}
 			rs.close();
 			stmt.close();
@@ -224,6 +221,25 @@ public class VisitaDAO {
 
 		}
 	}
+	
+	public void aggiornaData(int id_prenotazione, String data) {
+		Connection conn = DatabaseService.getDbConnection();
+		PreparedStatement stmt;
+		try {
+			String sql = "UPDATE public.prenotazioni_visite SET data=to_date(?, 'YYYY-MM-DD') WHERE id_prenotazione=?;";
+			stmt = conn.prepareStatement(sql);
+			stmt.setString(1, data);
+			stmt.setInt(2, id_prenotazione);
+
+			stmt.executeUpdate();
+			stmt.close();
+			conn.close();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+
+		}
+	}
 
 	public VisitaDTO getById(Integer id_prenotazione) {
 		Connection conn =DatabaseService.getDbConnection();
@@ -232,14 +248,12 @@ public class VisitaDAO {
 		VisitaDTO result = new VisitaDTO();
 
 		try {
-			String sql = "SELECT * FROM prenotazioni_visite WHERE id_prenotazione = ?;";
+			String sql = "SELECT TO_CHAR(prenotazioni_visite.\"data\", 'DD-MM-YYYY HH24:MI')as data_ora, * FROM prenotazioni_visite WHERE id_prenotazione = ?;";
 			stmt = conn.prepareStatement(sql);
 			stmt.setInt(1, id_prenotazione);
 			rs = stmt.executeQuery();
 			while(rs.next()){
-
-				Timestamp ts = rs.getTimestamp("data"); 
-				Date data = new Date(ts.getTime());
+				String data_ora = rs.getString("data_ora"); 
 				Integer id_paziente = rs.getInt("id_paziente");
 				Integer id_medico = rs.getInt("id_medico");
 				Integer id_visita = rs.getInt("id_visita");
@@ -248,7 +262,7 @@ public class VisitaDAO {
 				Integer id_riferimento = rs.getInt("id_riferimento");
 				String luogo= getLuogo(id_medico);
 				String nome_visita = new TipologiaVisitaDTO(id_visita).getNome_visita();
-				result = new VisitaDTO(id_prenotazione, id_medico, id_paziente, stato, referto, data, id_visita, luogo, nome_visita,id_riferimento);
+				result = new VisitaDTO(id_prenotazione, id_medico, id_paziente, stato, referto, data_ora, id_visita, luogo, nome_visita,id_riferimento);
 			}
 			rs.close();
 			stmt.close();

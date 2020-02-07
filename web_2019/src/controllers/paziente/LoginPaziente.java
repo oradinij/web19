@@ -67,7 +67,7 @@ public class LoginPaziente extends HttpServlet {
 		
 		String nextPage;
 		if(user!= null) {
-			nextPage = "/paziente/dettagliPaziente.jsp";
+			nextPage = "/paziente/homePaziente.jsp";
 			request.getSession().setAttribute("notifica", new Notifica("Login corretto", Notifica.SUCCESS));
 			
 		}

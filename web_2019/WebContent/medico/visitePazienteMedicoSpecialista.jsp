@@ -65,7 +65,7 @@
       <c:forEach items="${visita_corrente.paziente.lista_visite_prenotate}" var="visita">
       <c:if test="${visita.id_visita != 1 && visita.stato==1 && visita.id_medico==visita_corrente.id_medico}">
         <tr>
-          <td style="vertical-align: middle">${visita.data}</td>
+          <td style="vertical-align: middle">${visita.data_ora}</td>
           <td style="vertical-align: middle"><button href="#" id="bottone_dettagli${visita.id_prenotazione}" data-toggle="modal" onclick="modalPrenotazioneSpecialisticaMia(${visita.id_prenotazione})" class="btn btn-outline-info"> <i class="fa fa-info-circle"></i> Dettagli</button></td>
           <td style="vertical-align: middle"><button href="#"  data-toggle="modal" onclick="modal_compilazione_visita_specialistica(${visita.id_prenotazione})" class="btn btn-outline-success"><i class="fa fa-clipboard-list-check"></i> Compila</button></td>
         </tr>
@@ -101,7 +101,7 @@
          </c:forEach>
          <c:forEach items="${visita_corrente.paziente.lista_visite_prenotate}" var="visita">
           <tr>
-            <td style="vertical-align: middle">${visita.data}</td>
+            <td style="vertical-align: middle">${visita.data_ora}</td>
             <td style="vertical-align: middle"><span class="badge badge-pill badge-info">${visita.nome_visita}</span></td>
             <td style="vertical-align: middle"><button id="bottone_dettagli${visita.id_prenotazione}" onclick="modalDettagliPrenotazioneSpecialistica(${visita.id_prenotazione})" class="btn btn-outline-info"><i class="fa fa-info-circle"></i> Dettagli</button></td>
           </tr>
@@ -769,7 +769,7 @@ function modal_svolta_base(id){
 		        type: "GET",
 		        success: function (result) { 
 		        	console.log(result);
-		            document.getElementById('prenotazione_data_mia').innerHTML=result.visita.data;
+		            document.getElementById('prenotazione_data_mia').innerHTML=result.visita.data_ora;
 		            document.getElementById('prenotazione_numero_footer_mia').innerHTML="Codice prenotazione: " + id;
 		            document.getElementById('bottone_annullamento_prenotazione').outerHTML= "<a id=\"bottone_annullamento_prenotazione\" href=\"#\" class=\"btn btn-danger\" onclick=\"modalCancellazionePrenotazione(" + id + ")\">Annulla prenotazione</a>"
 		            document.getElementById('bottone_compila_modal_prenotazione').outerHTML= "<a id=\"bottone_compila_modal_prenotazione\" href=\"#\" class=\"btn btn-success\" onclick=\"modal_compilazione_visita_specialistica(" + id + ")\">Compila</a>"
@@ -800,7 +800,7 @@ function modal_svolta_base(id){
 			        type: "GET",
 			        success: function (result) { 
 			        	console.log(result);
-			            document.getElementById('prenotazione_data_spec').innerHTML=result.visita.data;
+			            document.getElementById('prenotazione_data_spec').innerHTML=result.visita.data_ora;
 			            document.getElementById('prenotazione_numero_footer_spec').innerHTML="Codice prenotazione: " + id;
 			            document.getElementById('prenotazione_nome_visita_spec').innerHTML=result.visita.nome_visita;
 			            document.getElementById('prenotazione_medico_spec').innerHTML=result.visita.nome_medico + " " + result.visita.cognome_medico;

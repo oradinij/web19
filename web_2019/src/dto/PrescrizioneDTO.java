@@ -17,8 +17,8 @@ public class PrescrizioneDTO {
 	private int id_prescrizione; 
 	private int id_paziente; 
 	private int id_medico; 
-	private String data; 
-	private String solo_data;
+	private String data_ora; 
+	private String data;
 	private String farmaco;
 	private int stato;
 	private String nome_medico;
@@ -28,12 +28,12 @@ public class PrescrizioneDTO {
 
 
 
-	public PrescrizioneDTO(int id_prescrizione, int id_paziente, int id_medico, String data, String farmaco, Integer stato) {
+	public PrescrizioneDTO(int id_prescrizione, int id_paziente, int id_medico, String data_ora, String farmaco, Integer stato) {
 		this.id_prescrizione = id_prescrizione;
 		this.id_paziente = id_paziente;
 		this.id_medico = id_medico;
-		this.data = data;
-		this.solo_data=data.split(" ")[0];
+		this.data_ora = data_ora;
+		this.data=data_ora.split(" ")[0];
 		this.farmaco = farmaco;
 		this.stato = stato;
 	}
@@ -91,8 +91,8 @@ public JsonObject toJson () {
 		return data;
 	}
 	
-	public String getSolo_data() {
-		return solo_data;
+	public String getData_ora() {
+		return data_ora;
 	}
 
 	public String getFarmaco() {

@@ -34,7 +34,7 @@ public class RicettePazienteMedicoBase extends HttpServlet {
 		
 		visita_corrente.setPaziente(paziente);
 		visita_corrente.setId_medico(user.getId_medico());
-		 String solo_data= new PrescrizioneDTO().getSolo_data();
+		 String solo_data= new PrescrizioneDTO().getData();
 		request.getSession().setAttribute("visita_corrente", visita_corrente);
 				
 		response.sendRedirect(request.getContextPath()+"/medico/ricettePazienteMedicoBase.jsp");

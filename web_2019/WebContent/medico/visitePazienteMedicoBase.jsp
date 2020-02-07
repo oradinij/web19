@@ -41,7 +41,7 @@
 &nbsp;
 <div class="container text-center" style="background-color: #C1D4D9; border-radius: 20px; padding:20px; max-width: 70%"><img class="rounded-circle " src="../images/utente1img.jpg" width="150" height="150" alt="user" style="margin-bottom: 10px;">
   <h2 style="margin-bottom: 20px;">Visite di: <span class="badge badge-info">${visita_corrente.paziente.nome} ${visita_corrente.paziente.cognome}</span></h2>
-  <form id="formPaziente${visita_corrente.paziente.id}" action="DettagliPaziente">  
+  <form id="formPaziente${visita_corrente.paziente.id}" action="DettagliPazienteBase">  
        <input type="hidden" value="${visita_corrente.paziente.id}" name="id"> 
   <button class="btn btn-success" onclick="loading_modal()" type="submit"><i class="fa fa-arrow-circle-left" style="vertical-align: middel"></i> Torna al paziente</button>
   </form>
@@ -65,7 +65,7 @@
       <c:forEach items="${visita_corrente.paziente.lista_visite_prenotate}" var="visita">
       <c:if test="${visita.id_visita == 1}">
         <tr>
-          <td style="vertical-align: middle">${visita.data}</td>
+          <td style="vertical-align: middle">${visita.data_ora}</td>
           <td style="vertical-align: middle"><button href="#" id="bottone_dettagli${visita.id_prenotazione}" data-toggle="modal" onclick="modalDettagliPrenotazioneBase(${visita.id_prenotazione})" class="btn btn-outline-info"> <i class="fa fa-info-circle"></i> Dettagli</button></td>
           <td style="vertical-align: middle"><button href="#"  data-toggle="modal" onclick="modal_compilazione_visita_base(${visita.id_prenotazione})" class="btn btn-outline-success"><i class="fa fa-clipboard-list-check"></i> Compila</button></td>
         </tr>
@@ -96,15 +96,17 @@
           <tr>
             <td style="vertical-align: middle">${visita.data}</td>
             <td style="vertical-align: middle"><span class="badge badge-pill badge-info">${visita.nome_visita}</span></td>
-            <td style="vertical-align: middle"><button id="bottone_dettagli${visita.id_prenotazione}" onclick="modalDettagliPrenotazioneSpecialistica(${visita.id_prenotazione})" class="btn btn-outline-info"><i class="fa fa-info-circle"></i> Dettagli</button></td>
+            <td style="vertical-align: middle"><button id="bottone_dettagli${visita.id_prenotazione}" onclick="modalDettagliPrescrizioneSpecialistica(${visita.id_prenotazione})" class="btn btn-outline-info"><i class="fa fa-info-circle"></i> Dettagli</button></td>
           </tr>
          </c:forEach>
          <c:forEach items="${visita_corrente.paziente.lista_visite_prenotate}" var="visita">
+         <c:if test="${visita.id_visita!=1}">
           <tr>
-            <td style="vertical-align: middle">${visita.data}</td>
+            <td style="vertical-align: middle">${visita.data_ora}</td>
             <td style="vertical-align: middle"><span class="badge badge-pill badge-info">${visita.nome_visita}</span></td>
             <td style="vertical-align: middle"><button id="bottone_dettagli${visita.id_prenotazione}" onclick="modalDettagliPrenotazioneSpecialistica(${visita.id_prenotazione})" class="btn btn-outline-info"><i class="fa fa-info-circle"></i> Dettagli</button></td>
           </tr>
+          </c:if>
          </c:forEach>
         </tbody>
       </table>
@@ -725,7 +727,7 @@ function modal_svolta_base(id){
 		        type: "GET",
 		        success: function (result) { 
 		        	console.log(result);
-		            document.getElementById('prenotazione_data_base').innerHTML=result.visita.data;
+		            document.getElementById('prenotazione_data_base').innerHTML=result.visita.data_ora;
 		            document.getElementById('prenotazione_numero_footer_base').innerHTML="Codice prenotazione: " + id;
 		            document.getElementById('bottone_annullamento_prenotazione').outerHTML= "<a id=\"bottone_annullamento_prenotazione\" href=\"#\" class=\"btn btn-danger\" onclick=\"modalCancellazionePrenotazione(" + id + ")\">Annulla prenotazione</a>"
 		            document.getElementById('bottone_compila_modal_prenotazione').outerHTML= "<a id=\"bottone_compila_modal_prenotazione\" href=\"#\" class=\"btn btn-success\" onclick=\"modal_compilazione_visita_base(" + id + ")\">Compila</a>"
@@ -756,7 +758,7 @@ function modal_svolta_base(id){
 			        type: "GET",
 			        success: function (result) { 
 			        	console.log(result);
-			            document.getElementById('prenotazione_data_spec').innerHTML=result.visita.data;
+			            document.getElementById('prenotazione_data_spec').innerHTML=result.visita.data_ora;
 			            document.getElementById('prenotazione_numero_footer_spec').innerHTML="Codice prenotazione: " + id;
 			            document.getElementById('prenotazione_nome_visita_spec').innerHTML=result.visita.nome_visita;
 			            document.getElementById('prenotazione_medico_spec').innerHTML=result.visita.nome_medico + " " + result.visita.cognome_medico;
@@ -1256,7 +1258,7 @@ function modalDettagliPrescrizioneSpecialistica(id){
       <div class="modal-footer">
       <form action="./annullaPrenotazioneVisita">
       <input name="id_prenotazione" id="input_to_delete" type="hidden">
-      <button type="submit" class="btn btn-warning">Cancella prenotazione</button>
+      <button type="submit" onclick="$('#modalCancellazionePrenotazione').modal('hide'); $('#modalPrenotazioneBase').modal('hide'); loading_modal()" class="btn btn-warning">Cancella prenotazione</button>
        </form>
         <button type="button" class="btn btn-danger" data-dismiss="modal">Annulla</button>
       </div>

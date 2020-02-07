@@ -14,7 +14,8 @@ public class VisitaDTO {
 	
 	public JsonObject toJson() {
 		JsonObject json = new JsonObject();
-		json.addProperty("data",getData().toString());
+		json.addProperty("data_ora",getData_ora());
+		json.addProperty("data",getData());
 		json.addProperty("id_prenotazione",getId_prenotazione());
 		json.addProperty("id_medico",getId_medico());
 		json.addProperty("id_paziente",getId_paziente());
@@ -133,17 +134,31 @@ public class VisitaDTO {
 	}
 
 
-	public void setData(Date data) {
+	
+
+	public String getData_ora() {
+		return data_ora;
+	}
+
+
+	public void setData_ora(String data_ora) {
+		this.data_ora = data_ora;
+	}
+
+
+	public void setData(String data) {
 		this.data = data;
 	}
 
 
-	public Date getData() {
+
+	public String getData() {
 		return data;
 	}
 
 	
-	private Date data;
+	private String data_ora;
+	private String data;
 	private int id_prenotazione;
 	private int id_medico;
 	private int id_paziente;
@@ -193,8 +208,9 @@ public class VisitaDTO {
 
 
 
-	public VisitaDTO(int id_prenotazione, int id_medico, int id_paziente, int stato, String referto, Date data, Integer id_visita, String luogo, String nome_visita, int id_riferimento) {
-		this.data = data;
+	public VisitaDTO(int id_prenotazione, int id_medico, int id_paziente, int stato, String referto, String data_ora, Integer id_visita, String luogo, String nome_visita, int id_riferimento) {
+		this.setData_ora(data_ora);
+		this.data = data_ora.split(" ")[0];
 		this.id_prenotazione = id_prenotazione;
 		this.id_medico = id_medico;
 		this.id_paziente = id_paziente;

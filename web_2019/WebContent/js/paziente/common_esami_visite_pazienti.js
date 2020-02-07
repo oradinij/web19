@@ -1,6 +1,4 @@
-$(".carousel").carousel({
-	interval: false
-});
+
 
 window.onresize = function (event) {
 	$('.datatable').DataTable().columns.adjust().draw();

@@ -2,7 +2,7 @@
     pageEncoding="utf-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
-<!DOCTYPE html5>
+<!DOCTYPE html>
 <html lang="it">
 <head>
 <meta charset="utf-8">
@@ -10,12 +10,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Ricette</title>
 <link rel="stylesheet" href="../css/custom.css">
+<link rel="stylesheet" href="../css/paziente/carousel_paziente.css">
 <link rel="stylesheet" href="../css/tempusdominus-bootstrap-4.min.css">
-<link rel="stylesheet" href="../css/fontawesome-pro-5.12.0-web/css/all.css">
+<link rel="stylesheet" href="../css/font-awesome-4.7.0/css/font-awesome.css">
 <link rel="stylesheet" href="../css/bootstrap.css">
 <link rel="stylesheet" href="../css/dataTables.bootstrap4.min.css">
-<script src="../js/popper.min.js"></script>
 <script src="../js/jquery-3.3.1.min.js"></script>
+<script src="../js/paziente/common_esami_visite_pazienti.js"></script> 
+<script src="../js/paziente/ricette_paziente.js"></script>
+<script src="../js/popper.min.js"></script>
 <script src="../js/bootstrap.js"></script>
 <script src="../js/datatables.min.js"></script>
 <script src="../js/jquery.dataTables.js"></script>
@@ -24,179 +27,101 @@
 <script src="../js/tempusdominus-bootstrap-4.min.js"></script>
 <script src="../js/qrcode.js"></script>
 </head>
-<body class="bg-light">
-<nav class="navbar navbar-expand-lg navbar-dark"><a class="navbar-brand" href="#"></a>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark"><a class="navbar-brand" href="#">Nome Cognome</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span> </button>
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item"> <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a> </li>
-      <li class="nav-item active"> <a class="nav-link " href="#" role="button" aria-haspopup="true" aria-expanded="false"> Pazienti </a> </li>
+      <li class="nav-item"> <a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Dati Personali </a> </li>
+      <li class="nav-item"> <a class="nav-link" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Medico </a> </li>
+      <li class="nav-item active"> <a class="nav-link " href="#"  role="button"  aria-haspopup="true" aria-expanded="false"> Ricette <span class="badge badge-pill badge-warning">4</span> </a> </li>
       <li class="nav-item"><a class="nav-link" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Visite <span class="badge badge-pill badge-warning">2</span></a> </li>
-      <li class="nav-item d-inline-block align-bottom"><img alt="iconaUtente" class="img iconaUtente rounded-circle " src="../images/utente1img.jpg"></li>
+      <li class="nav-item"> <a class="nav-link " href="#" role="button"  aria-haspopup="true" aria-expanded="false"> Esami <span class="badge badge-pill badge-warning">5</span> </a> </li>
+      <li class="nav-item d-inline-block align-bottom"><img alt="iconaUtente" class="img iconaUtente rounded-circle " src="images/utente1img.jpg"></li>
       <li class="nav-item"> <a class="btn btn-danger  " href="#">Logout</a> </li>
     </ul>
   </div>
 </nav>
-
-
-<div class="modal fade" id="loading_modal" style="border-radius:20px;">
-  <div class="modal-dialog" role="document" >
-    <div class="modal-content">
-     
-      <div class="modal-body text-center">
-        
-		<div class="spinner-border text-info" role="status">
- 			 
-		</div>
-		<h5><span>Caricamento...</span></h5>
-      </div>
-     
+&nbsp;
+<div class="container" style="border-radius: 20px;  background-color: #C1D4D9">
+  <h2 class="text-center">Le tue ricette</h2>
+  <div class="container text-center">
+    <div id="tabelle_ricette" class="carousel slide">
+      <ul class="carousel-indicators">
+        <li id="page1" data-target="#tabelle_ricette" data-slide-to="0" class="active"></li>
+        <li id="page2" data-target="#tabelle_ricette" data-slide-to="1"></li>
+      </ul>
+      <div class="carousel-inner">
+        <div class="carousel-item active">
+          <div class="container" style="max-width: 80%; padding-top: 20px; padding-bottom: 50px;">
+            <h4 class="text-light">Ricette da erogare</h4>
+            <p class="text-light">Qui trovi le ricette che non ti sono ancora state erogate.</p>
+            <hr class="bg-light">
+            &nbsp;
+            <table id="tabellaRicetteDaErogare" class="table datatable table-striped table-hover" style="background-color: #FFFFFF;">
+              <thead>
+                <tr>
+                  <th style="vertical-align: middle">Data prescrizione</th>
+                  <th style="vertical-align: middle">Medico prescrittore</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+               <c:forEach items="${user.listaPrescrizioni}" var="prescrizione">
+               <c:if test="${prescrizione.stato==0}">
+                <tr>
+                  <td style="vertical-align: middle">${prescrizione.data}</td>
+                  <td style="vertical-align: middle">${prescrizione.nome_medico}</td>
+                  <td style="vertical-align: middle"><button  id="bottone_dettagli${prescrizione.id_prescrizione}" onclick="modal_ricetta_da_erogare(${prescrizione.id_prescrizione})" class="btn btn-outline-info"><i class="fa fa-info-circle"></i> Dettagli</button></td>
+                </tr>
+                </c:if>
+                </c:forEach>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="carousel-item">
+          <div class="container" style="max-width: 80%; padding-top: 20px; padding-bottom: 50px;">
+            <h4 class="text-light">Ricette erogate</h4>
+            <p class="text-light">Qui trovi le ricette che ti sono già  state erogate.</p>
+            <hr class="bg-light">
+            &nbsp;
+            <table id="tabellaRicetteErogate" class="table datatable table-striped table-hover" style="background-color: #FFFFFF; width: 100%;">
+              <thead>
+                <tr>
+                  <th style="vertical-align: middle">Data erogazione</th>
+                  <th style="vertical-align: middle">Medico prescrittore</th>
+                  <th style="vertical-align: middle"></th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+               <c:forEach items="${user.listaPrescrizioni}" var="prescrizione">
+               <c:if test="${prescrizione.stato==1}">
+                <tr>
+                  <td style="vertical-align: middle">${prescrizione.data_ora}</td>
+                  <td style="vertical-align: middle">${prescrizione.nome_medico}</td>
+            	  <td style="vertical-align: middle"><button  id="bottone_dettagli${prescrizione.id_prescrizione}" onclick="modal_ricetta_erogata(${prescrizione.id_prescrizione})" class="btn btn-outline-info"><i class="fa fa-info-circle"></i> Dettagli</button></td>
+                  <td style="vertical-align: middle"><a href="#" class="btn btn-outline-success">Ticket</a></td>
+                </tr>
+                </c:if>
+               </c:forEach>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <a class="carousel-control-prev" href="#tabelle_ricette" data-slide="prev" style="width:80px;"> <span class="carousel-control-prev-icon"></span> </a> <a class="carousel-control-next" href="#tabelle_ricette" data-slide="next" style="width:80px;"> <span class="carousel-control-next-icon"></span> </a> </div>
     </div>
   </div>
-  </div>
-  
-  <script type="text/javascript">
-
-  function loadingModal() {
-  
-$('#loading_modal').modal({
-    backdrop: 'static',
-    keyboard: false
-})
-
-
-  
-  }
-  
-</script>
-  
-
-
-&nbsp;
-<div class="container text-center" style="background-color: #C1D4D9; border-radius: 20px; padding:20px; max-width: 70%"><img class="rounded-circle " src="../images/utente1img.jpg" width="150" height="150" alt="user" style="margin-bottom: 10px;">
-  <h2>Ricette di: <span class="badge badge-info">${visita_corrente.paziente.nome} ${visita_corrente.paziente.cognome}</span></h2>
-  <form id="formPaziente${visita_corrente.paziente.id}" action="DettagliPazienteSpecalista">  
-       <input type="hidden" value="${visita_corrente.paziente.id}" name="id"> 
-  <button class="btn btn-success" type="submit" onclick="loadingModal()"><i class="fa fa-arrow-circle-left"></i> Torna al paziente</button>
-  </form>
-</div>
+  &nbsp; </div>
 &nbsp;
 <hr>
-<div class="text-center container" style="background-color: #C1D4D9;  border-radius: 20px; padding: 20px; margin-bottom: 20px;">
-  <div class="bg-light" style=" border-radius:20px; padding: 10px;">
-    
-    &nbsp;
-    <div class="container">
-      <table id="tabellaRicette" class="table datatable text-center table-striped table-hover table-light tabella_visite" style="width: 100%;">
-        <thead>
-          <tr>
-            <th>Medico prescrittore</th>
-            <th>Stato</th>
-            <th>Data prescrizione/erogazione</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-        <c:forEach items="${visita_corrente.paziente.listaPrescrizioni}" var="prescrizione">
-          <tr>
-            <td>${prescrizione.nome_medico}</td>
-            <c:if test="${prescrizione.stato==0}">
-            <td style="vertical-align: middle"><span class="badge badge-pill badge-info">Non erogata</span></td>
-            </c:if>
-            <c:if test="${prescrizione.stato==1}">
-            <td style="vertical-align: middle"><span class="badge badge-pill badge-secondary">Erogata</span></td>
-            </c:if>
-            <c:if test="${prescrizione.stato==1}">
-            <td style="vertical-align: middle">${prescrizione.data_ora}</td>
-            </c:if>
-             <c:if test="${prescrizione.stato==0}">
-            <td style="vertical-align: middle">${prescrizione.data}</td>
-            </c:if>
-            <c:if test="${prescrizione.stato==0}">
-            <td style="vertical-align: middle"><button  id="bottone_dettagli${prescrizione.id_prescrizione}" onclick="modal_ricetta_da_erogare(${prescrizione.id_prescrizione})" class="btn btn-outline-info"><i class="fa fa-info-circle"></i> Dettagli</button></td>
-            </c:if>
-             <c:if test="${prescrizione.stato!=0}">
-            <td style="vertical-align: middle"><button  id="bottone_dettagli${prescrizione.id_prescrizione}" onclick="modal_ricetta_erogata(${prescrizione.id_prescrizione})" class="btn btn-outline-info"><i class="fa fa-info-circle"></i> Dettagli</button></td>
-            </c:if>
-          </tr>
-         </c:forEach>
-        </tbody>
-      </table>
-      <hr>
-      <h5>Per prescrivere una nuova ricetta compila una visita: </h5>
-      <br>
-      <form id="formVisite" action="VisitePazienteSpecialista">  
-       <input type="hidden" value="${visita_corrente.paziente.id}" name="id"> 
-      <button href="#" type="submit"  class="btn btn-success" onclick="loadingModal()"><i class="fa fa-arrow-circle-right" ></i> Vai alle visite del paziente</button>
-    </form>
-    </div>
-  </div>
-</div>
 &nbsp;
-<div class="modal fade" id="modalRicettaErogata">
-  
-	<div class="modal-dialog">
-    <div class="modal-content"> 
-      
-      <!-- Modal Header -->
-      <div class="modal-header text-light" style="background-color: #205373">
-        <h4 class="modal-title">Dettagli ricetta erogata</h4>
-        <button type="button" class="close text-light" data-dismiss="modal">&times;</button>
-      </div>
-      
-      <!-- Modal body -->
-      <div class="modal-body" style="background-color:  #C1D4D9">
-         <div class="container  bg-light text-center" style="padding: 10px;border-radius: 20px; margin-bottom: 20px;">
-          <h5>
-            <p class="badge badge-info">Medico prescrittore</p>
-          </h5>
-          <h5 id="nome_medico_erogata"></h5>
-          <hr class="bg-light">
-          <h5>
-            <p class="badge badge-info">Data e ora erogazione</p>
-          </h5>
-          <h5 id="data_erogata"></h5>
-          <hr class="bg-light">
-          <h5>
-            <p class="badge badge-info">Visita di riferimento</p>
-          </h5>
-         <h5 id="visita_riferimento_erogata"></h5>
-         <button id="bottone_riferimento_erogata" class="btn btn-info">Vedi visita</button>
-          <hr class="bg-light">
-          <h5>
-            <p class="badge badge-info">Farmacia erogatrice</p>
-          </h5>
-         <h5 id="farmacia_erogata"></h5>
-          <hr class="bg-light">
-          <h5>
-            <p class="badge badge-info">Prescrizione</p>
-          </h5>
-          <p id="farmaco_erogata" class="card-body text-left" style="border-style: solid; border-radius: 20px;"></p>
-          <hr class="bg-light">
-          <h5>
-            <p class="badge badge-info">PDF ricetta</p>
-          </h5>
-          <a href="#" class="btn btn-success">Scarica PDF</a>
-          <hr class="bg-light">
-          <h5>
-            <p class="badge badge-info">Codice QR</p>
-          </h5>
-          <button class="btn btn-success" data-toggle="collapse" data-target="#collpase_qr_erogata">Mostra QR</button>
-          <div id="collpase_qr_erogata" class="collapse text-center" style="margin-top: 20px;"> <div id="qr_erogata" class="text-center container" style="width: 300px; height: 300px;"></div> </div>
-        </div>
-         </div>
-        
-        <!-- Modal footer -->
-        <div class="modal-footer text-light" style="background-color: #205373">
-          <h6 id="codice_footer_erogata" class="badge text-dark badgeNumeroVisitaEsame" style="margin-top:10px;"></h6>
-          <button type="button" class="btn btn-danger" data-dismiss="modal">Chiudi</button>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+&nbsp;
 
-<script>
+
+<script type="text/javascript">
 
 function modal_ricetta_erogata(id){
 	
@@ -328,7 +253,6 @@ function modal_ricetta_da_erogare(id){
 	};
 
 
-	
 	
 	
 	  function modal_svolta_specialistica(id, stato){
@@ -566,112 +490,10 @@ function modal_ricetta_da_erogare(id){
 		
 		
 		
-		
 
-		$(document).ready(function () {
-			
 
-			$('#tabella_ricette_specialistica_completata').DataTable({
-
-				ordering: false,
-				paging: false,
-				scrollY: 200,
-				scrollX: true,
-				bInfo: false,
-				scrollCollapse: false,
-				searching: false
-				
-
-			});
-			
-			
-			$('#tabella_esami_specialistica_completata').DataTable({
-
-				ordering: false,
-				paging: false,
-				scrollY: 200,
-				scrollX: true,
-				bInfo: false,
-				scrollCollapse: false,
-				searching: false
-				
-
-			});
-			
-			
-
-			$('#tabella_visite_specialistica_completata').DataTable({
-
-				ordering: false,
-				paging: false,
-				scrollY: 200,
-				scrollX: true,
-				bInfo: false,
-				scrollCollapse: false,
-				searching: false
-				
-
-			});
-			
-			
-			$('#tabella_ricette_base_completata').DataTable({
-
-				ordering: false,
-				paging: false,
-				scrollY: 200,
-				scrollX: true,
-				bInfo: false,
-				scrollCollapse: false,
-				searching: false
-				
-
-			});
-			
-			
-			$('#tabella_visite_base_completata').DataTable({
-
-				ordering: false,
-				paging: false,
-				scrollY: 200,
-				scrollX: true,
-				bInfo: false,
-				scrollCollapse: false,
-				searching: false
-				
-
-			});
-			
-			
-
-			$('#tabella_esami_base_completata').DataTable({
-
-				ordering: false,
-				paging: false,
-				scrollY: 200,
-				scrollX: true,
-				bInfo: false,
-				scrollCollapse: false,
-				searching: false
-				
-
-			});
-			
-		});
-		
-		window.onresize = function (event) {
-			$('.datatable').DataTable().columns.adjust();
-		};
-
-		$(document).on('shown.bs.modal','.modal', function () {
-
-			$('.datatable').DataTable().columns.adjust();
-
-		});
-		
-		
-		
-		
 </script>
+
 
 
 <div class="modal fade modalPrenotazione" id="modalRicettaDaErogare">
@@ -723,6 +545,68 @@ function modal_ricetta_da_erogare(id){
         <!-- Modal footer -->
         <div class="modal-footer text-light" style="background-color: #205373">
           <h6 id="codice_footer_non_erogata" class="badge text-dark badgeNumeroVisitaEsame" style="margin-top:10px;"> </h6>
+          <button type="button" class="btn btn-danger" data-dismiss="modal">Chiudi</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+<div class="modal fade" id="modalRicettaErogata">
+  
+	<div class="modal-dialog">
+    <div class="modal-content"> 
+      
+      <!-- Modal Header -->
+      <div class="modal-header text-light" style="background-color: #205373">
+        <h4 class="modal-title">Dettagli ricetta erogata</h4>
+        <button type="button" class="close text-light" data-dismiss="modal">&times;</button>
+      </div>
+      
+      <!-- Modal body -->
+      <div class="modal-body" style="background-color:  #C1D4D9">
+         <div class="container  bg-light text-center" style="padding: 10px;border-radius: 20px; margin-bottom: 20px;">
+          <h5>
+            <p class="badge badge-info">Medico prescrittore</p>
+          </h5>
+          <h5 id="nome_medico_erogata"></h5>
+          <hr class="bg-light">
+          <h5>
+            <p class="badge badge-info">Data e ora erogazione</p>
+          </h5>
+          <h5 id="data_erogata"></h5>
+          <hr class="bg-light">
+          <h5>
+            <p class="badge badge-info">Visita di riferimento</p>
+          </h5>
+         <h5 id="visita_riferimento_erogata"></h5>
+         <button id="bottone_riferimento_erogata" class="btn btn-info">Vedi visita</button>
+          <hr class="bg-light">
+          <h5>
+            <p class="badge badge-info">Farmacia erogatrice</p>
+          </h5>
+         <h5 id="farmacia_erogata"></h5>
+          <hr class="bg-light">
+          <h5>
+            <p class="badge badge-info">Prescrizione</p>
+          </h5>
+          <p id="farmaco_erogata" class="card-body text-left" style="border-style: solid; border-radius: 20px;"></p>
+          <hr class="bg-light">
+          <h5>
+            <p class="badge badge-info">PDF ricetta</p>
+          </h5>
+          <a href="#" class="btn btn-success">Scarica PDF</a>
+          <hr class="bg-light">
+          <h5>
+            <p class="badge badge-info">Codice QR</p>
+          </h5>
+          <button class="btn btn-success" data-toggle="collapse" data-target="#collpase_qr_erogata">Mostra QR</button>
+          <div id="collpase_qr_erogata" class="collapse text-center" style="margin-top: 20px;"> <div id="qr_erogata" class="text-center container" style="width: 300px; height: 300px;"></div> </div>
+        </div>
+         </div>
+        
+        <!-- Modal footer -->
+        <div class="modal-footer text-light" style="background-color: #205373">
+          <h6 id="codice_footer_erogata" class="badge text-dark badgeNumeroVisitaEsame" style="margin-top:10px;"></h6>
           <button type="button" class="btn btn-danger" data-dismiss="modal">Chiudi</button>
         </div>
       </div>
@@ -918,7 +802,7 @@ function modal_ricetta_da_erogare(id){
 </div>
 
 
-<footer class="text-center text-light">©2019 Oradini & Bertamini</footer>
-<script src="../js/medico_base/utils_ricette_paziente_medico_base.js"></script>
+
+<footer class="text-center text-light">Â©2019 Oradini & Bertamini</footer>
 </body>
 </html>

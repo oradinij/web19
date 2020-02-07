@@ -22,7 +22,7 @@ public class PrescrizioneDAO {
 		PreparedStatement stmt;
 
 		try {
-			stmt = conn.prepareStatement("SELECT * FROM prescrizioni WHERE id_prescrizione = ?");
+			stmt = conn.prepareStatement("SELECT TO_CHAR(prescrizioni.\"timestamp\", 'DD-MM-YYYY HH24:MI')as data_ora, * FROM prescrizioni WHERE id_prescrizione = ?");
 			stmt.setInt(1, id_ricetta);
 			rs = stmt.executeQuery();
 			while(rs.next()){
@@ -30,9 +30,10 @@ public class PrescrizioneDAO {
 				int id_paziente= rs.getInt("id_paziente");
 				int id_medico = rs.getInt("id_medico");
 				int id_farmacia = rs.getInt("id_farmacia");
-				String data = rs.getString("timestamp");
+				String data_ora = rs.getString("data_ora");
+				String data = data_ora.split(" ")[0];
 				String farmaco = rs.getString("farmaco");
-				int stato = rs.getInt("stato");
+				Integer stato = rs.getInt("stato");
 				String nome_medico = new MedicoDAO().getUserById(id_medico).getNome();
 				String cognome_medico =  new MedicoDAO().getUserById(id_medico).getCognome();
 				VisitaDTO visita_tmp = new VisitaDAO().getById(id_riferimento);	
@@ -43,6 +44,7 @@ public class PrescrizioneDAO {
 					json.addProperty("farmacia", nome_farmacia);
 			}
 				json.addProperty("farmaco", farmaco);
+				json.addProperty("data_ora", data_ora);
 				json.addProperty("data", data);
 				json.addProperty("id_prescrizione", id_ricetta);
 				json.addProperty("stato", stato);
@@ -75,18 +77,18 @@ public class PrescrizioneDAO {
 		PreparedStatement stmt;
 
 		try {
-			stmt = conn.prepareStatement("SELECT * FROM prescrizioni WHERE id_riferimento = ?");
+			stmt = conn.prepareStatement("SELECT TO_CHAR(prescrizioni.\"timestamp\", 'DD-MM-YYYY HH24:MI')as data_ora, * FROM prescrizioni WHERE id_riferimento = ?");
 			stmt.setInt(1, id_riferimento);
 			rs = stmt.executeQuery();
 			while(rs.next()){
 				int id_prescrizione= rs.getInt("id_prescrizione");
 				int id_paziente= rs.getInt("id_paziente");
 				int id_medico = rs.getInt("id_medico");
-				String data = rs.getString("timestamp");
+				String data_ora = rs.getString("data_ora");
 				String farmaco = rs.getString("farmaco");
 				int stato = rs.getInt("stato");
 
-				listaPrescrizioni.add(new PrescrizioneDTO(id_prescrizione, id_paziente, id_medico, data, farmaco, stato));
+				listaPrescrizioni.add(new PrescrizioneDTO(id_prescrizione, id_paziente, id_medico, data_ora, farmaco, stato));
 			}
 			rs.close();
 			stmt.close();
@@ -159,9 +161,9 @@ public class PrescrizioneDAO {
 			ResultSet rs = stmt.executeQuery();
 			if(rs.next()){
 				int id_prescrizione= rs.getInt("id_prescrizione");
-				String data = rs.getString("data_ora");
+				String data_ora = rs.getString("data_ora");
 				int stato= rs.getInt("stato");
-				ultima_prescrizione = new PrescrizioneDTO(id_prescrizione, id_paziente, id_medico, data, farmaco, stato);
+				ultima_prescrizione = new PrescrizioneDTO(id_prescrizione, id_paziente, id_medico, data_ora, farmaco, stato);
 			}
 			stmt.close();
 			conn.close();

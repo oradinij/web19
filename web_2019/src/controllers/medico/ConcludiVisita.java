@@ -39,7 +39,7 @@ public class ConcludiVisita extends HttpServlet {
 			paziente.aggiungiPrenotazioneVisita(visita.getId_visita(), data, visita_corrente.getId_medico(), visita_corrente.getId_prenotazione_visita_corrente());
 		}
 		
-		paziente.completaVisita(visita_corrente.getId_prenotazione_visita_corrente(), visita_corrente.getReferto());
+		paziente.completaVisita(visita_corrente.getId_prenotazione_visita_corrente(), visita_corrente.getReferto(), data);
 		
 		VisitaCorrente nuova_visita = new VisitaCorrente();
 		nuova_visita.setPaziente(paziente);

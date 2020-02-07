@@ -40,7 +40,7 @@
 &nbsp;
 <div class="container text-center" style="background-color: #C1D4D9; border-radius: 20px; padding:20px; max-width: 70%"><img class="rounded-circle " src="../images/utente1img.jpg" width="150" height="150" alt="user" style="margin-bottom: 10px;">
   <h2>Esami di: <span class="badge badge-info">${visita_corrente.paziente.nome} ${visita_corrente.paziente.cognome}</span></h2>
-  <form id="formPaziente${visita_corrente.paziente.id}" action="DettagliPaziente">  
+  <form id="formPaziente${visita_corrente.paziente.id}" action="DettagliPazienteBase">  
        <input type="hidden" value="${visita_corrente.paziente.id}" name="id"> 
   <button  onclick="loadingModal()" class="btn btn-success" type="submit"><i class="fa fa-arrow-circle-left" style="vertical-align: middel"></i> Torna al paziente</button>
   </form>
@@ -57,18 +57,26 @@
           <tr>
             <th>Esame</th>
             <th>Area</th>
-            <th>Data prescrizione</th>
+            <th>Data prescrizione/prenotazione</th>
             <th></th>
           </tr>
         </thead>
         <tbody>
         <c:forEach items="${visita_corrente.paziente.listaEsami}" var="esame">
-        <c:if test="${esame.stato!=2}">
+         <c:if test="${esame.stato==0}">
           <tr>
             <td>${esame.nomeEsame}</td>
             <td style="vertical-align: middle"><span class="badge badge-pill badge-info">${esame.area}</span></td>
             <td style="vertical-align: middle">${esame.data}</td>
             <td style="vertical-align: middle"><button id="bottone_dettagli${esame.id_prenotazione}" onclick="modal_esame_prescritto(${esame.id_prenotazione})" class="btn btn-outline-info"><i class="fa fa-info-circle"></i> Dettagli</button></td>
+          </tr>
+          </c:if>
+          <c:if test="${esame.stato==1}">
+          <tr>
+            <td>${esame.nomeEsame}</td>
+            <td style="vertical-align: middle"><span class="badge badge-pill badge-info">${esame.area}</span></td>
+            <td style="vertical-align: middle">${esame.data_ora}</td>
+            <td style="vertical-align: middle"><button id="bottone_dettagli${esame.id_prenotazione}" onclick="modal_esame_prenotato(${esame.id_prenotazione})" class="btn btn-outline-info"><i class="fa fa-info-circle"></i> Dettagli</button></td>
           </tr>
           </c:if>
           </c:forEach>
@@ -136,78 +144,26 @@
   </div>
   </div>
   
-  <script type="text/javascript">
-
-  function loadingModal() {
-  
-$('#loading_modal').modal({
-    backdrop: 'static',
-    keyboard: false
-})
-
-
-  
-  }
-  
-</script>
   
 
 
 
-
-
-<div class="modal  fade" id="modalPrenotazioneEsame">
-  <div class="modal-dialog">
-    <div class="modal-content"> 
-      
-      <!-- Modal Header -->
-      <div class="modal-header text-light">
-        <h4>Dettagli prescrizone esame</h4>
-        <button type="button" class="close text-light" data-dismiss="modal">&times;</button>
-      </div>
-      
-      <!-- Modal body -->
-      <div class="modal-body">
-        <div class="container  bg-light text-center" style="padding: 10px;border-radius: 20px">
-          <h5>
-            <p class="badge badge-info">Esame</p>
-          </h5>
-          <h5 id="nome_esame_prescritto"></h5>
-          <hr class="bg-light">
-          <h5>
-            <p class="badge badge-info">Specializzazione</p>
-          </h5>
-          <h5 id="area_prescritto"></h5>
-          <hr>
-          <h5>
-            <p class="badge badge-info">Medico prescrivente</p>
-          </h5>
-          <h5 id="medico_prescritto"></h5>
-          <hr class="bg-light">
-          <h5>
-            <p class="badge badge-info">Data prescrizione</p>
-          </h5>
-          <h5 id="data_prescritto"></h5>
-          <hr class="bg-light">
-          <h5>
-            <p class="badge badge-info">Visita di riferimento</p>   
-          </h5>
-           <h5 id="visita_riferimento_prescritto"></h5>
-          <button id="bottone_riferimento_prescritto"  class="btn btn-info"></button> </div>
-      </div>
-      
-      <!-- Modal footer -->
-      <div class="modal-footer">
-        <h6 id="codice_footer_prescritto" class="badge badgeNumeroVisitaEsame" style="margin-top:10px;"></h6>
-        <button type="button" class="btn btn-danger" data-dismiss="modal">Chiudi</button>
-      </div>
-    </div>
-  </div>
-</div>
 
 
 <script>
 
+
+function loadingModal() {
+	  
+	$('#loading_modal').modal({
+	    backdrop: 'static',
+	    keyboard: false
+	})
+
+
+	  
+	  }
+	  
 
 function modal_esame_prescritto(id){
 	
@@ -236,7 +192,7 @@ function modal_esame_prescritto(id){
 	            
 	            
 	            
-	            $('#modalPrenotazioneEsame').modal('show');
+	            $('#modalPrescrizioneEsame').modal('show');
 	            
 	        	document.getElementById("bottone_dettagli"+id).outerHTML="<button href=\"#\" id=\"bottone_dettagli"+id +"\" onclick=\"modal_esame_prescritto("+ id +")\" class=\"btn btn-outline-info\"><i class=\"fa fa-info-circle\"></i> Dettagli</button>";
 
@@ -253,6 +209,52 @@ function modal_esame_prescritto(id){
 	    
 	  
 	};
+
+
+	function modal_esame_prenotato(id){
+		
+		document.getElementById("bottone_dettagli"+id).outerHTML="<div id=\"bottone_dettagli"+id+"\" class=\"spinner-grow text-info\"></div>";
+		 
+		   $.ajax({
+		        url: 'http://localhost:8080/web2019/medico/modal/dettagli_esame?id_prenotazione='+id,
+		        type: "GET",
+		        success: function (result) { 
+		        	console.log(result);
+		            document.getElementById('data_prenotato').innerHTML=result.data_ora;
+		            document.getElementById('medico_prenotato').innerHTML=result.nome_medico + " " + result.cognome_medico;    
+		            document.getElementById('visita_riferimento_prenotato').innerHTML=result.id_riferimento;
+		            document.getElementById('nome_esame_prenotato').innerHTML=result.nome_esame;
+		            document.getElementById('codice_footer_prenotato').innerHTML="Codice esame: " + id; 
+		            document.getElementById('area_prenotato').innerHTML=result.area;
+		            
+		            if(result.tipo_riferimento==1){
+			            document.getElementById('bottone_riferimento_prenotato').outerHTML="<button id=\"bottone_riferimento_prenotato\" class=\"btn btn-info\" onclick=\"modal_svolta_base("+ result.id_riferimento + ",1)\">Vedi visita</button>";
+			            } else{
+			            	
+						document.getElementById('bottone_riferimento_prenotato').outerHTML="<button id=\"bottone_riferimento_prenotato\" class=\"btn btn-info\" onclick=\"modal_svolta_specialistica("+ result.id_riferimento + ",1)\">Vedi visita</button>";
+			            	
+			            }
+		               
+		            
+		            
+		            
+		            $('#modalPrenotazioneEsame').modal('show');
+		            
+		        	document.getElementById("bottone_dettagli"+id).outerHTML="<button href=\"#\" id=\"bottone_dettagli"+id +"\" onclick=\"modal_esame_prescritto("+ id +")\" class=\"btn btn-outline-info\"><i class=\"fa fa-info-circle\"></i> Dettagli</button>";
+
+		            
+		            },
+		            
+		         error: function (result){
+		        	
+		        	console.log(result);
+		        	
+		        	
+		        }
+		        });
+		    
+		  
+		};
 
 
 
@@ -658,6 +660,106 @@ function modal_esame_svolto(id){
 
 
 
+<div class="modal  fade" id="modalPrescrizioneEsame">
+  <div class="modal-dialog">
+    <div class="modal-content"> 
+      
+      <!-- Modal Header -->
+      <div class="modal-header text-light">
+        <h4>Dettagli prescrizone esame</h4>
+        <button type="button" class="close text-light" data-dismiss="modal">&times;</button>
+      </div>
+      
+      <!-- Modal body -->
+      <div class="modal-body">
+        <div class="container  bg-light text-center" style="padding: 10px;border-radius: 20px">
+          <h5>
+            <p class="badge badge-info">Esame</p>
+          </h5>
+          <h5 id="nome_esame_prescritto"></h5>
+          <hr class="bg-light">
+          <h5>
+            <p class="badge badge-info">Specializzazione</p>
+          </h5>
+          <h5 id="area_prescritto"></h5>
+          <hr>
+          <h5>
+            <p class="badge badge-info">Medico prescrivente</p>
+          </h5>
+          <h5 id="medico_prescritto"></h5>
+          <hr class="bg-light">
+          <h5>
+            <p class="badge badge-info">Data prescrizione</p>
+          </h5>
+          <h5 id="data_prescritto"></h5>
+          <hr class="bg-light">
+          <h5>
+            <p class="badge badge-info">Visita di riferimento</p>   
+          </h5>
+           <h5 id="visita_riferimento_prescritto"></h5>
+          <button id="bottone_riferimento_prescritto"  class="btn btn-info"></button> </div>
+      </div>
+      
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <h6 id="codice_footer_prescritto" class="badge badgeNumeroVisitaEsame" style="margin-top:10px;"></h6>
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Chiudi</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal  fade" id="modalPrenotazioneEsame">
+  <div class="modal-dialog">
+    <div class="modal-content"> 
+      
+      <!-- Modal Header -->
+      <div class="modal-header text-light">
+        <h4>Dettagli prenotazione esame</h4>
+        <button type="button" class="close text-light" data-dismiss="modal">&times;</button>
+      </div>
+      
+      <!-- Modal body -->
+      <div class="modal-body">
+        <div class="container  bg-light text-center" style="padding: 10px;border-radius: 20px">
+          <h5>
+            <p class="badge badge-info">Esame</p>
+          </h5>
+          <h5 id="nome_esame_prenotato"></h5>
+          <hr class="bg-light">
+          <h5>
+            <p class="badge badge-info">Specializzazione</p>
+          </h5>
+          <h5 id="area_prenotato"></h5>
+          <hr>
+          <h5>
+            <p class="badge badge-info">Medico</p>
+          </h5>
+          <h5 id="medico_prenotato"></h5>
+          <hr class="bg-light">
+          <h5>
+            <p class="badge badge-info">Data e ora prenotazione</p>
+          </h5>
+          <h5 id="data_prenotato"></h5>
+          <hr class="bg-light">
+          <h5>
+            <p class="badge badge-info">Visita di riferimento</p>   
+          </h5>
+           <h5 id="visita_riferimento_prenotato"></h5>
+          <button id="bottone_riferimento_prenotato"  class="btn btn-info"></button> </div>
+      </div>
+      
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <h6 id="codice_footer_prenotato" class="badge badgeNumeroVisitaEsame" style="margin-top:10px;"></h6>
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Chiudi</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 
 <div class="modal fade" id="modalEsame">
   <div class="modal-dialog">
@@ -737,7 +839,7 @@ function modal_esame_svolto(id){
           <h5 id="completata_nome_medico_base"></h5>
           <hr class="bg-light">
           <h5>
-            <p class="badge badge-info">Data e ora</p>
+            <p class="badge badge-info">Data</p>
           </h5>
           <h5 id="completata_data_base"></h5>
           <hr class="bg-light">

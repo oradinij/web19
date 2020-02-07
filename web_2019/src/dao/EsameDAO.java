@@ -26,13 +26,13 @@ public class EsameDAO {
 		JsonObject result = new JsonObject();
 
 		try {
-			String sql = "SELECT * FROM prenotazioni_esami WHERE id_prenotazione = ?;";
+			String sql = "SELECT TO_CHAR(prenotazioni_esami.\"data_ora\", 'DD-MM-YYYY HH24:MI')as data_ora, * FROM prenotazioni_esami WHERE id_prenotazione = ?;";
 			stmt = conn.prepareStatement(sql);
 			stmt.setInt(1, id_prenotazione);
 			rs = stmt.executeQuery();
 			while(rs.next()){
 
-				String data = rs.getDate("data_ora").toString().split(" ")[0];
+				String data_ora = rs.getString("data_ora");
 				Integer id_paziente = rs.getInt("id_paziente");
 				Integer id_medico = rs.getInt("id_medico");
 				Integer id_esame = rs.getInt("id_esame");
@@ -47,7 +47,8 @@ public class EsameDAO {
 				VisitaDTO visita_tmp = new VisitaDAO().getById(id_riferimento);	
 				Integer tipo_riferimento= visita_tmp.getId_visita();
 				
-				result.addProperty("data", data);
+				result.addProperty("data_ora", data_ora);
+				result.addProperty("data", data_ora.split(" ")[0]);
 				result.addProperty("id_paziente", id_paziente);
 				result.addProperty("id_medico", id_medico);
 				result.addProperty("id_esame", id_esame);
@@ -106,6 +107,45 @@ public class EsameDAO {
 		return luogoVisita;
 	}
 	
+	
+	public EsameDTO getById(int id_prenotazione) { 
+		EsameDTO esame= new EsameDTO();
+		Connection conn =DatabaseService.getDbConnection();
+		ResultSet rs = null;
+		PreparedStatement stmt;
+
+		try {
+			stmt = conn.prepareStatement("SELECT TO_CHAR(prenotazioni_esami.\"data_ora\", 'DD-MM-YYYY HH24:MI')as data_ora, * FROM prenotazioni_esami WHERE id_prenotazione = ?");
+			stmt.setInt(1, id_prenotazione);
+			rs = stmt.executeQuery();
+			while(rs.next()){
+				String data_ora = rs.getString("data_ora");
+				int id_esame= rs.getInt("id_esame");
+				int id_paziente= rs.getInt("id_paziente");
+				int id_riferimento= rs.getInt("id_riferimento");
+				int id_medico = rs.getInt("id_medico");
+				int stato = rs.getInt("stato");
+				String referto = rs.getString("referto");
+				String nomeEsame = getNameById(id_esame);
+				String area = getAreaById(id_esame);
+
+
+				esame = new EsameDTO(id_esame, area, id_paziente, id_medico, data_ora, nomeEsame, referto, id_prenotazione, stato );
+			}
+			rs.close();
+			stmt.close();
+			conn.close();
+		}
+
+		catch (Exception e) {
+			e.printStackTrace();//puo essere che semplicemente non nulla
+		}
+
+		
+		return esame;
+	}
+	
+	
 	public ArrayList<EsameDTO>  getByRiferimento(int id_riferimento) { 
 		ArrayList<EsameDTO> listaEsami= new ArrayList<EsameDTO>();
 		Connection conn =DatabaseService.getDbConnection();
@@ -113,11 +153,11 @@ public class EsameDAO {
 		PreparedStatement stmt;
 
 		try {
-			stmt = conn.prepareStatement("SELECT * FROM prenotazioni_esami WHERE id_riferimento = ?");
+			stmt = conn.prepareStatement("SELECT TO_CHAR(prenotazioni_esami.\"data_ora\", 'DD-MM-YYYY HH24:MI')as data_ora, * FROM prenotazioni_esami WHERE id_riferimento = ?");
 			stmt.setInt(1, id_riferimento);
 			rs = stmt.executeQuery();
 			while(rs.next()){
-				Date data = rs.getDate("data_ora");
+				String data_ora = rs.getString("data_ora");
 				int id_esame= rs.getInt("id_esame");
 				int id_paziente= rs.getInt("id_paziente");
 				int id_prenotazione= rs.getInt("id_prenotazione");
@@ -128,7 +168,7 @@ public class EsameDAO {
 				String area = getAreaById(id_esame);
 
 
-				listaEsami.add(new EsameDTO(id_esame, area, id_paziente, id_medico, data, nomeEsame, referto, id_prenotazione, stato ));
+				listaEsami.add(new EsameDTO(id_esame, area, id_paziente, id_medico, data_ora, nomeEsame, referto, id_prenotazione, stato ));
 			}
 			rs.close();
 			stmt.close();
@@ -149,11 +189,11 @@ public class EsameDAO {
 		PreparedStatement stmt;
 
 		try {
-			stmt = conn.prepareStatement("SELECT * FROM prenotazioni_esami WHERE id_paziente = ?");
+			stmt = conn.prepareStatement("SELECT TO_CHAR(prenotazioni_esami.\"data_ora\", 'DD-MM-YYYY HH24:MI')as data_ora, * FROM prenotazioni_esami WHERE id_paziente = ?");
 			stmt.setInt(1, id_paziente);
 			rs = stmt.executeQuery();
 			while(rs.next()){
-				Date data = rs.getDate("data_ora");
+				String data_ora = rs.getString("data_ora");
 				int id_esame= rs.getInt("id_esame");
 				int id_prenotazione= rs.getInt("id_prenotazione");
 				int id_medico = rs.getInt("id_medico");
@@ -163,7 +203,7 @@ public class EsameDAO {
 				String area = getAreaById(id_esame);
 
 
-				listaEsami.add(new EsameDTO(id_esame, area, id_paziente, id_medico, data, nomeEsame, referto, id_prenotazione, stato ));
+				listaEsami.add(new EsameDTO(id_esame, area, id_paziente, id_medico, data_ora, nomeEsame, referto, id_prenotazione, stato ));
 			}
 			rs.close();
 			stmt.close();

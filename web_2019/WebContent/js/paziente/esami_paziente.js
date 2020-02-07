@@ -1,12 +1,18 @@
-$('#tabelle_esami').on('slid.bs.carousel', function () {
 
-	$('.datatable').DataTable().columns.adjust().draw();
-
-});
 
 $(document).ready(function () {
+	
+	$("#tabelle_esami").carousel({
+		interval: false
+	});
 
+	$('#tabelle_esami').on('slid.bs.carousel', function () {
 
+		$('.datatable').DataTable().columns.adjust();
+
+	});
+	
+	
 	$('#tabellaEsamiPrenotati').DataTable({
 
 		ordering: false,
@@ -66,5 +72,13 @@ $(document).ready(function () {
 
 
 	});
+	
+	$("#cercaStruttura").on("keyup", function () {
+		var value = $(this).val().toLowerCase();
+		$("#listaEsami li").filter(function () {
+			$(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+		});
+	});
+
 
 });

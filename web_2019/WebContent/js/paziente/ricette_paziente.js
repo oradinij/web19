@@ -1,12 +1,18 @@
-$('#tabelle_ricette').on('slid.bs.carousel', function () {
 
-	$('.datatable').DataTable().columns.adjust().draw();
-
-});
 
 $(document).ready(function () {
+	
+	$("#tabelle_ricette").carousel({
+		interval: false
+	});
 
+	$('#tabelle_ricette').on('slid.bs.carousel', function () {
 
+		$('.datatable').DataTable().columns.adjust();
+
+	});
+	
+	
 	$('#tabellaRicetteDaErogare').DataTable({
 
 		ordering: false,

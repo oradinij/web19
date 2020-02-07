@@ -75,7 +75,7 @@ $('#loading_modal').modal({
 &nbsp;
 <div class="container text-center" style="background-color: #C1D4D9; border-radius: 20px; padding:20px; max-width: 70%"><img class="rounded-circle " src="../images/utente1img.jpg" width="150" height="150" alt="user" style="margin-bottom: 10px;">
   <h2>Ricette di: <span class="badge badge-info">${visita_corrente.paziente.nome} ${visita_corrente.paziente.cognome}</span></h2>
-  <form id="formPaziente${visita_corrente.paziente.id}" action="DettagliPaziente">  
+  <form id="formPaziente${visita_corrente.paziente.id}" action="DettagliPazienteBase">  
        <input type="hidden" value="${visita_corrente.paziente.id}" name="id"> 
   <button class="btn btn-success" type="submit" onclick="loadingModal()"><i class="fa fa-arrow-circle-left"></i> Torna al paziente</button>
   </form>
@@ -107,10 +107,10 @@ $('#loading_modal').modal({
             <td style="vertical-align: middle"><span class="badge badge-pill badge-secondary">Erogata</span></td>
             </c:if>
             <c:if test="${prescrizione.stato==1}">
-            <td style="vertical-align: middle">${prescrizione.data}</td>
+            <td style="vertical-align: middle">${prescrizione.data_ora}</td>
             </c:if>
              <c:if test="${prescrizione.stato==0}">
-            <td style="vertical-align: middle">${prescrizione.solo_data}</td>
+            <td style="vertical-align: middle">${prescrizione.data}</td>
             </c:if>
             <c:if test="${prescrizione.stato==0}">
             <td style="vertical-align: middle"><button  id="bottone_dettagli${prescrizione.id_prescrizione}" onclick="modal_ricetta_da_erogare(${prescrizione.id_prescrizione})" class="btn btn-outline-info"><i class="fa fa-info-circle"></i> Dettagli</button></td>
@@ -194,7 +194,7 @@ $('#loading_modal').modal({
       </div>
     </div>
   </div>
-</div>
+
 
 <script>
 
@@ -208,7 +208,7 @@ function modal_ricetta_erogata(id){
 	        type: "GET",
 	        success: function (result) { 
 	        	console.log(result);
-	            document.getElementById('data_erogata').innerHTML=result.data;
+	            document.getElementById('data_erogata').innerHTML=result.data_ora;
 	            document.getElementById('nome_medico_erogata').innerHTML=result.nome_medico + " " + result.cognome_medico;    
 	            document.getElementById('visita_riferimento_erogata').innerHTML=result.id_riferimento;
 	            document.getElementById('farmaco_erogata').innerHTML=result.farmaco;

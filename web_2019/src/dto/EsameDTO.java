@@ -16,7 +16,8 @@ public class EsameDTO {
 	private int id_prenotazione;
 	private int id_paziente;
 	private int id_medico;
-	private Date data;
+	private String data_ora;
+	private String data;
 	private String nomeEsame;
 	private String area;
 	private String referto;
@@ -25,12 +26,13 @@ public class EsameDTO {
 	
 	
 
-	public EsameDTO(int id_esame, String area, int id_paziente, int id_medico, Date data, String nomeEsame, String referto, int id_prenotazione, int stato) {
+	public EsameDTO(int id_esame, String area, int id_paziente, int id_medico, String data_ora, String nomeEsame, String referto, int id_prenotazione, int stato) {
 		this.id_esame = id_esame;
 		this.id_prenotazione = id_prenotazione;
 		this.id_medico = id_medico;
 		this.id_paziente = id_paziente;
-		this.data = data;
+		this.data_ora = data_ora;
+		this.data = data_ora.split(" ")[0];
 		this.nomeEsame = nomeEsame;
 		this.referto = referto;
 		this.stato = stato;
@@ -50,7 +52,8 @@ public JsonObject toJson () {
 		
 		json.addProperty("nome_esame", getNomeEsame());
 		json.addProperty("id_prenotazione", getId_prenotazione());
-		json.addProperty("data", getData().toString());
+		json.addProperty("data", getData());
+		json.addProperty("data_ora", getData_ora());
 		json.addProperty("stato", getStato());
 		json.addProperty("specializzazione", getArea());
 
@@ -59,6 +62,11 @@ public JsonObject toJson () {
 		
 	}
 	
+	public String getData_ora() {
+		return data_ora;
+}
+
+
 	public ArrayList <EsameDTO> getEsamiByIdRiferimento(int id_riferimento){
 		
 		 ArrayList <EsameDTO> esami = new EsameDAO().getByRiferimento(id_riferimento);
@@ -107,10 +115,10 @@ public JsonObject toJson () {
 		this.referto = referto;
 	}
 
-	public Date getData() {
+	public String getData() {
 		return data;
 	}
-	public void setData(Date data) {
+	public void setData(String data) {
 		this.data = data;
 	}
 	public String getNomeEsame() {

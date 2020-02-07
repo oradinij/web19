@@ -1,11 +1,10 @@
-<%@page import="org.apache.tomcat.util.http.fileupload.RequestContext"%>
 <%@ page language="java" contentType="text/html; charset=UTF8"
 	pageEncoding="UTF8"%>
 
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
-<!DOCTYPE html5>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="it">
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -62,6 +61,7 @@
 		</div>
 	</nav>
 	&nbsp;
+	
 	<div class="container bg-faded"
 		style="background-color: #C1D4D9; padding: 20px; border-radius: 20px; max-width: 50%;">
 		<div class="container">
@@ -91,12 +91,12 @@
 				<img src="../images/pills.jpg" alt="pills" style="height: 220px;">
 				<div class="overlay">
 					<div class="overlay-content">
-						<a class="hover" href="#!">Vai alle ricette</a>
+						<a href="./Ricette">Vai alle ricette</a>
 					</div>
 				</div>
 			</div>
 			<div class="card-content">
-				<a href="#!">
+				<a href="./paziente/Ricette">
 					<h2>Ricette</h2>
 					<p>Le tue prescrizioni</p>
 				</a>
@@ -107,7 +107,7 @@
 				<img src="../images/visit.jpg" alt="pills" style="height: 220px;">
 				<div class="overlay">
 					<div class="overlay-content">
-						<a href="#!">Vai alle visite</a>
+						<a  href="#!">Vai alle visite</a>
 					</div>
 				</div>
 			</div>
@@ -135,7 +135,41 @@
 			</div>
 		</div>
 	</div>
-	<hr>
+	
+	
+	<div class="modal fade" id="loading_modal" style="border-radius:20px;">
+  <div class="modal-dialog" role="document" >
+    <div class="modal-content">
+     
+      <div class="modal-body text-center">
+        
+		<div class="spinner-border text-info" role="status">
+ 			 
+		</div>
+		<h5><span>Caricamento...</span></h5>
+      </div>
+     
+    </div>
+  </div>
+  </div>
+
+  <script type="text/javascript">
+
+  function loadingModal() {
+  
+$('#loading_modal').modal({
+    backdrop: 'static',
+    keyboard: false
+})
+
+
+  
+  }
+  
+</script>
+	
+	
+	
 
 	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 	<script type="text/javascript" src="../js/jquery-3.2.1.min.js"></script>

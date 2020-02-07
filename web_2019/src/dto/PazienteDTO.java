@@ -140,7 +140,7 @@ public class PazienteDTO implements Serializable{
 	}
 	public void aggiungiPrenotazioneVisita(int id_visita, String data_ora, int id_medico, int id_riferimento) {
 		int stato = Assets.DA_PRENOTARE;
-		if(id_medico == getId_medico()) {
+		if(id_visita == 1) {
 			Logger.log("Wow ma allra non sei codice inutile! riga 144");
 			stato = Assets.PRENOTAZIONE_EFFETTUATA;
 		}
@@ -271,10 +271,12 @@ public class PazienteDTO implements Serializable{
 	 * @param id
 	 * @param referto
 	 */
-	public void completaVisita(int id, String referto) {
+	public void completaVisita(int id, String referto, String data) {
 		new VisitaDAO().aggiornaStato(id, Assets.PRENOTAZIONE_SVOLTA);
 		if(referto != null)
 			new VisitaDAO().aggiornaReferto(id, referto);
+		if(data != null)
+			new VisitaDAO().aggiornaData(id, data);
 		for (VisitaDTO visitaDTO : listaVisite) {
 			if(visitaDTO.getId_prenotazione() == id);
 			{
@@ -299,6 +301,11 @@ public class PazienteDTO implements Serializable{
 	
 	public void annullaPrenotazioneVisita(Integer id_prenotazione) {
 		new PazienteDAO().annullaPrenotazioneVisita(id_prenotazione);
+		
+	}
+	
+	public void annullaPrenotazioneEsame(Integer id_prenotazione) {
+		new PazienteDAO().annullaPrenotazioneEsame(id_prenotazione);
 		
 	}
 	

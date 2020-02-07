@@ -12,6 +12,7 @@
 <link rel="stylesheet" href="../css/bootstrap.css">
 <link rel="stylesheet" href="../css/custom.css">
 <link rel="stylesheet" href="../css/medico_base/lista_pazienti.css">
+<link rel="stylesheet" href="../css/fontawesome-pro-5.12.0-web/css/all.css">
 <script src="../js/popper.min.js"></script>
 <script src="../js/jquery-3.3.1.min.js"></script>
 <script src="../js/bootstrap.js"></script>
