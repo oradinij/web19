@@ -21,10 +21,9 @@ public class PrescrizioneDTO {
 	private String data;
 	private String farmaco;
 	private int stato;
+	@SuppressWarnings("unused")
 	private String nome_medico;
-
-
-
+	private String cognome_medico;
 
 
 
@@ -32,6 +31,8 @@ public class PrescrizioneDTO {
 		this.id_prescrizione = id_prescrizione;
 		this.id_paziente = id_paziente;
 		this.id_medico = id_medico;
+		this.nome_medico = new MedicoDAO().getUserById(id_medico).getNome();
+		this.cognome_medico = new MedicoDAO().getUserById(id_medico).getCognome();
 		this.data_ora = data_ora;
 		this.data=data_ora.split(" ")[0];
 		this.farmaco = farmaco;
@@ -106,6 +107,18 @@ public JsonObject toJson () {
 	}
 	public Integer getStato() {
 		return stato;
+	}
+
+	public void setNome_medico(String nome_medico) {
+		this.nome_medico = nome_medico;
+	}
+
+	public String getCognome_medico() {
+		return cognome_medico;
+	}
+
+	public void setCognome_medico(String cognome_medico) {
+		this.cognome_medico = cognome_medico;
 	}
 
 }

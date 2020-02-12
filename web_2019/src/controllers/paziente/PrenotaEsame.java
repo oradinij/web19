@@ -11,14 +11,13 @@ import javax.servlet.http.HttpServletResponse;
 import com.sun.mail.iap.Response;
 
 import dao.EsameDAO;
-import dao.VisitaDAO;
 import dto.PazienteDTO;
 
 /**
  * Prenotazione visita dal prorio medico di base
  */
-@WebServlet("/paziente/prenotaVisita")
-public class PrenotaVisita extends HttpServlet {
+@WebServlet("/paziente/prenotaEsame")
+public class PrenotaEsame extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String time = req.getParameter("time");
@@ -29,9 +28,9 @@ public class PrenotaVisita extends HttpServlet {
 			
 			System.out.println("Nuova data: " + time);
 			
-			new VisitaDAO().aggiornaDataPrenotazione(id_prenotazione, time);
-			new VisitaDAO().aggiornaStato(id_prenotazione, 1);
-			new VisitaDAO().aggiornaMedico(id_prenotazione, id_medico);
+			new EsameDAO().aggiornaDataPrenotazione(id_prenotazione, time);
+			new EsameDAO().aggiornaStato(id_prenotazione, 1);
+			new EsameDAO().aggiornaMedico(id_prenotazione, id_medico);
 
 			
 			PazienteDTO user = (PazienteDTO)req.getSession().getAttribute("user");

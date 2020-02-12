@@ -3,6 +3,7 @@ package dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -14,7 +15,65 @@ import web_2019.DatabaseService;
 
 public class PrescrizioneDAO {
 	
+	public void aggiornaData(int id_prescrizione) {
+		Connection conn = DatabaseService.getDbConnection();
+		PreparedStatement stmt;
+		try {
+			String sql = "UPDATE public.prescrizioni SET timestamp=? WHERE id_prescrizione = ?;";
+			stmt = conn.prepareStatement(sql);
+			stmt.setTimestamp(1, new Timestamp(System.currentTimeMillis()));
+			stmt.setInt(2, id_prescrizione);
 
+			stmt.executeUpdate();
+			stmt.close();
+			conn.close();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+
+		}
+	}
+	
+	
+	public void aggiornaFarmacia(int id_prescrizione, int id_farmacia) {
+		Connection conn = DatabaseService.getDbConnection();
+		PreparedStatement stmt;
+		try {
+			String sql = "UPDATE public.prescrizioni SET id_farmacia=? WHERE id_prescrizione = ?;";
+			stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, id_farmacia);
+			stmt.setInt(2, id_prescrizione);
+
+			stmt.executeUpdate();
+			stmt.close();
+			conn.close();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+
+		}
+	}
+	
+	public void aggiornaStato(int id_prescrizione, int stato) {
+		Connection conn = DatabaseService.getDbConnection();
+		PreparedStatement stmt;
+		try {
+			String sql = "UPDATE public.prescrizioni SET stato=? WHERE id_prescrizione = ?;";
+			stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, stato);
+			stmt.setInt(2, id_prescrizione);
+
+			stmt.executeUpdate();
+			stmt.close();
+			conn.close();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+
+		}
+	}
+	
+	
 	public JsonObject  toJson(int id_ricetta) { 
 		JsonObject json = new JsonObject();
 		Connection conn =DatabaseService.getDbConnection();
@@ -40,7 +99,7 @@ public class PrescrizioneDAO {
 				Integer tipo_riferimento= visita_tmp.getId_visita();
 				
 				if(stato==1) {
-					String nome_farmacia = new FarmaciaDAO().getUserById(id_farmacia).getNome();
+					String nome_farmacia = new FarmaciaDAO().getUserById(id_farmacia).getNome_farmacia();
 					json.addProperty("farmacia", nome_farmacia);
 			}
 				json.addProperty("farmaco", farmaco);

@@ -14,6 +14,7 @@ cambia la tua password
 	<input type="radio" name="tipologia_utente" value="0" required="required">Sono un paziente<br>
 	<input type="radio" name="tipologia_utente" value="1" required="required">Sono un medico<br>
 	<input type="radio" name="tipologia_utente" value="2" required="required">Sono una farmacia<br>
+	<input type="radio" name="tipologia_utente" value="3" required="required">Sono un operatore<br>
 	<br><br>
 	email: <input type="email" required="required" name = "email">
 	<input type = "submit" value = "richiedi cambio password">

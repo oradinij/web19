@@ -3,6 +3,8 @@ package dto;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import com.google.gson.JsonObject;
+
 import dao.EsameDAO;
 import dao.MedicoDAO;
 import dao.PazienteDAO;
@@ -21,7 +23,8 @@ public class PazienteDTO implements Serializable{
 	private String sesso;		
 	private String data_nascita;		
 	private String luogo_nascita;		
-	private String foto_path;	
+	private String foto_path;
+	private String provincia;
 
 	private ArrayList<EsameDTO>  listaEsami = null;
 	private ArrayList<EsameDTO>  lista_esami_da_prenotare = null;
@@ -32,6 +35,23 @@ public class PazienteDTO implements Serializable{
 	private ArrayList<PrescrizioneDTO>  listaPrescrizioni = null;
 	private String dataUltimaVisita;
 
+	
+		public JsonObject toJson () {
+		
+		JsonObject json= new JsonObject();
+		
+		json.addProperty("nome", getNome());
+		json.addProperty("cognome", getCognome());
+		json.addProperty("data_nascita", getData_nascita());
+		json.addProperty("id", getId());
+		json.addProperty("codice_fiscale", getCodice_fiscale());
+		json.addProperty("foto_path", getFoto_path());
+
+		
+		return json;
+		
+	}
+	
 
 	public PazienteDTO(int id_paziente, int id_medico, String codice_fiscale, String email, String luogo_nascita, String provincia, String nome, String sesso,
 			String data_nascita, String cognome, String foto_path) {
@@ -40,6 +60,7 @@ public class PazienteDTO implements Serializable{
 		this.codice_fiscale = codice_fiscale;
 		this.email = email;
 		this.luogo_nascita = luogo_nascita;
+		this.setProvincia(provincia);
 		this.nome = nome;
 		this.sesso = sesso;
 		this.data_nascita = data_nascita;
@@ -282,6 +303,7 @@ public class PazienteDTO implements Serializable{
 			{
 				visitaDTO.setStato(Assets.PRENOTAZIONE_EFFETTUATA);
 				visitaDTO.setReferto(referto);
+				visitaDTO.setData(data);
 				break;
 			}
 		}
@@ -290,6 +312,8 @@ public class PazienteDTO implements Serializable{
 	
 	
 	public void completaEsame(int id, String referto, String data) {
+		
+
 		new EsameDAO().aggiornaStato(id,2);
 		if(referto != null)
 			new EsameDAO().aggiornaReferto(id, referto);
@@ -297,6 +321,16 @@ public class PazienteDTO implements Serializable{
 		if(data != null)
 			new EsameDAO().aggiornaData(id, data);
 
+		for (EsameDTO esameDTO : listaEsami) {
+			if(esameDTO.getId_prenotazione() == id);
+			{
+				esameDTO.setStato(Assets.PRENOTAZIONE_EFFETTUATA);
+				esameDTO.setReferto(referto);
+				esameDTO.setData(data);
+				break;
+			}
+		}
+		
 	}
 	
 	public void annullaPrenotazioneVisita(Integer id_prenotazione) {
@@ -308,5 +342,17 @@ public class PazienteDTO implements Serializable{
 		new PazienteDAO().annullaPrenotazioneEsame(id_prenotazione);
 		
 	}
+	public String getProvincia() {
+		return provincia;
+	}
+	public void setProvincia(String provincia) {
+		this.provincia = provincia;
+	}
+	
+	
+	
+
+	
+	
 	
 }

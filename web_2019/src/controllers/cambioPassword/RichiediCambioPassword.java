@@ -11,9 +11,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import dao.FarmaciaDAO;
 import dao.MedicoDAO;
+import dao.OperatoreDAO;
 import dao.PazienteDAO;
+import dto.FarmaciaDTO;
 import dto.MedicoDTO;
+import dto.OperatoreDTO;
 import dto.PazienteDTO;
 import web_2019.DatabaseService;
 import web_2019.MailingService;
@@ -33,6 +37,7 @@ public class RichiediCambioPassword extends HttpServlet {
 	public static final int PAZIENTE = 0;
 	public static final int MEDICO = 1;
 	public static final int FARMACIA = 2;
+	public static final int OPERATORE = 3;
 
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -53,7 +58,13 @@ public class RichiediCambioPassword extends HttpServlet {
 					id_utente = user.getId_medico();
 			}
 			if(tipologia_utente == FARMACIA) {
-				//TODO implementare farmacia
+				FarmaciaDTO user = new FarmaciaDAO().getUserByEmail(email);
+				if(user != null)
+					id_utente = user.getId();
+			}
+			if(tipologia_utente == OPERATORE) {
+				OperatoreDTO user = new OperatoreDAO().getUserByEmail(email);
+				id_utente = user.getId();
 			}
 			if(id_utente != null) {
 				Connection conn =DatabaseService.getDbConnection();

@@ -47,6 +47,7 @@ public class EsameDAO {
 				VisitaDTO visita_tmp = new VisitaDAO().getById(id_riferimento);	
 				Integer tipo_riferimento= visita_tmp.getId_visita();
 				
+				
 				result.addProperty("data_ora", data_ora);
 				result.addProperty("data", data_ora.split(" ")[0]);
 				result.addProperty("id_paziente", id_paziente);
@@ -130,7 +131,7 @@ public class EsameDAO {
 				String area = getAreaById(id_esame);
 
 
-				esame = new EsameDTO(id_esame, area, id_paziente, id_medico, data_ora, nomeEsame, referto, id_prenotazione, stato );
+				esame = new EsameDTO(id_esame, area, id_paziente, id_medico, data_ora, nomeEsame, referto, id_prenotazione, id_riferimento, stato );
 			}
 			rs.close();
 			stmt.close();
@@ -168,7 +169,7 @@ public class EsameDAO {
 				String area = getAreaById(id_esame);
 
 
-				listaEsami.add(new EsameDTO(id_esame, area, id_paziente, id_medico, data_ora, nomeEsame, referto, id_prenotazione, stato ));
+				listaEsami.add(new EsameDTO(id_esame, area, id_paziente, id_medico, data_ora, nomeEsame, referto, id_prenotazione, id_riferimento, stato ));
 			}
 			rs.close();
 			stmt.close();
@@ -196,6 +197,7 @@ public class EsameDAO {
 				String data_ora = rs.getString("data_ora");
 				int id_esame= rs.getInt("id_esame");
 				int id_prenotazione= rs.getInt("id_prenotazione");
+				int id_riferimento= rs.getInt("id_riferimento");
 				int id_medico = rs.getInt("id_medico");
 				int stato = rs.getInt("stato");
 				String referto = rs.getString("referto");
@@ -203,7 +205,7 @@ public class EsameDAO {
 				String area = getAreaById(id_esame);
 
 
-				listaEsami.add(new EsameDTO(id_esame, area, id_paziente, id_medico, data_ora, nomeEsame, referto, id_prenotazione, stato ));
+				listaEsami.add(new EsameDTO(id_esame, area, id_paziente, id_medico, data_ora, nomeEsame, referto, id_prenotazione, id_riferimento, stato ));
 			}
 			rs.close();
 			stmt.close();
@@ -277,6 +279,36 @@ public class EsameDAO {
 		return area;
 	}
 
+	public int getIdSpecializzazione (int id_esame) {
+		
+		
+		Integer id_spec=null;
+		
+		Connection conn =DatabaseService.getDbConnection();
+		ResultSet rs = null;
+		Statement stmt;
+
+
+		try {
+			stmt = conn.createStatement();
+			String sql = "SELECT * FROM esami WHERE id_esame = "+id_esame+";";
+			rs = stmt.executeQuery(sql);
+			while(rs.next()){
+				id_spec = rs.getInt("id_specializzazione");
+			}
+			rs.close();
+			stmt.close();
+			conn.close();
+		}
+
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		return id_spec;
+
+		
+	}
+	
 	
 	public void creaPrenotazioneEsame(int id_esame, int id_paziente, String data_ora, int id_medico, int id_riferimento) {
 		
@@ -330,6 +362,25 @@ public class EsameDAO {
 		}
 	}
 
+	public void aggiornaMedico(int id_prenotazione, int id_medico) {
+		Connection conn = DatabaseService.getDbConnection();
+		PreparedStatement stmt;
+		try {
+			String sql = "UPDATE public.prenotazioni_esami SET id_medico=? WHERE id_prenotazione = ?;";
+			stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, id_medico);
+			stmt.setInt(2, id_prenotazione);
+
+			stmt.executeUpdate();
+			stmt.close();
+			conn.close();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+
+		}
+	}
+	
 	public void aggiornaReferto(int id_prenotazione, String referto) {
 		System.out.println("Pronto referto: "+ referto);
 		Connection conn = DatabaseService.getDbConnection();
@@ -349,12 +400,33 @@ public class EsameDAO {
 
 		}
 	}
+	
+	
+	public void aggiornaDataPrenotazione(int id_prenotazione, String data) {
+		Connection conn = DatabaseService.getDbConnection();
+		PreparedStatement stmt;
+		try {
+			String sql = "UPDATE public.prenotazioni_esami SET data_ora=to_timestamp(?, 'YYYY-MM-DD HH24:MI:SS') WHERE id_prenotazione=?;";
+			stmt = conn.prepareStatement(sql);
+			stmt.setString(1, data);
+			stmt.setInt(2, id_prenotazione);
+
+			stmt.executeUpdate();
+			stmt.close();
+			conn.close();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+
+		}
+	}
+	
 
 	public void aggiornaData(int id_prenotazione, String data) {
 		Connection conn = DatabaseService.getDbConnection();
 		PreparedStatement stmt;
 		try {
-			String sql = "UPDATE public.prenotazioni_esami SET data_ora=to_date(?, 'YYYY-MM-DD') WHERE id_prenotazione=?;";
+			String sql = "UPDATE public.prenotazioni_esami SET data_ora=to_timestamp(?, 'YYYY-MM-DD') WHERE id_prenotazione=?;";
 			stmt = conn.prepareStatement(sql);
 			stmt.setString(1, data);
 			stmt.setInt(2, id_prenotazione);

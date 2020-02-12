@@ -7,39 +7,37 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.sun.mail.iap.Response;
 
 import dao.EsameDAO;
+import dao.PazienteDAO;
 import dao.VisitaDAO;
 import dto.PazienteDTO;
 
 /**
  * Prenotazione visita dal prorio medico di base
  */
-@WebServlet("/paziente/prenotaVisita")
-public class PrenotaVisita extends HttpServlet {
+@WebServlet("/paziente/prenotaVisitaBase")
+public class PrenotaVisitaBase extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		HttpSession session = req.getSession();
 		String time = req.getParameter("time");
 		Integer id_medico = Integer.parseInt(req.getParameter("id_medico"));
-		Integer id_prenotazione = Integer.parseInt(req.getParameter("id_prenotazione"));
+		Integer id_paziente = Integer.parseInt(req.getParameter("id_paziente"));
 
-		if(time != null && id_medico != null && id_prenotazione != null) {
+		if(time != null && id_medico != null && id_paziente != null) {
 			
 			System.out.println("Nuova data: " + time);
 			
-			new VisitaDAO().aggiornaDataPrenotazione(id_prenotazione, time);
-			new VisitaDAO().aggiornaStato(id_prenotazione, 1);
-			new VisitaDAO().aggiornaMedico(id_prenotazione, id_medico);
+			new VisitaDAO().creaPrenotazioneVisitaBase(1,id_paziente,id_medico, time, 1);
+									
+			PazienteDTO user = new PazienteDAO().getUserById(id_paziente);
+			session.setAttribute("user", user);
 
-			
-			PazienteDTO user = (PazienteDTO)req.getSession().getAttribute("user");
-			
-			user.getLista_esami_da_prenotare().remove(new EsameDAO().getById(id_prenotazione));
-			user.getLista_esami_prenotati().add(new EsameDAO().getById(id_prenotazione));
-			
-			resp.sendRedirect(req.getContextPath()+"/paziente/esamiPaziente.jsp");
+			resp.sendRedirect(req.getContextPath()+"/paziente/medicoBasePaziente.jsp");
 		}
 		else {}//TODO messaggistica di errore
 		}

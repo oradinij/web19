@@ -771,7 +771,7 @@ function modal_svolta_base(id){
 		        	console.log(result);
 		            document.getElementById('prenotazione_data_mia').innerHTML=result.visita.data_ora;
 		            document.getElementById('prenotazione_numero_footer_mia').innerHTML="Codice prenotazione: " + id;
-		            document.getElementById('bottone_annullamento_prenotazione').outerHTML= "<a id=\"bottone_annullamento_prenotazione\" href=\"#\" class=\"btn btn-danger\" onclick=\"modalCancellazionePrenotazione(" + id + ")\">Annulla prenotazione</a>"
+		            document.getElementById('bottone_annullamento_prenotazione').outerHTML= "<a id=\"bottone_annullamento_prenotazione\" href=\"#\" class=\"btn btn-danger\" onclick=\"modalCancellazionePrenotazione(" + id + ")\"><i class=\"fa fa-trash\"></i> Annulla prenotazione</a>"
 		            document.getElementById('bottone_compila_modal_prenotazione').outerHTML= "<a id=\"bottone_compila_modal_prenotazione\" href=\"#\" class=\"btn btn-success\" onclick=\"modal_compilazione_visita_specialistica(" + id + ")\">Compila</a>"
 		            $('#modalPrenotazioneSpecialisticaMia').modal('show');
 		            },

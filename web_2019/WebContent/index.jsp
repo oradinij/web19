@@ -24,6 +24,7 @@
 <%@include file="./notifica.jspf" %>
 cose <br>cose <br> cose
 <a href="./login/loginPaziente.jsp">Login Paziente</a>
+<a href="./login/loginOperatore.jsp">Login Operatore</a>
 <a href="./login/loginMedico.jsp">Login Medico</a>
 <a href="./login/loginFarmacia.jsp">Login Farmacia</a>
 <a href="./passwordDimenticata.jsp">Cambia password</a>

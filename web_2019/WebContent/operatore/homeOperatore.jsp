@@ -71,15 +71,13 @@
 				<div class="media-body text-center" style="background-color:">
 					<img class="rounded-circle " src="${user.foto_path}"
 						width="150" height="150" alt="user">
-					<h3 class="mt-0">Il tuo medico di base</h3>
+					<h3 class="mt-0">Il tuo profilo</h3>
 					<div class="container"
 						style="border-radius: 20px; background-color: #F2F2F2; padding-bottom: 10px; padding-top: 10px;">
-						<h4>Nome medico: ${user.medico.nome} ${user.medico.cognome}</h4>
+						<h4>Nome e cognome: ${user.nome} ${user.cognome}</h4>
 						<hr>
-						<h4>Telefono: ${user.medico.telefono_studio}</h4>
-						<hr>
-						<h5>Per prenotare una visita vai alla pagine del medico di base: </h5>
-						<a class="btn btn-success" href="medicoBasePaziente.jsp"><i class="fa fa-user-md"></i> Vai al medico di base</a>
+						<h4>Email: ${user.email}</h4>
+					
 					</div>
 				</div>
 			</div>
@@ -94,14 +92,14 @@
 				<img src="../images/pills.jpg" alt="pills" style="height: 220px;">
 				<div class="overlay">
 					<div class="overlay-content">
-						<a onclick="loadingModal()" href="ricettePaziente.jsp">Vai alle ricette</a>
+						<a onclick="loadingModal()" href="../operatore/ricetteOperatore.jsp">Vai alle ricette</a>
 					</div>
 				</div>
 			</div>
 			<div class="card-content">
-				<a onclick="loadingModal()" href="ricettePaziente.jsp">
-					<h2>Ricette</h2>
-					<p>Le tue prescrizioni</p>
+				<a onclick="loadingModal()" href="../operatore/ricetteOperatore.jsp">
+					<h2>Ricette erogate</h2>
+					<p>Le prescrizioni erogate nel sistema.</p>
 				</a>
 			</div>
 		</div>
@@ -110,14 +108,14 @@
 				<img src="../images/visit.jpg" alt="pills" style="height: 220px;">
 				<div class="overlay">
 					<div class="overlay-content">
-						<a onclick="loadingModal()" href="visitePaziente.jsp">Vai alle visite</a>
+						<a onclick="loadingModal()" href="../operatore/visiteOperatore">Vai alle visite</a>
 					</div>
 				</div>
 			</div>
 			<div class="card-content">
-				<a onclick="loadingModal()" href="visitePaziente.jsp">
+				<a onclick="loadingModal()" href="../operatore/visiteOperatore">
 					<h2>Visite</h2>
-					<p>Tutte le tue visite</p>
+					<p>Le visite specialistiche erogate.</p>
 				</a>
 			</div>
 		</div>
@@ -126,14 +124,14 @@
 				<img src="../images/exam.jpg" alt="pills" style="height: 220px;">
 				<div class="overlay">
 					<div class="overlay-content">
-						<a onclick="loadingModal()" href="esamiPaziente.jsp">Vai agli esami</a>
+						<a onclick="loadingModal()" href="../operatore/esamiOperatore">Vai agli esami</a>
 					</div>
 				</div>
 			</div>
 			<div class="card-content">
-				<a onclick="loadingModal()" href="esamiPaziente.jsp">
-					<h2>Esami</h2>
-					<p>I tuoi esami</p>
+				<a onclick="loadingModal()" href="../operatore/esamiOperatore">
+					<h2>Esami erogati</h2>
+					<p>Gli esami erogati nel sistema.</p>
 				</a>
 			</div>
 		</div>

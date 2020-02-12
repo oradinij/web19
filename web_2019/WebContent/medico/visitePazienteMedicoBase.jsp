@@ -729,7 +729,7 @@ function modal_svolta_base(id){
 		        	console.log(result);
 		            document.getElementById('prenotazione_data_base').innerHTML=result.visita.data_ora;
 		            document.getElementById('prenotazione_numero_footer_base').innerHTML="Codice prenotazione: " + id;
-		            document.getElementById('bottone_annullamento_prenotazione').outerHTML= "<a id=\"bottone_annullamento_prenotazione\" href=\"#\" class=\"btn btn-danger\" onclick=\"modalCancellazionePrenotazione(" + id + ")\">Annulla prenotazione</a>"
+		            document.getElementById('bottone_annullamento_prenotazione').outerHTML= "<a id=\"bottone_annullamento_prenotazione\" href=\"#\" class=\"btn btn-danger\" onclick=\"modalCancellazionePrenotazione(" + id + ")\"><i class=\"fa fa-trash\"></i> Annulla prenotazione</a>"
 		            document.getElementById('bottone_compila_modal_prenotazione').outerHTML= "<a id=\"bottone_compila_modal_prenotazione\" href=\"#\" class=\"btn btn-success\" onclick=\"modal_compilazione_visita_base(" + id + ")\">Compila</a>"
 		            $('#modalPrenotazioneBase').modal('show');
 		            },
@@ -849,7 +849,7 @@ function modalDettagliPrescrizioneSpecialistica(id){
           </h5>
           <h5 id="prenotazione_data_base"></h5>
           
-          <a id="bottone_annullamento_prenotazione" href="#" class="btn btn-danger" onclick="">Annulla prenotazione</a>
+          <a id="bottone_annullamento_prenotazione" href="#" class="btn btn-danger" onclick=""><i class="fa fa-trash"></i> Annulla prenotazione</a>
           
           <hr class="bg-light">
           <h5>
@@ -1052,6 +1052,7 @@ function modalDettagliPrescrizioneSpecialistica(id){
     </div>
   </div>
 </div>
+
 <div class="modal fade" id="modalVisitaBase">
   <div class="modal-dialog">
     <div class="modal-content"> 

@@ -1,11 +1,12 @@
 <!DOCTYPE html5>
-<html lang="en">
+<html lang="it">
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Dati personali</title>
 <link href="../css/custom.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="../css/fontawesome-pro-5.12.0-web/css/all.css">
 <script type="text/javascript" src="../js/jquery-3.3.1.min.js"></script>
 <link rel="stylesheet" href="../css/bootstrap.css">
 <script src="../js/bootstrap.js"></script>
@@ -102,6 +103,13 @@
 			</div>
 		</div>
 	</div>
+	&nbsp;
+	<div class="text-center" style="margin-bottom: 40px;">
+	<a class="btn btn-info" href="homePaziente.jsp"><i class="fa fa-home"></i> Torna alla home</a>
+	</div>
+
+&nbsp;
+	
 	<div class="modal fade" id="modalCambioImmagine">
 		<div class="modal-dialog">
 			<div class="modal-content">
@@ -112,19 +120,19 @@
 					<h4 class="modal-title">Prenotazione medico di base</h4>
 					<button type="button" class="close text-light" data-dismiss="modal">&times;</button>
 				</div>
-
+r
 				<!-- Modal body -->
 				<div class="modal-body text-center"
 					style="background-color: #C1D4D9">
 					<h5>Seleziona un'immagine da caricare:</h5>
-					<form>
+					<form action="./upload"  method="post" enctype="multipart/form-data">
 						<div class="custom-file" style="width: 80%; margin: 20px;">
 							<input required type="file" accept="image/*"
-								class="custom-file-input" id="customFile"> <label
-								class="custom-file-label" for="customFile">Scegli file</label>
+								class="custom-file-input" id="customFile"  name = "file"> <label
+								class="custom-file-label" for="customFile"><i class="fa fa-file-upload"></i> Scegli file</label>
 						</div>
 						&nbsp;
-						<button type="submit" class="btn btn-success">Cambia foto</button>
+						<button type="submit" class="btn btn-success" value="upload Immagine" name="submit"><i class="fa fa-edit"></i> Cambia foto</button>
 					</form>
 					<script type="text/javascript" src="../js/paziente/show_picture_file_name.js"></script>
 				</div>

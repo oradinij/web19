@@ -13,6 +13,8 @@ import java.util.UUID;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
+import com.google.gson.JsonArray;
+
 import dto.PazienteDTO;
 import web_2019.DatabaseService;
 import web_2019.PasswordEncryptionService;
@@ -59,6 +61,10 @@ public class PazienteDAO {
  * @param id_paziente
  * @return il relativo oggetto PazienteDto oppure null se non trova corrispondenza
  */
+
+	
+	
+	
 	
 	public PazienteDTO getUserById(int id_paziente) {
 		PazienteDTO user=null;

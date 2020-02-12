@@ -12,6 +12,19 @@ $(document).ready(function () {
 
 	});
 	
+	$('.tabellaVisita').DataTable({
+
+		ordering: false,
+		paging: false,
+		scrollY: 200,
+		scrollX: true,
+		bInfo: false,
+		scrollCollapse: false, 
+		searching: false
+		
+
+	});	
+	
 	
 	$('#tabellaRicetteDaErogare').DataTable({
 

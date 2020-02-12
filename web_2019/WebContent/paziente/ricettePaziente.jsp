@@ -12,7 +12,7 @@
 <link rel="stylesheet" href="../css/custom.css">
 <link rel="stylesheet" href="../css/paziente/carousel_paziente.css">
 <link rel="stylesheet" href="../css/tempusdominus-bootstrap-4.min.css">
-<link rel="stylesheet" href="../css/font-awesome-4.7.0/css/font-awesome.css">
+<link rel="stylesheet" href="../css/fontawesome-pro-5.12.0-web/css/all.css">
 <link rel="stylesheet" href="../css/bootstrap.css">
 <link rel="stylesheet" href="../css/dataTables.bootstrap4.min.css">
 <script src="../js/jquery-3.3.1.min.js"></script>
@@ -118,6 +118,10 @@
 &nbsp;
 <hr>
 &nbsp;
+	<div class="text-center" style="margin-bottom: 40px;">
+	<a class="btn btn-info" href="homePaziente.jsp"><i class="fa fa-home"></i> Torna alla home</a>
+	</div>
+
 &nbsp;
 
 
@@ -166,7 +170,7 @@ function modal_ricetta_erogata(id){
 	            
 	            
 	            
-	        	document.getElementById("bottone_dettagli"+id).outerHTML="<button href=\"#\" id=\"bottone_dettagli"+id +"\" onclick=\"modal_ricetta_erogata("+ id +")\" class=\"btn btn-outline-info\"><i class=\"fa fa-info-circle\"></i> Dettagli</button>";
+	        	document.getElementById("bottone_dettagli"+id).outerHTML="<button href=\"#\" id=\"bottone_dettagli"+id+"\" onclick=\"modal_ricetta_erogata("+ id +")\" class=\"btn btn-outline-info\"><i class=\"fa fa-info-circle\"></i> Dettagli</button>";
 
 	            
 	            
@@ -352,7 +356,7 @@ function modal_ricetta_da_erogare(id){
 
 		            } else {
 		            	
-		 				document.getElementById("spinner_visita_erogata").outerHTML="<button id=\"spinner_visita_erogata\" class=\"btn btn-info\" onclick=\"modal_svolta_specialistica("+ id + ",2)\">Vedi visita</button>";
+		 				document.getElementById("spinner_visita_erogata").outerHTML="<button id=\"bottone_riferimento_erogata\" class=\"btn btn-info\" onclick=\"modal_svolta_specialistica("+ id + ",2)\">Vedi visita</button>";
 		
 		            	
 		            }
@@ -469,7 +473,7 @@ function modal_ricetta_da_erogare(id){
 
 			            } else {
 			            	
-			 				document.getElementById("spinner_visita_erogata").outerHTML="<button id=\"spinner_visita_erogata\" class=\"btn btn-info\" onclick=\"modal_svolta_base("+ id + ",2)\">Vedi visita</button>";
+			 				document.getElementById("spinner_visita_erogata").outerHTML="<button id=\"bottone_riferimento_erogata\" class=\"btn btn-info\" onclick=\"modal_svolta_base("+ id + ",2)\">Vedi visita</button>";
 			
 			            	
 			            }
@@ -645,7 +649,7 @@ function modal_ricetta_da_erogare(id){
             <p class="badge badge-info">Ricette</p>
           </h5>
           <div class="container">
-            <table id="tabella_ricette_base_completata" class="table datatable table-hover table-striped table-bordered tabellaRicetteEsami" style="width:100%">
+            <table id="tabella_ricette_base_completata" class="table datatable tabellaVisita table-hover table-striped table-bordered tabellaRicetteEsami" style="width:100%">
               <thead >
                 <tr>
                   <th>Numero Ricetta</th>
@@ -661,7 +665,7 @@ function modal_ricetta_da_erogare(id){
             <p class="badge badge-info">Esami</p>
           </h5>
           <div class="container">
-            <table id="tabella_esami_base_completata" class="table datatable table-hover table-bordered table-striped tabellaRicetteEsami" style="width:100%">
+            <table id="tabella_esami_base_completata" class="table datatable tabellaVisita table-hover table-bordered table-striped tabellaRicetteEsami" style="width:100%">
               <thead style="width:100%">
                 <tr>
                   <th>Numero Esame</th>
@@ -677,7 +681,7 @@ function modal_ricetta_da_erogare(id){
             <p class="badge badge-info">Visite</p>
           </h5>
           <div class="container">
-            <table id="tabella_visite_base_completata" class="table datatable table-hover table-bordered table-striped tabellaRicetteEsami" style="width:100%">
+            <table id="tabella_visite_base_completata" class="table datatable tabellaVisita table-hover table-bordered table-striped tabellaRicetteEsami" style="width:100%">
               <thead >
                 <tr>
                   <th>Numero Visita</th>
@@ -746,7 +750,7 @@ function modal_ricetta_da_erogare(id){
             <p class="badge badge-info">Ricette</p>
           </h5>
           <div class="container">
-            <table id="tabella_ricette_specialistica_completata" class="table datatable table-hover table-striped table-bordered tabellaRicetteEsami" style="width:100%">
+            <table id="tabella_ricette_specialistica_completata" class="table datatable tabellaVisita table-hover table-striped table-bordered tabellaRicetteEsami" style="width:100%">
               <thead >
                 <tr>
                   <th>Numero Ricetta</th>
@@ -762,7 +766,7 @@ function modal_ricetta_da_erogare(id){
             <p class="badge badge-info">Esami</p>
           </h5>
           <div class="container">
-            <table id="tabella_esami_specialistica_completata" class="table datatable table-hover table-bordered table-striped tabellaRicetteEsami" style="width:100%">
+            <table id="tabella_esami_specialistica_completata" class="table datatable tabellaVisita table-hover table-bordered table-striped tabellaRicetteEsami" style="width:100%">
               <thead style="width:100%">
                 <tr>
                   <th>Numero Esame</th>
@@ -778,7 +782,7 @@ function modal_ricetta_da_erogare(id){
             <p class="badge badge-info">Visite</p>
           </h5>
           <div class="container">
-            <table id="tabella_visite_specialistica_completata" class="table datatable table-hover table-bordered table-striped tabellaRicetteEsami" style="width:100%">
+            <table id="tabella_visite_specialistica_completata" class="table datatable tabellaVisita table-hover table-bordered table-striped tabellaRicetteEsami" style="width:100%">
               <thead >
                 <tr>
                   <th>Numero Visita</th>

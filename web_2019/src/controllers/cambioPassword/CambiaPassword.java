@@ -46,6 +46,10 @@ public class CambiaPassword extends HttpServlet {
 				tabella_utente="farmacie";
 				campo_utente = "id_farmacia";
 				break;
+			case RichiediCambioPassword.OPERATORE:
+				tabella_utente="operatori";
+				campo_utente = "id_operatore	";
+				break;
 			default:
 				Logger.log("\nCambiaPassword.java: Nessuna tipologia utente ha corrispondenza per %d\n", tipologia_utente);
 				break;

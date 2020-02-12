@@ -32,6 +32,46 @@ import web_2019.DatabaseService;
 import web_2019.PasswordEncryptionService;
 
 public class MedicoDAO {
+	
+	
+	public JsonArray getJsonMediciBase(String provincia, int id_medico_vecchio){
+		System.out.println(provincia);
+	
+		JsonArray result = new JsonArray();
+		Connection conn =DatabaseService.getDbConnection();
+		ResultSet rs = null;
+		try {
+			Statement stmt = conn.createStatement();
+			String sql = "SELECT * FROM medici WHERE id_specializzazione=0 AND provincia='"+ provincia+ "' AND id_medico!='"+id_medico_vecchio +"';";		
+			rs = stmt.executeQuery(sql);
+			while(rs.next()){
+				
+				String nome = rs.getString("nome");	
+				String cognome = rs.getString("cognome");	
+				int id_medico = rs.getInt("id_medico");	
+				
+				JsonObject medico= new JsonObject();
+				
+				medico.addProperty("nome", nome);
+				medico.addProperty("cognome", cognome);
+				medico.addProperty("id_medico", id_medico);
+				
+				result.add(medico);
+				System.out.println("Medico risultante: "+ medico);
+			}
+			rs.close();
+			stmt.close();
+			conn.close();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}	
+		
+		System.out.println(result);
+		return result;
+		
+	};
+	
 
 	public MedicoDTO getUserBySession(String id_sessione) {
 		MedicoDTO user=null;
@@ -56,6 +96,158 @@ public class MedicoDAO {
 		return user;
 	}
 
+	
+	public JsonArray getJsonMediciVisita(int id_prenotazione, String nome_struttura){
+		System.out.println(nome_struttura);
+	
+		JsonArray result = new JsonArray();
+		int id_visita = new VisitaDAO().getById(id_prenotazione).getId_visita();
+		int id_area = new VisitaDAO().getIdSpecializzazione(id_visita);
+		System.out.println(id_area);
+		Connection conn =DatabaseService.getDbConnection();
+		ResultSet rs = null;
+		try {
+			Statement stmt = conn.createStatement();
+			String sql = "SELECT * FROM medici WHERE id_specializzazione = '"+id_area
+					+"' AND struttura='"+ nome_struttura+ "';";		
+			rs = stmt.executeQuery(sql);
+			while(rs.next()){
+				
+				String nome = rs.getString("nome");	
+				String cognome = rs.getString("cognome");	
+				int id_medico = rs.getInt("id_medico");	
+				
+				JsonObject medico= new JsonObject();
+				
+				medico.addProperty("nome", nome);
+				medico.addProperty("cognome", cognome);
+				medico.addProperty("id_medico", id_medico);
+				
+				result.add(medico);
+				System.out.println("Medico risultante: "+ medico);
+			}
+			rs.close();
+			stmt.close();
+			conn.close();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}	
+		
+		System.out.println(result);
+		return result;
+		
+	};
+	
+	public JsonArray getJsonMediciEsame(int id_prenotazione, String nome_struttura){
+		System.out.println(nome_struttura);
+	
+		JsonArray result = new JsonArray();
+		int id_esame = new EsameDAO().getById(id_prenotazione).getId_esame();
+		int id_area = new EsameDAO().getIdSpecializzazione(id_esame);
+		System.out.println(id_area);
+		Connection conn =DatabaseService.getDbConnection();
+		ResultSet rs = null;
+		try {
+			Statement stmt = conn.createStatement();
+			String sql = "SELECT * FROM medici WHERE id_specializzazione = '"+id_area
+					+"' AND struttura='"+ nome_struttura+ "';";		
+			rs = stmt.executeQuery(sql);
+			while(rs.next()){
+				
+				String nome = rs.getString("nome");	
+				String cognome = rs.getString("cognome");	
+				int id_medico = rs.getInt("id_medico");	
+				
+				JsonObject medico= new JsonObject();
+				
+				medico.addProperty("nome", nome);
+				medico.addProperty("cognome", cognome);
+				medico.addProperty("id_medico", id_medico);
+				
+				result.add(medico);
+				System.out.println("Medico risultante: "+ medico);
+			}
+			rs.close();
+			stmt.close();
+			conn.close();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}	
+		
+		System.out.println(result);
+		return result;
+		
+	};
+	
+	
+	public JsonArray getJsonStruttureVisita(int id_prenotazione, String provincia){
+		System.out.println(provincia);
+	
+		JsonArray result = new JsonArray();
+		int id_visita = new VisitaDAO().getById(id_prenotazione).getId_visita();
+		int id_area = new VisitaDAO().getIdSpecializzazione(id_visita);
+		System.out.println(id_area);
+		Connection conn =DatabaseService.getDbConnection();
+		ResultSet rs = null;
+		try {
+			Statement stmt = conn.createStatement();
+			String sql = "SELECT DISTINCT struttura FROM medici WHERE id_specializzazione = '"+id_area
+					+"' AND provincia='"+ provincia+ "';";		
+			rs = stmt.executeQuery(sql);
+			while(rs.next()){
+				String struttura = rs.getString("struttura");	
+				result.add(struttura);
+				System.out.println("Struttura risultante: "+ struttura);
+			}
+			rs.close();
+			stmt.close();
+			conn.close();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}	
+		
+		System.out.println(result);
+		return result;
+		
+	};
+	
+	public JsonArray getJsonStruttureEsame(int id_prenotazione, String provincia){
+		System.out.println(provincia);
+	
+		JsonArray result = new JsonArray();
+		int id_esame = new EsameDAO().getById(id_prenotazione).getId_esame();
+		int id_area = new EsameDAO().getIdSpecializzazione(id_esame);
+		System.out.println(id_area);
+		Connection conn =DatabaseService.getDbConnection();
+		ResultSet rs = null;
+		try {
+			Statement stmt = conn.createStatement();
+			String sql = "SELECT DISTINCT struttura FROM medici WHERE id_specializzazione = '"+id_area
+					+"' AND provincia='"+ provincia+ "';";		
+			rs = stmt.executeQuery(sql);
+			while(rs.next()){
+				String struttura = rs.getString("struttura");	
+				result.add(struttura);
+				System.out.println("Struttura risultante: "+ struttura);
+			}
+			rs.close();
+			stmt.close();
+			conn.close();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}	
+		
+		System.out.println(result);
+		return result;
+		
+	};
+	
+	
+	
 	
 	
 	private Calendar dateToCalendar(Date date) {
@@ -245,7 +437,7 @@ public class MedicoDAO {
 				String immagine = rs.getString("immagine");
 				String struttura = rs.getString("struttura");
 				String provincia = rs.getString("provincia");
-				user= new MedicoDTO(email, id, idSpecializzazione, nome, cognome, provincia, telefono_stuidio, immagine, immagine, struttura);
+				user= new MedicoDTO(email, id, idSpecializzazione, nome, cognome, provincia, telefono_stuidio, telefono_cellulare, immagine, struttura);
 
 			}
 			rs.close();
@@ -281,26 +473,7 @@ public class MedicoDAO {
 
 		return user;
 	}
-	public ArrayList<MedicoDTO> getListaMediciBase(){
-		ArrayList<MedicoDTO> listaMedici = new ArrayList<MedicoDTO>();
-		Connection conn =DatabaseService.getDbConnection();
-		PreparedStatement pst;
-		ResultSet rs;
-		String sql = "SELECT * FROM medici WHERE id_specializzazione = ?;";
-		
-		try {
-			pst = conn.prepareStatement(sql);
-			pst.setInt(1,0); //0 el'id specializzazione dei medici di base
-			rs = pst.executeQuery();
-			while(rs.next()){
-				int id_medico= rs.getInt("id_medico");
-				listaMedici.add(new MedicoDAO().getUserById(id_medico));//accede ad db quarantordici volte per nulla ma ok
-			}
-		}
-		catch (Exception e) {e.printStackTrace();}
-		return listaMedici;
 
-	}
 
 	public ArrayList<PazienteDTO> getListaPazienti(int id, int idSpecializzazione) {
 		ArrayList<PazienteDTO> listaPazienti = new ArrayList<PazienteDTO>();

@@ -14,6 +14,7 @@ public class EsameDTO {
 
 	private int id_esame;
 	private int id_prenotazione;
+	private int id_riferimento;
 	private int id_paziente;
 	private int id_medico;
 	private String data_ora;
@@ -22,18 +23,23 @@ public class EsameDTO {
 	private String area;
 	private String referto;
 	private int stato;
+	private String nome_medico;
+	private String cognome_medico;
 
 	
 	
 
-	public EsameDTO(int id_esame, String area, int id_paziente, int id_medico, String data_ora, String nomeEsame, String referto, int id_prenotazione, int stato) {
+	public EsameDTO(int id_esame, String area, int id_paziente, int id_medico, String data_ora, String nomeEsame, String referto, int id_prenotazione, int id_riferimento, int stato) {
 		this.id_esame = id_esame;
 		this.id_prenotazione = id_prenotazione;
+		this.id_riferimento = id_riferimento;
 		this.id_medico = id_medico;
 		this.id_paziente = id_paziente;
 		this.data_ora = data_ora;
 		this.data = data_ora.split(" ")[0];
 		this.nomeEsame = nomeEsame;
+		this.setNome_medico(new MedicoDAO().getUserById(id_medico).getNome());
+		this.setCognome_medico(new MedicoDAO().getUserById(id_medico).getCognome());
 		this.referto = referto;
 		this.stato = stato;
 		this.area = area;
@@ -93,7 +99,6 @@ public JsonObject toJson () {
 		return id_medico;
 	}
 	
-
 	
 	public String getArea() {
 		return new EsameDAO().getSpecializzazioneEsame(this.id_esame);
@@ -150,6 +155,26 @@ public JsonObject toJson () {
 		else
 			return "<button type='button' >Dettagli </button>";
 		
+	}
+
+
+	public String getNome_medico() {
+		return nome_medico;
+	}
+
+
+	public void setNome_medico(String nome_medico) {
+		this.nome_medico = nome_medico;
+	}
+
+
+	public String getCognome_medico() {
+		return cognome_medico;
+	}
+
+
+	public void setCognome_medico(String cognome_medico) {
+		this.cognome_medico = cognome_medico;
 	}
 
 

@@ -18,8 +18,24 @@ public class FarmaciaDTO {
 		return this.id;
 	}
 
-	public String getNome() {		
-		return this.nome_farmacia;
+	public String getIndirizzo() {
+		return indirizzo;
+	}
+
+	public void setIndirizzo(String indirizzo) {
+		this.indirizzo = indirizzo;
+	}
+
+	public String getNome_farmacia() {
+		return nome_farmacia;
+	}
+
+	public void setNome_farmacia(String nome_farmacia) {
+		this.nome_farmacia = nome_farmacia;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	

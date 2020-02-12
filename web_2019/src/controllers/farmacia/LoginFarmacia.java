@@ -52,7 +52,7 @@ public class LoginFarmacia extends HttpServlet {
 		}
 
 		session.setAttribute("user", user);
-		String nextPage = user!= null? "/farmacia/dettagliFarmacia.jsp": "/login/loginFarmacia.jsp" ;
+		String nextPage = user!= null? "/farmacia/homeFarmacia.jsp": "/login/loginFarmacia.jsp" ;
 		response.sendRedirect(request.getContextPath() + nextPage);
 
 	}

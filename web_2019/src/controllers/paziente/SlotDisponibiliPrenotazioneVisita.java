@@ -34,6 +34,7 @@ public class SlotDisponibiliPrenotazioneVisita extends HttpServlet {
 		HashSet<String> orari_prenotati = new HashSet<String>();
 		Set<String> orari_disponibili = orariDisponibili();
 		String data = request.getParameter("data");
+		Integer id_medico = Integer.parseInt(request.getParameter("id_medico"));
 		Logger.log("Data selezionata: %s", data);
 		if (data!= null) {
 			Connection conn =DatabaseService.getDbConnection();
@@ -45,9 +46,25 @@ public class SlotDisponibiliPrenotazioneVisita extends HttpServlet {
 						+ "'day', prenotazioni_visite.data)  as data, "
 						+ "to_char( prenotazioni_visite.data - date_trunc('day', prenotazioni_visite.data), 'HH24:MI:SS')as ora "
 						+ "from prenotazioni_visite "
-						+ "where data::date = TO_DATE(?, 'YYYY-DD-MM');";
+						+ "where data::date = TO_DATE(?, 'YYYY-MM-DD') AND id_medico = ?;";
 				pst = conn.prepareStatement(sql);
 				pst.setString(1,data);
+				pst.setInt(2,id_medico);
+				rs = pst.executeQuery();
+				while(rs.next()){
+					String orario_prenotato = rs.getString("ora");
+					orari_prenotati.add(orario_prenotato);
+					//Logger.log("Slot prenotato: %s", orario_prenotato);
+
+				}
+				String sql2 = "select date_trunc("
+						+ "'day', prenotazioni_esami.data_ora)  as data, "
+						+ "to_char( prenotazioni_esami.data_ora - date_trunc('day', prenotazioni_esami.data_ora), 'HH24:MI:SS')as ora "
+						+ "from prenotazioni_esami "
+						+ "where data_ora::date = TO_DATE(?, 'YYYY-MM-DD') AND id_medico = ?;";
+				pst = conn.prepareStatement(sql2);
+				pst.setString(1,data);
+				pst.setInt(2,id_medico);
 				rs = pst.executeQuery();
 				while(rs.next()){
 					String orario_prenotato = rs.getString("ora");

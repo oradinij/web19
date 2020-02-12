@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 
@@ -14,6 +15,77 @@ import utils.Logger;
 import web_2019.DatabaseService;
 
 public class VisitaDAO {
+	
+	
+	public void aggiornaMedico(int id_prenotazione, int id_medico) {
+		Connection conn = DatabaseService.getDbConnection();
+		PreparedStatement stmt;
+		try {
+			String sql = "UPDATE public.prenotazioni_visite SET id_medico=? WHERE id_prenotazione = ?;";
+			stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, id_medico);
+			stmt.setInt(2, id_prenotazione);
+
+			stmt.executeUpdate();
+			stmt.close();
+			conn.close();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+
+		}
+	}
+	
+	
+	public void aggiornaDataPrenotazione(int id_prenotazione, String data) {
+		Connection conn = DatabaseService.getDbConnection();
+		PreparedStatement stmt;
+		try {
+			String sql = "UPDATE public.prenotazioni_visite SET data=to_timestamp(?, 'YYYY-MM-DD HH24:MI:SS') WHERE id_prenotazione=?;";
+			stmt = conn.prepareStatement(sql);
+			stmt.setString(1, data);
+			stmt.setInt(2, id_prenotazione);
+
+			stmt.executeUpdate();
+			stmt.close();
+			conn.close();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+
+		}
+	}
+		
+	
+public int getIdSpecializzazione (int id_visita) {
+		
+		
+		Integer id_spec=null;
+		
+		Connection conn =DatabaseService.getDbConnection();
+		ResultSet rs = null;
+		Statement stmt;
+
+
+		try {
+			stmt = conn.createStatement();
+			String sql = "SELECT * FROM visite_specialistiche WHERE id_visita = "+id_visita+";";
+			rs = stmt.executeQuery(sql);
+			while(rs.next()){
+				id_spec = rs.getInt("id_specializzazione");
+			}
+			rs.close();
+			stmt.close();
+			conn.close();
+		}
+
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		return id_spec;
+
+		
+	}
 
 	public ArrayList<VisitaDTO> getPrenotateBySpecialista( int id_medico, int id_paziente) {
 		ArrayList<VisitaDTO> listaVisite = new ArrayList<VisitaDTO>();
@@ -157,6 +229,33 @@ public class VisitaDAO {
 		return luogoVisita;
 	}
 
+	
+	public void creaPrenotazioneVisitaBase(int id_visita, int id_paziente, int id_medico, String data_ora,  int stato) {
+		Connection conn = DatabaseService.getDbConnection();
+		PreparedStatement stmt;
+		//se e' una visita del medico di base l'utente la prenota direttamente altrimenti viene prima prescritta dal medico e successivamente prenotata
+		//per questo il metodo prende anche lo stato
+		try {
+			String sql = "INSERT INTO public.prenotazioni_visite(data, id_paziente, id_medico, stato, id_riferimento, id_visita) VALUES (TO_TIMESTAMP(?, 'YYYY-MM-DD HH24:MI'), ?, ?, ?, null , ?);";
+			stmt = conn.prepareStatement(sql);
+
+			stmt.setString(1, data_ora);
+			stmt.setInt(2, id_paziente);
+			stmt.setInt(3, id_medico);
+			stmt.setInt(4, stato);
+			stmt.setInt(5,	id_visita);
+
+			stmt.executeUpdate();
+			stmt.close();
+			conn.close();
+		}
+
+		catch (Exception e) {
+			e.printStackTrace();
+
+		}
+	}
+	
 	public void creaPrenotazioneVisita(int id_visita, int id_paziente, int id_medico, String data_ora,  int stato, int id_riferimento) {
 		Connection conn = DatabaseService.getDbConnection();
 		PreparedStatement stmt;
