@@ -33,6 +33,7 @@ public class UploadServlet extends HttpServlet {
 		PazienteDTO user = (PazienteDTO) request.getSession().getAttribute("user");
 
 		String appPath = request.getServletContext().getRealPath("");
+		Logger.log("REAL PATH: %s", appPath);
 		String savePath = appPath + SAVE_DIR;
 		File fileSaveDir = new File(savePath);
 		if (!fileSaveDir.exists()) {

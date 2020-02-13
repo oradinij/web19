@@ -148,7 +148,7 @@ public class OperatoreDAO {
 			e.printStackTrace();//puo essere che semplicemente non nulla
 		}
 
-		System.out.println("Viva la f...");
+
 		
 		return listaVisite;
 	}

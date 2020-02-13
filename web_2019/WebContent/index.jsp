@@ -49,7 +49,7 @@
     </div>
     <div class="container">
        <div class="row text-center">
-          <div class="col-lg-6 offset-lg-3"> Con la presenza di 5 diverse tipologie di utente, ognuno di essi può svolgere le proprie mansioni all'interno dell'ecosistema del sistema sanitario. Gli attori di questo sistema sono paziente, medico di base, medico specialista, farmacia e operatore del servizio sanitario.</div>
+          <div class="col-lg-6 offset-lg-3"> Con la presenza di 5 diverse tipologie di utente, ognuno di essi può svolgere le proprie mansioni all'interno dell'ecosistema del servizio sanitario. Gli attori di questo sistema sono paziente, medico di base, medico specialista, farmacia e operatore del servizio sanitario.</div>
        </div>
       </div>
 

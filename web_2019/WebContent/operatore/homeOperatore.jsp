@@ -32,20 +32,20 @@
 		</button>
 		<div class="collapse navbar-collapse" id="navbarSupportedContent">
 			<ul class="navbar-nav mr-auto">
-				<li class="nav-item active"><a class="nav-link" href="./homeOperatore.jsp">Home <span
+				<li class="nav-item active"><a class="nav-link" onclick="loadingModal()" href="./homeOperatore.jsp">Home <span
 						class="sr-only">
 							 
 						</span></a></li>
 				
-				<li class="nav-item"><a class="nav-link " onclick="loadingModal()" href="./ricetteOperatore.jsp"
+				<li class="nav-item"><a class="nav-link " onclick="loadingModal()" href="../operatore/ricetteOperatore.jsp"
 					role="button" aria-haspopup="true" aria-expanded="false">
 						Ricette 
 				</a></li>
-				<li class="nav-item"><a onclick="loadingModal()" class="nav-link" href="visiteOperatore" role="button"
+				<li class="nav-item"><a onclick="loadingModal()" class="nav-link" href="../operatore/visiteOperatore" role="button"
 					 aria-haspopup="true" aria-expanded="false">
 						Visite <span class="badge badge-pill badge-warning">${user.getVisiteNonPagate().size()}</span>
 				</a></li>
-				<li class="nav-item"><a onclick="loadingModal()" class="nav-link" href="esamiOperatore"
+				<li class="nav-item"><a onclick="loadingModal()" class="nav-link" href="../operatore/esamiOperatore"
 					role="button" aria-haspopup="true" aria-expanded="false"> Esami
 						<span class="badge badge-pill badge-warning">${user.getEsamiNonPagati().size()}</span>
 				</a></li>

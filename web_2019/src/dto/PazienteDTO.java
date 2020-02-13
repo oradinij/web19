@@ -69,7 +69,7 @@ public class PazienteDTO implements Serializable{
 		if (foto_path != null && foto_path.length()>0)
 			this.foto_path = foto_path;
 		else
-			this.foto_path = "/web2019/uploadFiles/default_user.png"; 
+			this.foto_path = "/web2019/immagini_pazienti/default_user.png"; 
 	}
 	public String getDataUltimaVisita() {
 		ArrayList<VisitaDTO>listaVisite = getListaVisite();

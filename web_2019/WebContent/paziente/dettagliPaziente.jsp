@@ -24,22 +24,22 @@
 		</button>
 		<div class="collapse navbar-collapse" id="navbarSupportedContent">
 			<ul class="navbar-nav mr-auto">
-				<li class="nav-item "><a class="nav-link" href="./dettagliPaziente.jsp">Home <span
+				<li class="nav-item "><a onclick="loadingModal()" class="nav-link" href="./homePaziente.jsp">Home <span
 						class="sr-only">
 							 
 						</span></a></li>
-				<li class="nav-item active "><a class="nav-link" href="#"
-					id="navbarDropdown" role="button" data-toggle="dropdown"
+				<li class="nav-item active "><a class="nav-link" onclick="loadingModal()" href="./dettagliPaziente.jsp"
+					id="navbarDropdown" role="button" 
 					aria-haspopup="true" aria-expanded="false"> Dati Personali </a></li>
-				<li class="nav-item"><a onclick="loadingModal()" class="nav-link" href="./dettagliPaziente.jsp" role="button"
-					data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+				<li class="nav-item"><a onclick="loadingModal()" class="nav-link" href="./medicoBasePaziente.jsp" role="button"
+					 aria-haspopup="true" aria-expanded="false">
 						Medico </a></li>
 				<li class="nav-item"><a  onclick="loadingModal()" class="nav-link " href="./ricettePaziente.jsp"
 					role="button" aria-haspopup="true" aria-expanded="false">
 						Ricette <span class="badge badge-pill badge-warning">${user.getRicetteNonErogate().size()}</span>
 				</a></li>
 				<li class="nav-item"><a  onclick="loadingModal()" class="nav-link" href="./visitePaziente.jsp" role="button"
-					data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					 aria-haspopup="true" aria-expanded="false">
 						Visite <span class="badge badge-pill badge-warning">${user.getLista_visite_da_prenotare().size()}</span>
 				</a></li>
 				<li class="nav-item"><a  onclick="loadingModal()" class="nav-link " href="./esamiPaziente.jsp"
@@ -112,7 +112,39 @@
 	</div>
 
 &nbsp;
+		
+<div class="modal fade" id="loading_modal" style="border-radius:20px;">
+  <div class="modal-dialog" role="document" >
+    <div class="modal-content">
+     
+      <div class="modal-body text-center">
+        
+		<div class="spinner-border text-info" role="status">
+ 			 
+		</div>
+		<h5><span>Caricamento...</span></h5>
+      </div>
+     
+    </div>
+  </div>
+  </div>
 	
+	<script>
+	
+	
+
+	function loadingModal() {
+	  
+	$('#loading_modal').modal({
+	    backdrop: 'static',
+	    keyboard: false
+	})
+
+
+	  
+	  }
+
+	  </script>
 	<div class="modal fade" id="modalCambioImmagine">
 		<div class="modal-dialog">
 			<div class="modal-content">

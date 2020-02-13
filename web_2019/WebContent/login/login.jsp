@@ -30,7 +30,7 @@ body {
     <li class="nav-item"> <a class="nav-link" href="#section3">Login farmacia</a> </li>
   	<li class="nav-item"> <a class="nav-link" href="#section4">Login operatore</a> </li>
 	<li class="nav-item"> <a class="nav-link" href="./passwordDimenticata.jsp">Recupera password</a> </li>
-	<li class="nav-item"> <a class="nav-link" href="./index.jsp">Home</a> </li>
+	<li class="nav-item"> <a class="nav-link" href="../index.jsp">Home</a> </li>
 	   <%@ include file="../notifica.jspf" %>
   </ul>
 	</div>
