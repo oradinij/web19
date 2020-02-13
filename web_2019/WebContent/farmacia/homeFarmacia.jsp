@@ -13,20 +13,20 @@
 <title>Home</title>
 <link rel="stylesheet" href="../css/custom.css">
 <link rel="stylesheet" href="../css/bootstrap.css">
+<link rel="stylesheet" href="../css/fontawesome-pro-5.12.0-web/css/all.css">
+
 <script src="../js/popper.min.js"></script>
 <script src="../js/jquery-3.3.1.min.js"></script>
 <script src="../js/bootstrap.js"></script>
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-dark"><a class="navbar-brand" href="#">Nome Cognome</a>
+<nav class="navbar navbar-expand-lg navbar-dark"><a class="navbar-brand" href="#">${user.nome_farmacia}</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span> </button>
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
-      <li class="nav-item active"> <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a> </li>
-      <li class="nav-item"> </li>
-      <li class="nav-item"> </li>
-      <li class="nav-item d-inline-block align-bottom"><img alt="iconaUtente" class="img iconaUtente rounded-circle " src="images/utente1img.jpg"></li>
-      <li class="nav-item"> <a class="btn btn-danger" href="#">Logout</a> </li>
+      <li class="nav-item active"> <a class="nav-link" href="./homeFarmacia.jsp">Home <span class="sr-only">(current)</span></a> </li>
+      <li class="nav-item d-inline-block align-bottom"><img alt="iconaUtente" class="img iconaUtente rounded-circle " src="../images/farmacia.png"></li>
+      <li class="nav-item"> <a class="btn btn-danger" href="../login/login.jsp"><i class="fa fa-sign-out"></i> Logout</a> </li>
     </ul>
   </div>
 </nav>
@@ -35,7 +35,7 @@
 	<div class="text-center container" style="padding:20px; border-radius: 20px; max-width: 90%; background-color: white;">
   <div class="container">
     <div class="media">
-      <div class="media-body text-center" style="background-color:  "> <img class="rounded-circle " src="images/utente1img.jpg" width="150" height="150" alt="user">
+      <div class="media-body text-center" style="background-color:  "> <img class="rounded-circle " src="../images/farmacia.png" width="150" height="150" alt="user">
         <h3 class="mt-0">${user.nome_farmacia}</h3>
       </div>
     </div>
@@ -51,7 +51,7 @@
 	 <div class="input-group mb-3">
   <input type="text" id="input_codice_fiscale" class="form-control" placeholder="Cerca codice fiscale...">
   <div class="input-group-append">
-    <button class="btn btn-success" id="bottone_cerca" onclick="cercaPaziente()">Cerca</button>
+    <button class="btn btn-success" id="bottone_cerca" onclick="cercaPaziente()"><i class="fa fa-search"></i> Cerca</button>
   </div>
 </div>
 	 <div id="risultato_ricerca"></div>
@@ -112,11 +112,13 @@ function cercaPaziente(){
 	        url: 'cercaPaziente?codice_fiscale=' + codice_ficale,
 	        type: "GET",
 	        success: function (result) { 
-	        	result = JSON.parse(result);
+	        
 	        	
 	        	
 	        	
 	        	if(result!=""){
+	        		
+	        		result = JSON.parse(result);
 	        	
 	            document.getElementById('risultato_ricerca').innerHTML="<ul class=\"list-group striped pull-down overflow-auto\" id=\contact-list\" style=\"height: 780px;\">"+
 				"<form name=\"formPaziente\" id=\"formPaziente\" action=\"ricettePaziente\" method=\"GET\">"+

@@ -26,20 +26,20 @@
 </head>
 
 <body class="bg-light">
-<nav class="navbar navbar-expand-lg navbar-dark"><a class="navbar-brand" href="#">Nome Cognome</a>
+<nav class="navbar navbar-expand-lg navbar-dark"><a class="navbar-brand" href="#">${user.nome} ${user.cognome}</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span> </button>
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
-      <li class="nav-item"> <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a> </li>
-      <li class="nav-item active"> <a class="nav-link " href="#" role="button" aria-haspopup="true" aria-expanded="false"> Pazienti </a> </li>
-      <li class="nav-item"><a class="nav-link" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Visite <span class="badge badge-pill badge-warning">2</span></a> </li>
-      <li class="nav-item d-inline-block align-bottom"><img alt="iconaUtente" class="img iconaUtente rounded-circle " src="../images/utente1img.jpg"></li>
-      <li class="nav-item"> <a class="btn btn-danger  " href="#">Logout</a> </li>
+      <li class="nav-item "> <a class="nav-link" onclick="loadingModal()" href="./homeMedicoSpecialista.jsp">Home <span class="sr-only">(current)</span></a> </li>
+      <li class="nav-item active"> <a class="nav-link " onclick="loadingModal()" href="./pazientiMedicoSpecialista"  role="button"  aria-haspopup="true" aria-expanded="false"> Pazienti</a> </li>
+      <li class="nav-item"><a class="nav-link" onclick="loadingModal()" href="CalendarioVisiteSpecialista" role="button" aria-haspopup="true" aria-expanded="false"> Visite</a> </li>
+      <li class="nav-item d-inline-block align-bottom"><img alt="iconaUtente" class="img iconaUtente rounded-circle " src="${user.immagine}"></li>
+      <li class="nav-item"> <a class="btn btn-danger" href="../login/login.jsp"><i class="fa fa-sign-out"></i> Logout</a> </li>
     </ul>
   </div>
 </nav>
 &nbsp;
-<div class="container text-center" style="background-color: #C1D4D9; border-radius: 20px; padding:20px; max-width: 70%"><img class="rounded-circle " src="../images/utente1img.jpg" width="150" height="150" alt="user" style="margin-bottom: 10px;">
+<div class="container text-center" style="background-color: #C1D4D9; border-radius: 20px; padding:20px; max-width: 70%"><img class="rounded-circle " src="${visita_corrente.paziente.foto_path}" width="150" height="150" alt="user" style="margin-bottom: 10px;">
   <h2 style="margin-bottom: 20px;">Visite di: <span class="badge badge-info">${visita_corrente.paziente.nome} ${visita_corrente.paziente.cognome}</span></h2>
   <form id="formPaziente${visita_corrente.paziente.id}" action="DettagliPazienteSpecalista">  
        <input type="hidden" value="${visita_corrente.paziente.id}" name="id"> 
@@ -143,7 +143,7 @@
             </c:if>
             <td style="vertical-align: middle">${visita.nome_medico} ${visita.cognome_medico}</td>
               <c:if test="${visita.id_visita!=1}">
-            <td style="vertical-align: middle"><button  id="bottone_dettagli${visita.id_prenotazione}" onclick="modal_svolta_specialistica(${visita.id_prenotazione})" href="#" class="btn btn-outline-info"><i class="fa fa-info-circle"></i> Dettagli</button></td>
+            <td style="vertical-align: middlXre"><button  id="bottone_dettagli${visita.id_prenotazione}" onclick="modal_svolta_specialistica(${visita.id_prenotazione})" href="#" class="btn btn-outline-info"><i class="fa fa-info-circle"></i> Dettagli</button></td>
             </c:if>
             <c:if test="${visita.id_visita==1}">
             
@@ -1195,11 +1195,7 @@ function modal_svolta_base(id){
               </tbody>
             </table>
           </div>
-			 <hr class="bg-light">
-          <h5>
-            <p class="badge badge-info">Scarica referto</p>
-          </h5>
-			<a href="#" class="btn btn-success"><i class="fa fa-download"></i> Scarica referto</a>
+			
         </div>
       </div>
       
@@ -1296,7 +1292,7 @@ function modal_svolta_base(id){
               </tbody>
             </table>
           </div>
-			 <hr class="bg-light">
+			
       </div>
       </div>
       <!-- Modal footer -->

@@ -32,32 +32,32 @@
 		</button>
 		<div class="collapse navbar-collapse" id="navbarSupportedContent">
 			<ul class="navbar-nav mr-auto">
-				<li class="nav-item"><a class="nav-link" href="./dettagliPaziente.jsp">Home <span
+				<li class="nav-item active"><a class="nav-link" href="./dettagliPaziente.jsp">Home <span
 						class="sr-only">
 							 
 						</span></a></li>
-				<li class="nav-item active"><a class="nav-link" href="#"
+				<li class="nav-item "><a class="nav-link" href="#"
 					id="navbarDropdown" role="button" data-toggle="dropdown"
 					aria-haspopup="true" aria-expanded="false"> Dati Personali </a></li>
-				<li class="nav-item"><a class="nav-link" href="#" role="button"
+				<li class="nav-item"><a onclick="loadingModal()" class="nav-link" href="./dettagliPaziente.jsp" role="button"
 					data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 						Medico </a></li>
-				<li class="nav-item"><a class="nav-link " href="#"
+				<li class="nav-item"><a  onclick="loadingModal()" class="nav-link " href="./ricettePaziente.jsp"
 					role="button" aria-haspopup="true" aria-expanded="false">
-						Ricette <span class="badge badge-pill badge-warning">4</span>
+						Ricette <span class="badge badge-pill badge-warning">${user.getRicetteNonErogate().size()}</span>
 				</a></li>
-				<li class="nav-item"><a class="nav-link" href="#" role="button"
+				<li class="nav-item"><a  onclick="loadingModal()" class="nav-link" href="./visitePaziente.jsp" role="button"
 					data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-						Visite <span class="badge badge-pill badge-warning">2</span>
+						Visite <span class="badge badge-pill badge-warning">${user.getLista_visite_da_prenotare().size()}</span>
 				</a></li>
-				<li class="nav-item"><a class="nav-link " href="#"
+				<li class="nav-item"><a  onclick="loadingModal()" class="nav-link " href="./esamiPaziente.jsp"
 					role="button" aria-haspopup="true" aria-expanded="false"> Esami
-						<span class="badge badge-pill badge-warning">5</span>
+						<span class="badge badge-pill badge-warning">${user.lista_esami_prenotati.size() }</span>
 				</a></li>
 				<li class="nav-item d-inline-block align-bottom"><img
 					alt="iconaUtente" class="img iconaUtente rounded-circle "
 					src="${user.foto_path}"></li>
-				<li class="nav-item"><a class="btn btn-danger  " href="#">Logout</a>
+				<li class="nav-item"><a class="btn btn-danger" href="../login/login.jsp"><i class="fa fa-sign-out"></i> Logout</a>
 				</li>
 			</ul>
 		</div>
@@ -79,7 +79,7 @@
 						<h4>Telefono: ${user.medico.telefono_studio}</h4>
 						<hr>
 						<h5>Per prenotare una visita vai alla pagine del medico di base: </h5>
-						<a class="btn btn-success" href="medicoBasePaziente.jsp"><i class="fa fa-user-md"></i> Vai al medico di base</a>
+						<a class="btn btn-success" href="../paziente/medicoBasePaziente.jsp"><i class="fa fa-user-md"></i> Vai al medico di base</a>
 					</div>
 				</div>
 			</div>
@@ -94,12 +94,12 @@
 				<img src="../images/pills.jpg" alt="pills" style="height: 220px;">
 				<div class="overlay">
 					<div class="overlay-content">
-						<a onclick="loadingModal()" href="ricettePaziente.jsp">Vai alle ricette</a>
+						<a onclick="loadingModal()" href="../paziente/ricettePaziente.jsp">Vai alle ricette</a>
 					</div>
 				</div>
 			</div>
 			<div class="card-content">
-				<a onclick="loadingModal()" href="ricettePaziente.jsp">
+				<a onclick="loadingModal()" href="../paziente/ricettePaziente.jsp">
 					<h2>Ricette</h2>
 					<p>Le tue prescrizioni</p>
 				</a>
@@ -110,12 +110,12 @@
 				<img src="../images/visit.jpg" alt="pills" style="height: 220px;">
 				<div class="overlay">
 					<div class="overlay-content">
-						<a onclick="loadingModal()" href="visitePaziente.jsp">Vai alle visite</a>
+						<a onclick="loadingModal()" href="../paziente/visitePaziente.jsp">Vai alle visite</a>
 					</div>
 				</div>
 			</div>
 			<div class="card-content">
-				<a onclick="loadingModal()" href="visitePaziente.jsp">
+				<a onclick="loadingModal()" href="../paziente/visitePaziente.jsp">
 					<h2>Visite</h2>
 					<p>Tutte le tue visite</p>
 				</a>
@@ -126,19 +126,19 @@
 				<img src="../images/exam.jpg" alt="pills" style="height: 220px;">
 				<div class="overlay">
 					<div class="overlay-content">
-						<a onclick="loadingModal()" href="esamiPaziente.jsp">Vai agli esami</a>
+						<a onclick="loadingModal()" href="../paziente/esamiPaziente.jsp">Vai agli esami</a>
 					</div>
 				</div>
 			</div>
 			<div class="card-content">
-				<a onclick="loadingModal()" href="esamiPaziente.jsp">
+				<a onclick="loadingModal()" href="../paziente/esamiPaziente.jsp">
 					<h2>Esami</h2>
 					<p>I tuoi esami</p>
 				</a>
 			</div>
 		</div>
 	</div>
-	
+	&nbsp;
 	
 	<div class="modal fade" id="loading_modal" style="border-radius:20px;">
   <div class="modal-dialog" role="document" >

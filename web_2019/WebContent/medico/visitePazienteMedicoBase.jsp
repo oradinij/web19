@@ -26,20 +26,20 @@
 </head>
 
 <body class="bg-light">
-<nav class="navbar navbar-expand-lg navbar-dark"><a class="navbar-brand" href="#">Nome Cognome</a>
+<nav class="navbar navbar-expand-lg navbar-dark"><a class="navbar-brand" href="#">${user.nome} ${user.cognome}</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span> </button>
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
-      <li class="nav-item"> <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a> </li>
-      <li class="nav-item active"> <a class="nav-link " href="#" role="button" aria-haspopup="true" aria-expanded="false"> Pazienti </a> </li>
-      <li class="nav-item"><a class="nav-link" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Visite <span class="badge badge-pill badge-warning">2</span></a> </li>
-      <li class="nav-item d-inline-block align-bottom"><img alt="iconaUtente" class="img iconaUtente rounded-circle " src="../images/utente1img.jpg"></li>
-      <li class="nav-item"> <a class="btn btn-danger  " href="#">Logout</a> </li>
+      <li class="nav-item "> <a class="nav-link"  onclick="loadingModal()" href="./homeMedicoBase.jsp">Home <span class="sr-only">(current)</span></a> </li>
+      <li class="nav-item active"> <a class="nav-link "  onclick="loadingModal()" href="./pazientiMedicoBase.jsp"  role="button"  aria-haspopup="true" aria-expanded="false"> Pazienti</a> </li>
+      <li class="nav-item"><a class="nav-link"  onclick="loadingModal()" href="CalendarioVisiteBase" role="button" aria-haspopup="true" aria-expanded="false"> Visite</a> </li>
+      <li class="nav-item d-inline-block align-bottom"><img alt="iconaUtente" class="img iconaUtente rounded-circle " src="${user.immagine}"></li>
+      <li class="nav-item"> <a class="btn btn-danger" href="../login/login.jsp"><i class="fa fa-sign-out"></i> Logout</a> </li>
     </ul>
   </div>
 </nav>
 &nbsp;
-<div class="container text-center" style="background-color: #C1D4D9; border-radius: 20px; padding:20px; max-width: 70%"><img class="rounded-circle " src="../images/utente1img.jpg" width="150" height="150" alt="user" style="margin-bottom: 10px;">
+<div class="container text-center" style="background-color: #C1D4D9; border-radius: 20px; padding:20px; max-width: 70%"><img class="rounded-circle " src="${visita_corrente.paziente.foto_path}" width="150" height="150" alt="user" style="margin-bottom: 10px;">
   <h2 style="margin-bottom: 20px;">Visite di: <span class="badge badge-info">${visita_corrente.paziente.nome} ${visita_corrente.paziente.cognome}</span></h2>
   <form id="formPaziente${visita_corrente.paziente.id}" action="DettagliPazienteBase">  
        <input type="hidden" value="${visita_corrente.paziente.id}" name="id"> 
@@ -730,7 +730,7 @@ function modal_svolta_base(id){
 		            document.getElementById('prenotazione_data_base').innerHTML=result.visita.data_ora;
 		            document.getElementById('prenotazione_numero_footer_base').innerHTML="Codice prenotazione: " + id;
 		            document.getElementById('bottone_annullamento_prenotazione').outerHTML= "<a id=\"bottone_annullamento_prenotazione\" href=\"#\" class=\"btn btn-danger\" onclick=\"modalCancellazionePrenotazione(" + id + ")\"><i class=\"fa fa-trash\"></i> Annulla prenotazione</a>"
-		            document.getElementById('bottone_compila_modal_prenotazione').outerHTML= "<a id=\"bottone_compila_modal_prenotazione\" href=\"#\" class=\"btn btn-success\" onclick=\"modal_compilazione_visita_base(" + id + ")\">Compila</a>"
+		            document.getElementById('bottone_compila_modal_prenotazione').outerHTML= "<a id=\"bottone_compila_modal_prenotazione\" href=\"#\" class=\"btn btn-success\" onclick=\"modal_compilazione_visita_base(" + id + ")\"><i class=\"fa fa-clipboard-check\"></i> Compila</a>"
 		            $('#modalPrenotazioneBase').modal('show');
 		            },
 		            
@@ -1046,7 +1046,7 @@ function modalDettagliPrescrizioneSpecialistica(id){
       <!-- Modal footer -->
       <div class="modal-footer">
         <h6 id="compila_badge_numero_footer" class="badge badgeNumeroVisitaEsame"></h6>
-        <button onclick=" $('#modalCompilazione').modal('hide'); loading_modal(); $('#formConcludiVisita').submit();" class="btn btn-success" >Compila visita</button>
+        <button onclick=" $('#modalCompilazione').modal('hide'); loading_modal(); $('#formConcludiVisita').submit();" class="btn btn-success" ><i class="fa fa-clipboard-check"></i> Compila visita</button>
         <button class="btn btn-danger" data-dismiss="modal">Annulla</button>
       </div>
     </div>

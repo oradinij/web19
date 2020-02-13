@@ -13,8 +13,9 @@
 <link rel="stylesheet" href="../css/paziente/change_picture_hover.css">
 </head>
 <body>
-	<nav class="navbar navbar-expand-lg navbar-dark">
-		<a class="navbar-brand" href="#">Nome Cognome</a>
+	
+<nav class="navbar navbar-expand-lg navbar-dark">
+		<a class="navbar-brand" href="#">${user.nome} ${user.cognome}</a>
 		<button class="navbar-toggler" type="button" data-toggle="collapse"
 			data-target="#navbarSupportedContent"
 			aria-controls="navbarSupportedContent" aria-expanded="false"
@@ -23,30 +24,32 @@
 		</button>
 		<div class="collapse navbar-collapse" id="navbarSupportedContent">
 			<ul class="navbar-nav mr-auto">
-				<li class="nav-item"><a class="nav-link" href="#">Home <span
-						class="sr-only">(current)</span></a></li>
-				<li class="nav-item active"><a class="nav-link" href="#"
+				<li class="nav-item "><a class="nav-link" href="./dettagliPaziente.jsp">Home <span
+						class="sr-only">
+							 
+						</span></a></li>
+				<li class="nav-item active "><a class="nav-link" href="#"
 					id="navbarDropdown" role="button" data-toggle="dropdown"
 					aria-haspopup="true" aria-expanded="false"> Dati Personali </a></li>
-				<li class="nav-item"><a class="nav-link" href="#" role="button"
+				<li class="nav-item"><a onclick="loadingModal()" class="nav-link" href="./dettagliPaziente.jsp" role="button"
 					data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 						Medico </a></li>
-				<li class="nav-item"><a class="nav-link " href="#"
+				<li class="nav-item"><a  onclick="loadingModal()" class="nav-link " href="./ricettePaziente.jsp"
 					role="button" aria-haspopup="true" aria-expanded="false">
-						Ricette <span class="badge badge-pill badge-warning">4</span>
+						Ricette <span class="badge badge-pill badge-warning">${user.getRicetteNonErogate().size()}</span>
 				</a></li>
-				<li class="nav-item"><a class="nav-link" href="#" role="button"
+				<li class="nav-item"><a  onclick="loadingModal()" class="nav-link" href="./visitePaziente.jsp" role="button"
 					data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-						Visite <span class="badge badge-pill badge-warning">2</span>
+						Visite <span class="badge badge-pill badge-warning">${user.getLista_visite_da_prenotare().size()}</span>
 				</a></li>
-				<li class="nav-item"><a class="nav-link " href="#"
+				<li class="nav-item"><a  onclick="loadingModal()" class="nav-link " href="./esamiPaziente.jsp"
 					role="button" aria-haspopup="true" aria-expanded="false"> Esami
-						<span class="badge badge-pill badge-warning">5</span>
+						<span class="badge badge-pill badge-warning">${user.lista_esami_prenotati.size() }</span>
 				</a></li>
 				<li class="nav-item d-inline-block align-bottom"><img
 					alt="iconaUtente" class="img iconaUtente rounded-circle "
 					src="${user.foto_path}"></li>
-				<li class="nav-item"><a class="btn btn-danger  " href="#">Logout</a>
+				<li class="nav-item"><a class="btn btn-danger" href="../login/login.jsp"><i class="fa fa-sign-out"></i> Logout</a>
 				</li>
 			</ul>
 		</div>

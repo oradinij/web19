@@ -132,6 +132,9 @@ public class PazienteDTO implements Serializable{
 		return listaVisite;
 	}
 
+	
+	
+	
 	public ArrayList<PrescrizioneDTO>  getListaPrescrizioni()
 	{
 		listaPrescrizioni = new PrescrizioneDAO().getListaPrescrizioniByUserId(this.id);
@@ -184,6 +187,19 @@ public class PazienteDTO implements Serializable{
 		return visite_prenotate;
 
 	}
+	
+	
+	public ArrayList<PrescrizioneDTO> getRicetteNonErogate(){
+	
+		ArrayList<PrescrizioneDTO> ricette_non_erogate = new ArrayList<PrescrizioneDTO>();
+		for (PrescrizioneDTO prescrizione : getListaPrescrizioni()) {
+			if( prescrizione.getStato() ==0)
+				ricette_non_erogate.add(prescrizione);
+		}
+		return ricette_non_erogate;
+
+	}
+	
 	/**
 	 * cerca nella lista visite relative al paziente quelle da prenotare
 	 */
@@ -202,7 +218,7 @@ public class PazienteDTO implements Serializable{
 	public ArrayList<VisitaDTO> getLista_visite_svolte(){
 		ArrayList<VisitaDTO> visite_svolte = new ArrayList<VisitaDTO>();
 		for (VisitaDTO visita : getListaVisite()) {
-			if(visita.getStato() == Assets.PRENOTAZIONE_SVOLTA)
+			if(visita.getStato() == Assets.PRENOTAZIONE_SVOLTA || visita.getStato() ==  Assets.PRENOTAZIONE_PAGATA)
 				visite_svolte.add(visita);
 		}
 		return visite_svolte;
@@ -255,7 +271,7 @@ public class PazienteDTO implements Serializable{
 	public ArrayList<EsameDTO> getLista_esami_svolti(){
 		ArrayList<EsameDTO> esami_svolti = new ArrayList<EsameDTO>();
 		for (EsameDTO esame : getListaEsami()) {
-			if(esame.getStato() == Assets.DA_PRENOTARE)
+			if(esame.getStato() == Assets.PRENOTAZIONE_SVOLTA || esame.getStato() == Assets.PRENOTAZIONE_PAGATA)
 				esami_svolti.add(esame);
 		}
 		return esami_svolti;

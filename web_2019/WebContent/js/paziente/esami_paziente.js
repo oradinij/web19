@@ -53,7 +53,7 @@ $(document).ready(function () {
 			[5, 10, 25, 50, "All"]
 		],
 		"columnDefs": [{
-			"targets": [3],
+			"targets": [4],
 			"orderable": false
 		}]
 	});

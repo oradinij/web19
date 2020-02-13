@@ -14,6 +14,8 @@
 <link rel="stylesheet" href="../css/fontawesome-pro-5.12.0-web/css/all.css">
 <link rel="stylesheet" href="../css/bootstrap.css">
 <link rel="stylesheet" href="../css/dataTables.bootstrap4.min.css">
+<link rel="stylesheet" href="../css/fontawesome-pro-5.12.0-web/css/all.css">
+
 <script src="../js/popper.min.js"></script>
 <script src="../js/jquery-3.3.1.min.js"></script>
 <script src="../js/bootstrap.js"></script>
@@ -25,15 +27,13 @@
 <script src="../js/qrcode.js"></script>
 </head>
 <body class="bg-light">
-<nav class="navbar navbar-expand-lg navbar-dark"><a class="navbar-brand" href="#"></a>
+<nav class="navbar navbar-expand-lg navbar-dark"><a class="navbar-brand" href="#">${user.nome_farmacia}</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span> </button>
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
-      <li class="nav-item"> <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a> </li>
-      <li class="nav-item active"> <a class="nav-link " href="#" role="button" aria-haspopup="true" aria-expanded="false"> Pazienti </a> </li>
-      <li class="nav-item"><a class="nav-link" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Visite <span class="badge badge-pill badge-warning">2</span></a> </li>
-      <li class="nav-item d-inline-block align-bottom"><img alt="iconaUtente" class="img iconaUtente rounded-circle " src="../images/utente1img.jpg"></li>
-      <li class="nav-item"> <a class="btn btn-danger  " href="#">Logout</a> </li>
+      <li class="nav-item "> <a class="nav-link" href="./homeFarmacia.jsp">Home <span class="sr-only">(current)</span></a> </li>
+      <li class="nav-item d-inline-block align-bottom"><img alt="iconaUtente" class="img iconaUtente rounded-circle " src="../images/farmacia.png"></li>
+      <li class="nav-item"> <a class="btn btn-danger" href="../login/login.jsp"><i class="fa fa-sign-out"></i> Logout</a> </li>
     </ul>
   </div>
 </nav>
@@ -73,13 +73,12 @@ $('#loading_modal').modal({
 
 
 &nbsp;
-<div class="container text-center" style="background-color: #C1D4D9; border-radius: 20px; padding:20px; max-width: 70%"><img class="rounded-circle " src="../images/utente1img.jpg" width="150" height="150" alt="user" style="margin-bottom: 10px;">
+<div class="container text-center" style="background-color: #C1D4D9; border-radius: 20px; padding:20px; max-width: 70%"><img class="rounded-circle " src="${paziente.foto_path}" width="150" height="150" alt="user" style="margin-bottom: 10px;">
   <h2>Ricette di: <span class="badge badge-info">${paziente.nome} ${paziente.cognome}</span></h2>
-  <form id="formPaziente${paziente.id}" action="DettagliPazienteBase">  
-       <input type="hidden" value="${paziente.id}" name="id"> 
+  
        &nbsp;
-  <button class="btn btn-success" type="submit" onclick="loadingModal()"><i class="fa fa-home"></i> Torna alla home</button>
-  </form>
+  <a class="btn btn-success" href="./homeFarmacia.jsp"  onclick="loadingModal()"><i class="fa fa-home"></i> Torna alla home</a>
+
 </div>
 &nbsp;
 <hr>
@@ -170,7 +169,7 @@ $('#loading_modal').modal({
           <h5>
             <p class="badge badge-info">Codice QR</p>
           </h5>
-          <button class="btn btn-success" data-toggle="collapse" data-target="#collpase_qr_erogata">Mostra QR</button>
+          <button class="btn btn-success" data-toggle="collapse" data-target="#collpase_qr_erogata"><i class="fa fa-qrcode"></i> Mostra QR</button>
           <div id="collpase_qr_erogata" class="collapse text-center" style="margin-top: 20px;"> <div id="qr_erogata" class="text-center container" style="width: 300px; height: 300px;"></div> </div>
         </div>
          </div>
@@ -460,7 +459,7 @@ function modal_ricetta_da_erogare(id){
           <h5>
             <p class="badge badge-info">Codice QR</p>
           </h5>
-          <button class="btn btn-success" data-toggle="collapse" data-target="#collpase_qr_non_erogata">Mostra QR</button>
+          <button class="btn btn-success" data-toggle="collapse" data-target="#collpase_qr_non_erogata"><i class="fa fa-qrcode"></i> Mostra QR</button>
           <div id="collpase_qr_non_erogata" class="collapse text-center" style="margin-top: 20px;"> <div id="qr_non_erogata" class="text-center container" style="width: 300px; height: 300px;"></div> </div>
         </div>
          </div>

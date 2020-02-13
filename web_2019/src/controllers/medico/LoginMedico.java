@@ -19,13 +19,13 @@ import web_2019.Notifica;
 /**
  * Servlet implementation class LoginMedico
  */
-@WebServlet("/login/LoginMedico")
+@WebServlet("/login/loginMedico")
 public class LoginMedico extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	PrintWriter out;
 
-	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		out = response.getWriter();
 		MedicoDTO user=null;
 		MedicoDAO medicoDAO = new MedicoDAO();
@@ -65,7 +65,7 @@ public class LoginMedico extends HttpServlet {
 			
 		request.getSession().setAttribute("notifica", new Notifica("Login corretto", Notifica.SUCCESS));}
 		else {
-			nextPage = "/login/loginMedico.jsp" ;
+			nextPage = "/login/login.jsp" ;
 			request.getSession().setAttribute("notifica", new Notifica("<strong>Login fallito:</strong> username o password sbagliati", Notifica.DANGER));
 		}
 		response.sendRedirect(request.getContextPath() + nextPage);

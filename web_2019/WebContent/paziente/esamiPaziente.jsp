@@ -27,8 +27,9 @@
 <script type="text/javascript" src="../js/paziente/common_esami_visite_pazienti.js"></script>
 </head>
 <body>
-	<nav class="navbar navbar-expand-lg navbar-dark">
-		<a class="navbar-brand" href="#">Nome Cognome</a>
+	
+<nav class="navbar navbar-expand-lg navbar-dark">
+		<a class="navbar-brand" href="#">${user.nome} ${user.cognome}</a>
 		<button class="navbar-toggler" type="button" data-toggle="collapse"
 			data-target="#navbarSupportedContent"
 			aria-controls="navbarSupportedContent" aria-expanded="false"
@@ -37,30 +38,32 @@
 		</button>
 		<div class="collapse navbar-collapse" id="navbarSupportedContent">
 			<ul class="navbar-nav mr-auto">
-				<li class="nav-item"><a class="nav-link" href="#">Home <span
-						class="sr-only">(current)</span></a></li>
-				<li class="nav-item"><a class="nav-link" href="#"
+				<li class="nav-item "><a class="nav-link" href="./dettagliPaziente.jsp">Home <span
+						class="sr-only">
+							 
+						</span></a></li>
+				<li class="nav-item "><a class="nav-link" href="#"
 					id="navbarDropdown" role="button" data-toggle="dropdown"
 					aria-haspopup="true" aria-expanded="false"> Dati Personali </a></li>
-				<li class="nav-item"><a class="nav-link" href="#" role="button"
+				<li class="nav-item"><a onclick="loadingModal()" class="nav-link" href="./dettagliPaziente.jsp" role="button"
 					data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 						Medico </a></li>
-				<li class="nav-item"><a class="nav-link " href="#"
+				<li class="nav-item"><a  onclick="loadingModal()" class="nav-link " href="./ricettePaziente.jsp"
 					role="button" aria-haspopup="true" aria-expanded="false">
-						Ricette <span class="badge badge-pill badge-warning">4</span>
+						Ricette <span class="badge badge-pill badge-warning">${user.getRicetteNonErogate().size()}</span>
 				</a></li>
-				<li class="nav-item"><a class="nav-link" href="#" role="button"
+				<li class="nav-item"><a  onclick="loadingModal()" class="nav-link" href="./visitePaziente.jsp" role="button"
 					data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-						Visite <span class="badge badge-pill badge-warning">2</span>
+						Visite <span class="badge badge-pill badge-warning">${user.getLista_visite_da_prenotare().size()}</span>
 				</a></li>
-				<li class="nav-item active"><a class="nav-link " href="#"
+				<li class="nav-item active"><a  onclick="loadingModal()" class="nav-link " href="./esamiPaziente.jsp"
 					role="button" aria-haspopup="true" aria-expanded="false"> Esami
-						<span class="badge badge-pill badge-warning">5</span>
+						<span class="badge badge-pill badge-warning">${user.lista_esami_prenotati.size() }</span>
 				</a></li>
 				<li class="nav-item d-inline-block align-bottom"><img
 					alt="iconaUtente" class="img iconaUtente rounded-circle "
-					src="../images/utente1img.jpg"></li>
-				<li class="nav-item"><a class="btn btn-danger  " href="#">Logout</a>
+					src="${user.foto_path}"></li>
+				<li class="nav-item"><a class="btn btn-danger" href="../login/login.jsp"><i class="fa fa-sign-out"></i> Logout</a>
 				</li>
 			</ul>
 		</div>
@@ -173,18 +176,25 @@
 										<th style="vertical-align: middle">Data</th>
 										<th style="vertical-align: middle">Area medica</th>
 										<th style="vertical-align: middle">Esame</th>
+										<th style="vertical-align: middle">Stato</th>
 										<th style="vertical-align: middle"></th>
 									</tr>
 								</thead>
 								<tbody>
 									<c:forEach items="${user.listaEsami}" var="esame">
-								    <c:if test="${esame.stato==2}">
+								    <c:if test="${esame.stato==2 || esame.stato==3 }">
 									
 									<tr>
 										<td style="vertical-align: middle">${esame.data}</td>
 										<td style="vertical-align: middle"><span
-											class="badge badge-pill badge-info">>${esame.area}</span></td>
+											class="badge badge-pill badge-info">${esame.area}</span></td>
 										<td style="vertical-align: middle">${esame.nomeEsame}</td>
+										<c:if test="${esame.stato==2}">
+										<td style="vertical-align: middle"><span class="badge badge-pill badge-warning">Non pagato</span></td>
+										</c:if>
+										<c:if test="${esame.stato==3}">
+										<td style="vertical-align: middle"><span class="badge badge-pill badge-success">Pagato</span></td>
+										</c:if>
 									    <td class="text-center" style="vertical-align: middle"><button id="bottone_dettagli${esame.id_prenotazione}" onclick="modal_esame_svolto(${esame.id_prenotazione})" 
 									     class="btn btn-outline-info"><i class="fa fa-info-circle"></i> Dettagli</button></td>
 									</tr>

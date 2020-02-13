@@ -32,32 +32,27 @@
 		</button>
 		<div class="collapse navbar-collapse" id="navbarSupportedContent">
 			<ul class="navbar-nav mr-auto">
-				<li class="nav-item"><a class="nav-link" href="./dettagliPaziente.jsp">Home <span
+				<li class="nav-item active"><a class="nav-link" href="./homeOperatore.jsp">Home <span
 						class="sr-only">
 							 
 						</span></a></li>
-				<li class="nav-item active"><a class="nav-link" href="#"
-					id="navbarDropdown" role="button" data-toggle="dropdown"
-					aria-haspopup="true" aria-expanded="false"> Dati Personali </a></li>
-				<li class="nav-item"><a class="nav-link" href="#" role="button"
-					data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-						Medico </a></li>
-				<li class="nav-item"><a class="nav-link " href="#"
+				
+				<li class="nav-item"><a class="nav-link " onclick="loadingModal()" href="./ricetteOperatore.jsp"
 					role="button" aria-haspopup="true" aria-expanded="false">
-						Ricette <span class="badge badge-pill badge-warning">4</span>
+						Ricette 
 				</a></li>
-				<li class="nav-item"><a class="nav-link" href="#" role="button"
-					data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-						Visite <span class="badge badge-pill badge-warning">2</span>
+				<li class="nav-item"><a onclick="loadingModal()" class="nav-link" href="visiteOperatore" role="button"
+					 aria-haspopup="true" aria-expanded="false">
+						Visite <span class="badge badge-pill badge-warning">${user.getVisiteNonPagate().size()}</span>
 				</a></li>
-				<li class="nav-item"><a class="nav-link " href="#"
+				<li class="nav-item"><a onclick="loadingModal()" class="nav-link" href="esamiOperatore"
 					role="button" aria-haspopup="true" aria-expanded="false"> Esami
-						<span class="badge badge-pill badge-warning">5</span>
+						<span class="badge badge-pill badge-warning">${user.getEsamiNonPagati().size()}</span>
 				</a></li>
 				<li class="nav-item d-inline-block align-bottom"><img
 					alt="iconaUtente" class="img iconaUtente rounded-circle "
 					src="${user.foto_path}"></li>
-				<li class="nav-item"><a class="btn btn-danger  " href="#">Logout</a>
+				<li class="nav-item"><a class="btn btn-danger  " href="../login/login.jsp"><i class="fa fa-sign-out"></i> Logout</a>
 				</li>
 			</ul>
 		</div>

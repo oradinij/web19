@@ -62,7 +62,7 @@ public class LoginPaziente extends HttpServlet {
 		}
 
 		session.setAttribute("user", user);
-		ArrayList<Message> lista_messaggi =new ArrayList<Message>();
+		//ArrayList<Message> lista_messaggi =new ArrayList<Message>();
 		
 		
 		String nextPage;
@@ -72,12 +72,11 @@ public class LoginPaziente extends HttpServlet {
 			
 		}
 		else {
-			nextPage = "/login/loginPaziente.jsp" ;
-			request.getSession().setAttribute("notifica", new Notifica("Login fallito", Notifica.DANGER));
+			nextPage = "/login/login.jsp" ;
+			request.getSession().setAttribute("notifica", new Notifica("<strong>Login fallito:</strong> username o password sbagliati", Notifica.DANGER));
 		
 		}
-		RequestDispatcher rd = request.getRequestDispatcher(nextPage);
-		rd.forward(request, response);
+		response.sendRedirect(request.getContextPath()+nextPage);
 
 	}
 

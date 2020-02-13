@@ -51,6 +51,25 @@ public class OperatoreDTO implements Serializable{
 		
 	}
 	
+	public ArrayList<VisitaDTO> getVisiteNonPagate(){
+		ArrayList<VisitaDTO> visite_non_pagate = new ArrayList<VisitaDTO>();
+		for (VisitaDTO visita : listaVisiteErogate) {
+			if( visita.getStato() == 2)
+				visite_non_pagate.add(visita);
+		}
+		return visite_non_pagate;
+
+	}
+	
+	public ArrayList<EsameDTO> getEsamiNonPagati(){
+		ArrayList<EsameDTO> esami_non_pagati = new ArrayList<EsameDTO>();
+		for (EsameDTO esame : listaEsamiErogati) {
+			if( esame.getStato() == 2)
+				esami_non_pagati.add(esame);
+		}
+		return esami_non_pagati;
+
+	}
 	
 	public String getCodice_fiscale() {return codice_fiscale;}
 	public void setCodice_fiscale(String codice_fiscale) {this.codice_fiscale = codice_fiscale;}

@@ -28,7 +28,7 @@ public class SessionFilter implements Filter {
 		if(session.getAttribute("user")==null) {
 			((HttpServletResponse) response).sendRedirect(((HttpServletRequest) request).getContextPath() + "/index.jsp");
 		}
-		((HttpServletRequest) request).getSession().setAttribute("notifica", new Notifica("<strong> Sessione scaduta</strong>, per favore effettua nuovamente il <strong>login</strong>", Notifica.WARNING));
+		//((HttpServletRequest) request).getSession().setAttribute("notifica", new Notifica("<strong> Sessione scaduta</strong>, per favore effettua nuovamente il <strong>login</strong>", Notifica.WARNING));
 		chain.doFilter(request, response);
 	}
 	

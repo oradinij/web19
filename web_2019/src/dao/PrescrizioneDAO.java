@@ -145,9 +145,10 @@ public class PrescrizioneDAO {
 				int id_medico = rs.getInt("id_medico");
 				String data_ora = rs.getString("data_ora");
 				String farmaco = rs.getString("farmaco");
+				int id_farmacia = rs.getInt("id_farmacia");
 				int stato = rs.getInt("stato");
 
-				listaPrescrizioni.add(new PrescrizioneDTO(id_prescrizione, id_paziente, id_medico, data_ora, farmaco, stato));
+				listaPrescrizioni.add(new PrescrizioneDTO(id_prescrizione, id_paziente, id_medico, data_ora, farmaco, stato, id_farmacia));
 			}
 			rs.close();
 			stmt.close();
@@ -178,8 +179,9 @@ public class PrescrizioneDAO {
 				String data = rs.getString("data_ora");
 				String farmaco = rs.getString("farmaco");
 				int stato = rs.getInt("stato");
+				int id_farmacia = rs.getInt("id_farmacia");
 
-				listaPrescrizioni.add(new PrescrizioneDTO(id_prescrizione, id_paziente, id_medico, data, farmaco, stato));
+				listaPrescrizioni.add(new PrescrizioneDTO(id_prescrizione, id_paziente, id_medico, data, farmaco, stato, id_farmacia));
 			}
 			rs.close();
 			stmt.close();
@@ -193,6 +195,40 @@ public class PrescrizioneDAO {
 		return listaPrescrizioni;
 	}
 
+	
+	public PrescrizioneDTO getById(int id_prescrizione) { 
+		PrescrizioneDTO prescrizione = new PrescrizioneDTO();
+		Connection conn =DatabaseService.getDbConnection();
+		ResultSet rs = null;
+		PreparedStatement stmt;
+
+		try {
+			stmt = conn.prepareStatement("SELECT TO_CHAR(prescrizioni.\"timestamp\", 'DD-MM-YYYY HH24:MI')as data_ora, * FROM prescrizioni WHERE id_prescrizione = ?");
+			stmt.setInt(1, id_prescrizione);
+			rs = stmt.executeQuery();
+			while(rs.next()){
+				int id_paziente= rs.getInt("id_paziente");
+				int id_medico = rs.getInt("id_medico");
+				String data = rs.getString("data_ora");
+				String farmaco = rs.getString("farmaco");
+				int stato = rs.getInt("stato");
+				int id_farmacia = rs.getInt("id_farmacia");
+
+				prescrizione = new PrescrizioneDTO(id_prescrizione, id_paziente, id_medico, data, farmaco, stato, id_farmacia);
+			}
+			rs.close();
+			stmt.close();
+			conn.close();
+		}
+
+		catch (Exception e) {
+			e.printStackTrace();//puo essere che semplicemente non nulla
+		}
+
+		return prescrizione;
+	}
+
+	
 	public PrescrizioneDTO  creaPrescrizione(int id_paziente, int id_medico,String farmaco, String timestamp, int id_riferimento) { 
 		Connection conn =DatabaseService.getDbConnection();
 		PreparedStatement stmt;
@@ -222,7 +258,8 @@ public class PrescrizioneDAO {
 				int id_prescrizione= rs.getInt("id_prescrizione");
 				String data_ora = rs.getString("data_ora");
 				int stato= rs.getInt("stato");
-				ultima_prescrizione = new PrescrizioneDTO(id_prescrizione, id_paziente, id_medico, data_ora, farmaco, stato);
+				int id_farmacia = rs.getInt("id_farmacia");
+				ultima_prescrizione = new PrescrizioneDTO(id_prescrizione, id_paziente, id_medico, data_ora, farmaco, stato, id_farmacia);
 			}
 			stmt.close();
 			conn.close();

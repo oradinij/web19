@@ -28,21 +28,47 @@
 <script src="../js/qrcode.js"></script>
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-dark"><a class="navbar-brand" href="#">Nome Cognome</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span> </button>
-  <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <ul class="navbar-nav mr-auto">
-      <li class="nav-item"> <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a> </li>
-      <li class="nav-item"> <a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Dati Personali </a> </li>
-      <li class="nav-item"> <a class="nav-link" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Medico </a> </li>
-      <li class="nav-item active"> <a class="nav-link " href="#"  role="button"  aria-haspopup="true" aria-expanded="false"> Ricette <span class="badge badge-pill badge-warning">4</span> </a> </li>
-      <li class="nav-item"><a class="nav-link" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Visite <span class="badge badge-pill badge-warning">2</span></a> </li>
-      <li class="nav-item"> <a class="nav-link " href="#" role="button"  aria-haspopup="true" aria-expanded="false"> Esami <span class="badge badge-pill badge-warning">5</span> </a> </li>
-      <li class="nav-item d-inline-block align-bottom"><img alt="iconaUtente" class="img iconaUtente rounded-circle " src="images/utente1img.jpg"></li>
-      <li class="nav-item"> <a class="btn btn-danger  " href="#">Logout</a> </li>
-    </ul>
-  </div>
-</nav>
+
+<nav class="navbar navbar-expand-lg navbar-dark">
+		<a class="navbar-brand" href="#">${user.nome} ${user.cognome}</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse"
+			data-target="#navbarSupportedContent"
+			aria-controls="navbarSupportedContent" aria-expanded="false"
+			aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="navbarSupportedContent">
+			<ul class="navbar-nav mr-auto">
+				<li class="nav-item "><a class="nav-link" href="./dettagliPaziente.jsp">Home <span
+						class="sr-only">
+							 
+						</span></a></li>
+				<li class="nav-item "><a class="nav-link" href="#"
+					id="navbarDropdown" role="button" data-toggle="dropdown"
+					aria-haspopup="true" aria-expanded="false"> Dati Personali </a></li>
+				<li class="nav-item"><a onclick="loadingModal()" class="nav-link" href="./dettagliPaziente.jsp" role="button"
+					data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						Medico </a></li>
+				<li class="nav-item active"><a  onclick="loadingModal()" class="nav-link " href="./ricettePaziente.jsp"
+					role="button" aria-haspopup="true" aria-expanded="false">
+						Ricette <span class="badge badge-pill badge-warning">${user.getRicetteNonErogate().size()}</span>
+				</a></li>
+				<li class="nav-item"><a  onclick="loadingModal()" class="nav-link" href="./visitePaziente.jsp" role="button"
+					data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						Visite <span class="badge badge-pill badge-warning">${user.getLista_visite_da_prenotare().size()}</span>
+				</a></li>
+				<li class="nav-item"><a  onclick="loadingModal()" class="nav-link " href="./esamiPaziente.jsp"
+					role="button" aria-haspopup="true" aria-expanded="false"> Esami
+						<span class="badge badge-pill badge-warning">${user.lista_esami_prenotati.size() }</span>
+				</a></li>
+				<li class="nav-item d-inline-block align-bottom"><img
+					alt="iconaUtente" class="img iconaUtente rounded-circle "
+					src="${user.foto_path}"></li>
+				<li class="nav-item"><a class="btn btn-danger" href="../login/login.jsp"><i class="fa fa-sign-out"></i> Logout</a>
+				</li>
+			</ul>
+		</div>
+	</nav>
 &nbsp;
 <div class="container" style="border-radius: 20px;  background-color: #C1D4D9">
   <h2 class="text-center">Le tue ricette</h2>
@@ -103,7 +129,8 @@
                   <td style="vertical-align: middle">${prescrizione.data_ora}</td>
                   <td style="vertical-align: middle">${prescrizione.nome_medico}</td>
             	  <td style="vertical-align: middle"><button  id="bottone_dettagli${prescrizione.id_prescrizione}" onclick="modal_ricetta_erogata(${prescrizione.id_prescrizione})" class="btn btn-outline-info"><i class="fa fa-info-circle"></i> Dettagli</button></td>
-                  <td style="vertical-align: middle"><a href="#" class="btn btn-outline-success">Ticket</a></td>
+                  <td style="vertical-align: middle"><form id="formScaricaTicketPrescrizioneTabella" name="formScaricaTicketPrescrizioneTabella" method="GET" action="scaricaTicketPrescrizione"><input type="hidden" value="${ prescrizione.id_prescrizione}" name="id_prescrizione">
+          			<button href="#"  type="submit" class="btn btn-outline-success"><i class="fa fa-ticket"></i> Ticket</button></form></td>
                 </tr>
                 </c:if>
                </c:forEach>
@@ -144,6 +171,8 @@ function modal_ricetta_erogata(id){
 	            document.getElementById('codice_footer_erogata').innerHTML="Codice ricetta: " + id; 
 	            document.getElementById('farmaco_erogata').innerHTML=result.farmaco;
 	            document.getElementById('farmacia_erogata').innerHTML=result.farmacia;
+	            document.getElementById('formScaricaTicketPrescrizione').innerHTML="<input type=\"hidden\" value=\"" + id +  "\" name=\"id_prescrizione\"> <button href=\"#\" type=\"submit\" class=\"btn btn-success\"><i class=\"fa fa-ticket\"></i> Scarica Ticket</button>"; 
+
 	            if(result.tipo_riferimento==1){
 		            document.getElementById('bottone_riferimento_erogata').outerHTML="<button id=\"bottone_riferimento_erogata\" class=\"btn btn-info\" onclick=\"modal_svolta_base("+ result.id_riferimento + ",2)\">Vedi visita</button>"
 		            } else{
@@ -183,7 +212,7 @@ function modal_ricetta_erogata(id){
 	        	
 	        	console.log(result);
 	        	
-	        	
+	        
 	        }
 	        });
 	    
@@ -210,6 +239,9 @@ function modal_ricetta_da_erogare(id){
 	            document.getElementById('visita_riferimento_non_erogata').innerHTML=result.id_riferimento;
 	            document.getElementById('farmaco_non_erogata').innerHTML=result.farmaco;
 	            document.getElementById('codice_footer_non_erogata').innerHTML="Codice ricetta: " + id; 
+	            document.getElementById('formScaricaPrescrizione').innerHTML="<input type=\"hidden\" value=\"" + id +  "\"name=\"id_prescrizione\"> <button href=\"#\" type=\"submit\" class=\"btn btn-success\"><i class=\"fa fa-file-pdf\"></i> Scarica PDF</button>"; 
+
+	            
 	            if(result.tipo_riferimento==1){
 	            document.getElementById('bottone_riferimento_non_erogata').outerHTML="<button id=\"bottone_riferimento_non_erogata\" class=\"btn btn-info\" onclick=\"modal_svolta_base("+ result.id_riferimento + ",1)\">Vedi visita</button>"
 	            } else{
@@ -537,12 +569,15 @@ function modal_ricetta_da_erogare(id){
           <h5>
             <p class="badge badge-info">PDF ricetta</p>
           </h5>
-          <a href="#" class="btn btn-success">Scarica PDF</a>
+          <form id="formScaricaPrescrizione" name="formScaricaPrescrizione" method="GET" action="scaricaPrescrizione">
+          <input type="hidden" name="id_prescrizione">
+          <a href="#" type="submit" class="btn btn-success">Scarica PDF</a>
+          </form>
           <hr class="bg-light">
           <h5>
             <p class="badge badge-info">Codice QR</p>
           </h5>
-          <button class="btn btn-success" data-toggle="collapse" data-target="#collpase_qr_non_erogata">Mostra QR</button>
+          <button class="btn btn-success" data-toggle="collapse" data-target="#collpase_qr_non_erogata"><i class="fa fa-qrcode"></i>Mostra QR</button>
           <div id="collpase_qr_non_erogata" class="collapse text-center" style="margin-top: 20px;"> <div id="qr_non_erogata" class="text-center container" style="width: 300px; height: 300px;"></div> </div>
         </div>
          </div>
@@ -596,14 +631,16 @@ function modal_ricetta_da_erogare(id){
           <p id="farmaco_erogata" class="card-body text-left" style="border-style: solid; border-radius: 20px;"></p>
           <hr class="bg-light">
           <h5>
-            <p class="badge badge-info">PDF ricetta</p>
+            <p class="badge badge-info">Ticket ricetta</p>
           </h5>
-          <a href="#" class="btn btn-success">Scarica PDF</a>
+         <form id="formScaricaTicketPrescrizione" name="formScaricaTicketPrescrizione" method="GET" action="scaricaTicketPrescrizione">
+          <a href="#" type="submit" class="btn btn-success"><i class="fa fa-ticket"></i> Scarica Ticket</a>
+          </form>
           <hr class="bg-light">
           <h5>
             <p class="badge badge-info">Codice QR</p>
           </h5>
-          <button class="btn btn-success" data-toggle="collapse" data-target="#collpase_qr_erogata">Mostra QR</button>
+          <button class="btn btn-success" data-toggle="collapse" data-target="#collpase_qr_erogata"><i class="fa fa-qrcode"></i> Mostra QR</button>
           <div id="collpase_qr_erogata" class="collapse text-center" style="margin-top: 20px;"> <div id="qr_erogata" class="text-center container" style="width: 300px; height: 300px;"></div> </div>
         </div>
          </div>
@@ -807,6 +844,6 @@ function modal_ricetta_da_erogare(id){
 
 
 
-<footer class="text-center text-light">Â©2019 Oradini & Bertamini</footer>
+<footer class="text-center text-light">©2019 Oradini & Bertamini</footer>
 </body>
 </html>

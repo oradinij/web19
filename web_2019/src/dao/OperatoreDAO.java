@@ -97,8 +97,9 @@ public class OperatoreDAO {
 				String data_ora = rs.getString("data_ora");
 				String farmaco = rs.getString("farmaco");
 				int stato = rs.getInt("stato");
+				int id_farmacia = rs.getInt("id_farmacia");
 
-				listaPrescrizioni.add(new PrescrizioneDTO(id_prescrizione, id_paziente, id_medico, data_ora, farmaco, stato));
+				listaPrescrizioni.add(new PrescrizioneDTO(id_prescrizione, id_paziente, id_medico, data_ora, farmaco, stato, id_farmacia));
 			}
 			rs.close();
 			stmt.close();

@@ -11,6 +11,7 @@ import javax.mail.Multipart;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
+import javax.mail.internet.InternetHeaders;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
@@ -38,7 +39,15 @@ public class MailingService {
 		MimeMessage message = new MimeMessage(mailSession);
 		message.setSubject(subject);
 		message.setRecipient(Message.RecipientType.TO, InternetAddress.parse(to)[0]);
-		message.setContent(text, "text/html");
+		
+		InternetHeaders headers = new InternetHeaders();
+		headers.addHeader("Content-type", "text/html; charset=UTF-8");
+	
+		MimeBodyPart body = new MimeBodyPart(headers, text.getBytes("UTF-8"));
+		Multipart multipartNoAtt = new MimeMultipart();
+		multipartNoAtt.addBodyPart(body);
+		message.setContent(multipartNoAtt);
+		
 
 		if(attachment!=null) {
 			BodyPart messageBodyPart = new MimeBodyPart();

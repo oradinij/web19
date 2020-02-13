@@ -3,6 +3,7 @@ package web_2019;
 import java.io.ByteArrayOutputStream;
 
 import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.FontFactory;
@@ -12,6 +13,7 @@ import com.itextpdf.text.Phrase;
 import com.itextpdf.text.pdf.BarcodeQRCode;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import com.itextpdf.text.pdf.draw.DottedLineSeparator;
 
 import dto.PazienteDTO;
 import dto.PrescrizioneDTO;
@@ -45,18 +47,28 @@ public class PdfPrescrizione {
 		try {
 			PdfWriter.getInstance(document, outputStream);
 			document.open();
-
-
-			//intestazione con dati utente
-			Font header_font = FontFactory.getFont(FontFactory.TIMES, 11, BaseColor.BLACK);
-			String header_string= String.format("Codice fiscale: %s\n Nome: %s \n Cogome: %s \n Data di nascita: %s \n Sesso: %s \n Id Cartella: %06d",
-					paziente.getCodice_fiscale(), paziente.getNome(), paziente.getCognome(),paziente.getData_nascita(), paziente.getSesso(), paziente.getId());
-			Paragraph header_paragraph = new Paragraph(header_string, header_font);
-			document.add(header_paragraph);
-
-			//tabella relativa ai dati esame
+			Font title_font = FontFactory.getFont(FontFactory.TIMES_BOLD, 20, BaseColor.BLACK);
 			Font table_headers_font = FontFactory.getFont(FontFactory.TIMES_BOLD, 11, BaseColor.BLACK);
 			Font table_content_font = FontFactory.getFont(FontFactory.TIMES_ROMAN, 11, BaseColor.BLACK);
+				
+		    document.addTitle("Prescrizione");
+		    
+		    Paragraph title= new Paragraph("Dettagli prescrizione", title_font);
+		    title.setAlignment(1);
+		    title.setSpacingAfter(20);
+		    document.add(title);
+		    
+			//intestazione con dati utente
+			Font header_font = FontFactory.getFont(FontFactory.TIMES, 11, BaseColor.BLACK);
+			String header_string= String.format("Codice fiscale: %s\n Nome: %s \n Cogome: %s \n Data di nascita: %s \n Sesso: %s \n Medico: %s \n Data prescrizione: %s \n Id Cartella: %06d",
+					paziente.getCodice_fiscale(), paziente.getNome(), paziente.getCognome(),paziente.getData_nascita(), paziente.getSesso(), prescrizione.getNome_medico(), prescrizione.getData(), paziente.getId());
+			Paragraph header_paragraph = new Paragraph(header_string, header_font);
+			document.add(header_paragraph);
+			Chunk linebreak = new Chunk(new DottedLineSeparator());
+			document.add(linebreak);  
+
+			//tabella relativa ai dati esame
+			
 			PdfPTable table = new PdfPTable(2);
 			Phrase phrase= new Phrase("Prescrizione", table_headers_font);
 			table.addCell(phrase);
@@ -76,6 +88,7 @@ public class PdfPrescrizione {
 					prescrizione.getId_prescrizione(), prescrizione.getFarmaco());
 			BarcodeQRCode barcodeQRCode = new BarcodeQRCode(qr_content, 1000, 1000, null);
 			Image codeQrImage = barcodeQRCode.getImage();
+			codeQrImage.setAlignment(1);
 			codeQrImage.scaleAbsolute(100, 100);
 			document.add(codeQrImage);
 			Logger.log("Creto pdf %s:\n"+qr_content, pdfFileName);

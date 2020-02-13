@@ -14,6 +14,7 @@ import javax.servlet.http.HttpSession;
 import dao.FarmaciaDAO;
 import dto.FarmaciaDTO;
 import filters.CookiesFilterFarmacia;
+import web_2019.Notifica;
 
 
 /**
@@ -23,13 +24,13 @@ import filters.CookiesFilterFarmacia;
  * </p>
  * @see CookiesFilterFarmacia
  */
-@WebServlet("/login/LoginFarmacia")
+@WebServlet("/login/loginFarmacia")
 public class LoginFarmacia extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 
 	//TODO: doPost
-	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		HttpSession session = request.getSession();
 		FarmaciaDTO user=null;
@@ -52,8 +53,16 @@ public class LoginFarmacia extends HttpServlet {
 		}
 
 		session.setAttribute("user", user);
-		String nextPage = user!= null? "/farmacia/homeFarmacia.jsp": "/login/loginFarmacia.jsp" ;
+		String nextPage;
+		if(user != null) {
+		nextPage="/farmacia/homeFarmacia.jsp";	
+		request.getSession().setAttribute("notifica", new Notifica("Login corretto", Notifica.SUCCESS));}
+		else {
+			nextPage = "/login/login.jsp" ;
+			request.getSession().setAttribute("notifica", new Notifica("<strong>Login fallito:</strong> username o password sbagliati", Notifica.DANGER));
+		}
 		response.sendRedirect(request.getContextPath() + nextPage);
+
 
 	}
 

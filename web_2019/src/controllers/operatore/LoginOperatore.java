@@ -39,7 +39,7 @@ public class LoginOperatore extends HttpServlet {
 
 
 	//TODO: doPost
-	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		HttpSession session = request.getSession();
 		OperatoreDAO operatoreDAO = new OperatoreDAO();
@@ -76,8 +76,8 @@ public class LoginOperatore extends HttpServlet {
 			
 		}
 		else {
-			nextPage = "/login/loginOperatore.jsp" ;
-			request.getSession().setAttribute("notifica", new Notifica("Login fallito", Notifica.DANGER));
+			nextPage = "/login/login.jsp" ;
+			request.getSession().setAttribute("notifica", new Notifica("<strong>Login fallito:</strong> username o password sbagliati", Notifica.DANGER));
 		
 		}
 		RequestDispatcher rd = request.getRequestDispatcher(nextPage);

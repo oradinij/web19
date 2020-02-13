@@ -5,6 +5,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.util.UUID;
 
+import javax.mail.BodyPart;
+import javax.mail.internet.InternetHeaders;
+import javax.mail.internet.MimeBodyPart;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -85,22 +88,27 @@ public class RichiediCambioPassword extends HttpServlet {
 				}
 
 				String link = request.getServerName()+":"+request.getServerPort()+request.getContextPath()+"/nuovaPassword?token="+token;
-				String text =String.format("<html><body>E' stato richiesto un cambio password, per effettuare l'aggiornamento premere sul seguente link \n" + 
+				String text =String.format("E' stato richiesto un cambio password, per effettuare l'aggiornamento premere sul seguente link \n" + 
 						"				<br><br>\n" + 
-						"<a href=\"%s\"style=\"text-decoration:none;\n" + 
+						"<a href=\"%s\" style=\"text-decoration:none;\n" + 
 						"    width: 200px; padding: 15px; box-shadow: 6px 6px 5px; \n" + 
-						"    font-weight: MEDIUM; background: #3ebfac; color: #000000; \n" + 
+						"    font-weight: MEDIUM; background: #C1D4D9; color: #000000; \n" + 
 						"    cursor: pointer; border-radius: 10px; border: 1px solid #D9D9D9; \n" + 
 						"    font-size: 14px;\">Cambia Password</a>"+
-						"	<br><br><h3>oppure visita il link: </h3><br><br><a href=\"%s\">%s</a></body></html>",
+						"	<br><br><h3>oppure visita il link: </h3><br><br><a href=\"%s\">%s</a>",
 						link, link, link
 						);
+				
+
+
+				
 				try {
-					MailingService.sendTo(email, "cambio password", text, null, null);
+					
+					MailingService.sendTo(email, "Cambio password", text, null, null);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				response.sendRedirect(request.getContextPath()+"/");
+				response.sendRedirect(request.getContextPath()+"/login/login.jsp");
 
 			}
 		}

@@ -35,7 +35,7 @@ public class ScaricaTicketPrescrizione extends HttpServlet {
 
 		for (PrescrizioneDTO prescrizione : listaPrescrizioni) {
 			if(prescrizione.getId_prescrizione() == id_prescrizione) {
-				pdfFileName = String.format("dettagli_prescrizione_%d.pdf", prescrizione.getId_prescrizione());
+				pdfFileName = String.format("ticket_prescrizione_%d.pdf", prescrizione.getId_prescrizione());
 				file = PdfTicketPrescrizione.creaPdf(user, prescrizione, pdfFileName);
 			}
 		}

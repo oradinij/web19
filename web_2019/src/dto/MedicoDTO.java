@@ -1,13 +1,17 @@
 package dto;
 
 import java.io.Serializable;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import dao.MedicoDAO;
+import dao.PrescrizioneDAO;
+import dao.VisitaDAO;
 
 public class MedicoDTO implements Serializable{
 	private int id_medico;
 	private ArrayList<PazienteDTO> listaPazienti = null;
+
 	private String email;
 	private int idSpecializzazione;
 	private String nome;
@@ -71,6 +75,7 @@ public class MedicoDTO implements Serializable{
 	}
 
 
+	
 	public ArrayList<PazienteDTO> getListaPazienti() {
 		if(listaPazienti == null)
 			this.listaPazienti = new MedicoDAO().getListaPazienti(id_medico, idSpecializzazione);

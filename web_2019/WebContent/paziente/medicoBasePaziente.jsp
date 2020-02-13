@@ -20,32 +20,58 @@
 <script src="../js/tempusdominus-bootstrap-4.min.js"></script>	
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-dark"><a class="navbar-brand" href="#">Nome Cognome</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span> </button>
-  <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <ul class="navbar-nav mr-auto">
-      <li class="nav-item"> <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a> </li>
-      <li class="nav-item"> <a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Dati Personali </a> </li>
-      <li class="nav-item active"> <a class="nav-link" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Medico </a> </li>
-      <li class="nav-item"> <a class="nav-link " href="#"  role="button"  aria-haspopup="true" aria-expanded="false"> Ricette <span class="badge badge-pill badge-warning">4</span> </a> </li>
-      <li class="nav-item"><a class="nav-link" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Visite <span class="badge badge-pill badge-warning">2</span></a> </li>
-      <li class="nav-item"> <a class="nav-link " href="#" role="button"  aria-haspopup="true" aria-expanded="false"> Esami <span class="badge badge-pill badge-warning">5</span> </a> </li>
-      <li class="nav-item d-inline-block align-bottom"><img alt="iconaUtente" class="img iconaUtente rounded-circle " src="images/utente1img.jpg"></li>
-      <li class="nav-item"> <a class="btn btn-danger  " href="#">Logout</a> </li>
-    </ul>
-  </div>
-</nav>
+
+<nav class="navbar navbar-expand-lg navbar-dark">
+		<a class="navbar-brand" href="#">${user.nome} ${user.cognome}</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse"
+			data-target="#navbarSupportedContent"
+			aria-controls="navbarSupportedContent" aria-expanded="false"
+			aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="navbarSupportedContent">
+			<ul class="navbar-nav mr-auto">
+				<li class="nav-item "><a class="nav-link" href="./dettagliPaziente.jsp">Home <span
+						class="sr-only">
+							 
+						</span></a></li>
+				<li class="nav-item "><a class="nav-link" href="#"
+					id="navbarDropdown" role="button" data-toggle="dropdown"
+					aria-haspopup="true" aria-expanded="false"> Dati Personali </a></li>
+				<li class="nav-item active"><a onclick="loadingModal()" class="nav-link" href="./dettagliPaziente.jsp" role="button"
+					data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						Medico </a></li>
+				<li class="nav-item"><a  onclick="loadingModal()" class="nav-link " href="./ricettePaziente.jsp"
+					role="button" aria-haspopup="true" aria-expanded="false">
+						Ricette <span class="badge badge-pill badge-warning">${user.getRicetteNonErogate().size()}</span>
+				</a></li>
+				<li class="nav-item"><a  onclick="loadingModal()" class="nav-link" href="./visitePaziente.jsp" role="button"
+					data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						Visite <span class="badge badge-pill badge-warning">${user.getLista_visite_da_prenotare().size()}</span>
+				</a></li>
+				<li class="nav-item"><a  onclick="loadingModal()" class="nav-link " href="./esamiPaziente.jsp"
+					role="button" aria-haspopup="true" aria-expanded="false"> Esami
+						<span class="badge badge-pill badge-warning">${user.lista_esami_prenotati.size() }</span>
+				</a></li>
+				<li class="nav-item d-inline-block align-bottom"><img
+					alt="iconaUtente" class="img iconaUtente rounded-circle "
+					src="${user.foto_path}"></li>
+				<li class="nav-item"><a class="btn btn-danger" href="../login/login.jsp"><i class="fa fa-sign-out"></i> Logout</a>
+				</li>
+			</ul>
+		</div>
+	</nav>
 &nbsp;
 <h2 class="text-center" >Il tuo medico di base</h2>
 <div class="text-center"> &nbsp;
   <div class="col-md-8 container">
     <div class="text-center" style="background-color:#C1D4D9; border-radius: 20px; padding: 20px; margin-bottom: 40px;">
       <h4 class="card-title">${user.medico.nome} ${user.medico.cognome}</h4>
-      <img class="card-img-top rounded-circle" src="images/utente1img.jpg" alt="doctor_image" style="height:200px; width:200px; margin-bottom: 20px;">
+      <img class="card-img-top rounded-circle" src="${user.medico.immagine}" alt="doctor_image" style="height:200px; width:200px; margin-bottom: 20px;">
       <p class="card-text"><span class="badge text-white" style="background-color: #326173">Telefono studio</span> ${user.medico.telefono_studio}</p>
       <p class="card-text"><span class="badge text-light" style="background-color: #326173">Cellulare</span> ${user.medico.telefono_cellulare}</p>
       <p class="card-text"><span class="badge text-white" style="background-color: #326173">Email</span> ${user.medico.email}</p>
-      <p class="card-text"><span class="badge text-white" style="background-color: #326173">Orari visite</span> LUN-VEN 08:00-18:00</p>
+      <p class="card-text"><span class="badge text-white" style="background-color: #326173">Orari visite</span> LUN-VEN 08:00-18:30</p>
 		<p class="card-text"><span class="badge text-white" style="background-color: #326173">Indirizzo</span> ${user.medico.struttura}</p>
       <hr>
       <div class="text-center"><a id="bottoneModalPrenotaVisitaBase"  onclick="seleziona_data(${user.medico.id_medico},${user.id})" class="btn text-light btn-success"><i class="fa fa-calendar-edit"></i> Prenota visita dal tuo medico di base</a></div>

@@ -34,6 +34,7 @@ public class ConcludiVisita extends HttpServlet {
 		}
 		for (TipologiaEsameDTO esame : visita_corrente.getLista_esami()) {
 			paziente.aggiungiPrenotazioneEsame(esame.getId_esame(), visita_corrente.getId_medico(), data, visita_corrente.getId_prenotazione_visita_corrente());
+			
 		}
 		for (TipologiaVisitaDTO visita : visita_corrente.getLista_visite()) {
 			paziente.aggiungiPrenotazioneVisita(visita.getId_visita(), data, visita_corrente.getId_medico(), visita_corrente.getId_prenotazione_visita_corrente());

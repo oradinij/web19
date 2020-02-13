@@ -20,6 +20,7 @@ import dto.PazienteDTO;
 import dto.PrescrizioneDTO;
 import dto.TipologiaVisitaDTO;
 import utils.Logger;
+import web_2019.PdfTicketPrescrizione;
 import web_2019.VisitaCorrente;
 
 /**
@@ -44,7 +45,7 @@ public class ErogaRicetta extends HttpServlet {
 			new PrescrizioneDAO().aggiornaStato(id_prenotazione, 1);
 			new PrescrizioneDAO().aggiornaFarmacia(id_prenotazione, id_farmacia);
 			new PrescrizioneDAO().aggiornaData(id_prenotazione);
-
+			PdfTicketPrescrizione.inviaMail(paziente, new PrescrizioneDAO().getById(id_prenotazione));
 			
 			paziente = new PazienteDAO().getUserById(id_paziente);
 			

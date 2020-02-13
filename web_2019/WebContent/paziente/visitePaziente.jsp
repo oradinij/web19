@@ -24,14 +24,14 @@
 <script type="text/javascript" src="../js/dataTables.bootstrap4.min.js"></script>
 <script type="text/javascript" src="../js/moment-with-locales.min.js"></script>
 <script type="text/javascript" src="../js/tempusdominus-bootstrap-4.min.js"></script>
-<script type="text/javascript" src="../js/paziente/visite_paziente.js"></script>
 <script type="text/javascript" src="../js/paziente/common_esami_visite_pazienti.js"></script>
 
 
 </head>
 <body>
-	<nav class="navbar navbar-expand-lg navbar-dark">
-		<a class="navbar-brand" href="#">Nome Cognome</a>
+	
+<nav class="navbar navbar-expand-lg navbar-dark">
+		<a class="navbar-brand" href="#">${user.nome} ${user.cognome}</a>
 		<button class="navbar-toggler" type="button" data-toggle="collapse"
 			data-target="#navbarSupportedContent"
 			aria-controls="navbarSupportedContent" aria-expanded="false"
@@ -40,30 +40,32 @@
 		</button>
 		<div class="collapse navbar-collapse" id="navbarSupportedContent">
 			<ul class="navbar-nav mr-auto">
-				<li class="nav-item"><a class="nav-link" href="#">Home <span
-						class="sr-only">(current)</span></a></li>
-				<li class="nav-item"><a class="nav-link" href="#"
+				<li class="nav-item "><a class="nav-link" href="./dettagliPaziente.jsp">Home <span
+						class="sr-only">
+							 
+						</span></a></li>
+				<li class="nav-item "><a class="nav-link" href="#"
 					id="navbarDropdown" role="button" data-toggle="dropdown"
 					aria-haspopup="true" aria-expanded="false"> Dati Personali </a></li>
-				<li class="nav-item"><a class="nav-link" href="#" role="button"
+				<li class="nav-item"><a onclick="loadingModal()" class="nav-link" href="./dettagliPaziente.jsp" role="button"
 					data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 						Medico </a></li>
-				<li class="nav-item"><a class="nav-link " href="#"
+				<li class="nav-item"><a  onclick="loadingModal()" class="nav-link " href="./ricettePaziente.jsp"
 					role="button" aria-haspopup="true" aria-expanded="false">
-						Ricette <span class="badge badge-pill badge-warning">4</span>
+						Ricette <span class="badge badge-pill badge-warning">${user.getRicetteNonErogate().size()}</span>
 				</a></li>
-				<li class="nav-item active"><a class="nav-link" href="#"
-					role="button" data-toggle="dropdown" aria-haspopup="true"
-					aria-expanded="false"> Visite <span
-						class="badge badge-pill badge-warning">2</span></a></li>
-				<li class="nav-item"><a class="nav-link " href="#"
+				<li class="nav-item active"><a  onclick="loadingModal()" class="nav-link" href="./visitePaziente.jsp" role="button"
+					data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						Visite <span class="badge badge-pill badge-warning">${user.getLista_visite_da_prenotare().size()}</span>
+				</a></li>
+				<li class="nav-item"><a  onclick="loadingModal()" class="nav-link " href="./esamiPaziente.jsp"
 					role="button" aria-haspopup="true" aria-expanded="false"> Esami
-						<span class="badge badge-pill badge-warning">5</span>
+						<span class="badge badge-pill badge-warning">${user.lista_esami_prenotati.size() }</span>
 				</a></li>
 				<li class="nav-item d-inline-block align-bottom"><img
 					alt="iconaUtente" class="img iconaUtente rounded-circle "
-					src="images/utente1img.jpg"></li>
-				<li class="nav-item"><a class="btn btn-danger  " href="#">Logout</a>
+					src="${user.foto_path}"></li>
+				<li class="nav-item"><a class="btn btn-danger" href="../login/login.jsp"><i class="fa fa-sign-out"></i> Logout</a>
 				</li>
 			</ul>
 		</div>
@@ -179,28 +181,34 @@
 						          <tr>
 						            <th>Data</th>
 						            <th>Tipo</th>
+						            <th>Stato</th>
 						            <th>Dottore</th>
 						            <th></th>
 						          </tr>
 						        </thead>
 						        <tbody>
 						        <c:forEach items="${user.lista_visite_svolte}" var="visita">
-						          <tr>
-						            <td style="vertical-align: middle">${visita.data}</td>
-						    
-						         <c:if test="${visita.id_visita!=1}">
+						        <tr>
+						         <c:if test="${visita.id_visita!=1 && visita.stato==2}">
+						         			 <td style="vertical-align: middle">${visita.data}</td>
 						                     <td style="vertical-align: middle"><span class="badge badge-pill badge-info">${visita.nome_visita}</span></td>
+						                     <td style="vertical-align: middle"><span class="badge badge-pill badge-warning">Non pagata</span></td>
+						                     <td style="vertical-align: middle">${visita.nome_medico} ${visita.cognome_medico}</td>
+						                     <td style="vertical-align: middle"><button  id="bottone_dettagli${visita.id_prenotazione}" onclick="modal_svolta_specialistica(${visita.id_prenotazione})" href="#" class="btn btn-outline-info"><i class="fa fa-info-circle"></i> Dettagli</button></td>
 						            </c:if>
-						              <c:if test="${visita.id_visita==1}">
+						            <c:if test="${visita.id_visita!=1 && visita.stato==3}">
+						          			 <td style="vertical-align: middle">${visita.data}</td>
+						                     <td style="vertical-align: middle"><span class="badge badge-pill badge-info">${visita.nome_visita}</span></td>
+						                     <td style="vertical-align: middle"><span class="badge badge-pill badge-success">Pagata</span></td>
+						                     <td style="vertical-align: middle">${visita.nome_medico} ${visita.cognome_medico}</td>
+						                     <td style="vertical-align: middle"><button  id="bottone_dettagli${visita.id_prenotazione}" onclick="modal_svolta_specialistica(${visita.id_prenotazione})" href="#" class="btn btn-outline-info"><i class="fa fa-info-circle"></i> Dettagli</button></td>
+						            </c:if>
+						         	<c:if test="${visita.id_visita==1  && visita.stato==2}">
+						         			 <td style="vertical-align: middle">${visita.data}</td>
 						                     <td style="vertical-align: middle"><span class="badge badge-pill badge-secondary">${visita.nome_visita}</span></td>
-						            </c:if>
-						            <td style="vertical-align: middle">${visita.nome_medico} ${visita.cognome_medico}</td>
-						              <c:if test="${visita.id_visita!=1}">
-						            <td style="vertical-align: middle"><button  id="bottone_dettagli${visita.id_prenotazione}" onclick="modal_svolta_specialistica(${visita.id_prenotazione})" href="#" class="btn btn-outline-info"><i class="fa fa-info-circle"></i> Dettagli</button></td>
-						            </c:if>
-						            <c:if test="${visita.id_visita==1}">
-						            
-						            <td style="vertical-align: middle"><button id="bottone_dettagli${visita.id_prenotazione}" onclick="modal_svolta_base(${visita.id_prenotazione})" href="#" class="btn btn-outline-info"><i class="fa fa-info-circle"></i> Dettagli</button></td>
+						                     <td style="vertical-align: middle"><span class="badge badge-pill badge-success">Pagata</span></td>
+						                     <td style="vertical-align: middle">${visita.nome_medico} ${visita.cognome_medico}</td>
+						                     <td style="vertical-align: middle"><button id="bottone_dettagli${visita.id_prenotazione}" onclick="modal_svolta_base(${visita.id_prenotazione})" href="#" class="btn btn-outline-info"><i class="fa fa-info-circle"></i> Dettagli</button></td>
 						            </c:if>
 						          </tr>
 						          </c:forEach>
@@ -1458,6 +1466,7 @@ function modalDettagliPrescrizioneSpecialistica(id){
     </div>
   </div>
 </div>
+<script type="text/javascript" src="../js/paziente/visite_paziente.js"></script>
 
 </body>
 </html>
